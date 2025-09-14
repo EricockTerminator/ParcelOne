@@ -16,6 +16,8 @@ except ImportError:  # pragma: no cover
     from config import CP_WFS_BASE, CP_UO_WFS_BASE, PAGE_SIZE  # type: ignore
 ZONE_C = "cp:CP.CadastralZoning"
 ZONE_E = "cp_uo:CP.CadastralZoningUO"
+TYPE_C = "cp:CP.CadastralParcel"
+TYPE_E = "cp_uo:CP.CadastralParcelUO"
 PREVIEW_PAGE_SIZE = 100
 PREVIEW_MAX_FEATURES = 500
 DEBUG_PROFILE = False
