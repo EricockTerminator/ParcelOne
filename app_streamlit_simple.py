@@ -11,7 +11,6 @@ Jednoduchá appka len s WFS + GML.
 Spustenie:  streamlit run app_streamlit_simple.py
 """
 from __future__ import annotations
-
 import glob
 import io
 import json
@@ -27,13 +26,12 @@ from typing import List, Optional, Tuple
 from streamlit.components.v1 import html as st_html
 from streamlit_folium import st_folium
 from functools import lru_cache
-
+from urllib.parse import urlencode
 import folium
 import pydeck as pdk  # nechávam – môžeš mať aj pydeck fallback
 import requests
 import streamlit as st
 import unicodedata
-
 result = None          # type: ignore  # FetchResult | None
 map_res = None         # type: ignore  # FetchResult | None
 
@@ -44,7 +42,6 @@ CP_WFS_BASE = "https://inspirews.skgeodesy.sk/geoserver/cp/ows"        # C regis
 CP_UO_WFS_BASE = "https://inspirews.skgeodesy.sk/geoserver/cp_uo/ows"   # E register
 TYPE_C = "cp:CP.CadastralParcel"
 TYPE_E = "cp_uo:CP.CadastralParcelUO"
-
 HEADERS_XML = {
     "User-Agent": "ParcelOne/WFS-GML 1.0",
     "Accept": "application/xml,*/*;q=0.5",
@@ -52,7 +49,6 @@ HEADERS_XML = {
 }
 TIMEOUT = (10, 60)  # (connect, read)
 PAGE_SIZE = 1000
-
 # --- voľby CRS pre WFS srsName (None = default servera)
 WFS_CRS_CHOICES = {
     "auto (server default)": None,
@@ -60,15 +56,26 @@ WFS_CRS_CHOICES = {
     "EPSG:4258 (ETRS89)": "EPSG:4258",
     "EPSG:4326 (WGS84)": "EPSG:4326",
 }
-
 DEBUG_UI = False  # keď True, ukáže URL, diagnostiku, počty stránok
-
 WMS_URL_C = "https://inspirews.skgeodesy.sk/geoserver/cp/ows"
 WMS_URL_E = "https://inspirews.skgeodesy.sk/geoserver/cp_uo/ows"
 LAYER_C = "cp:CP.CadastralParcel"
 LAYER_E = "cp_uo:CP.CadastralParcelUO"
 ZONE_C = "cp:CP.CadastralZoning"
 ZONE_E = "cp_uo:CP.CadastralZoningUO"
+PREVIEW_MAX_FEATURES = 500 # koľko GeoJSON prvkov max vykreslíme
+PREVIEW_PAGE_SIZE = 500 # koľko prvkov žiadame na stránku
+DEBUG_PROFILE = False # zapni pre zobrazenie časov
+# --- Jednoduché profilovanie ---
+_step_times: dict[str, float] = {}
+class timed:
+    def __init__(self, name: str):
+        self.name = name
+        self.t0 = 0.0
+    def __enter__(self):
+        self.t0 = time.perf_counter(); return self
+    def __exit__(self, *exc):
+        _step_times[self.name] = _step_times.get(self.name, 0.0) + (time.perf_counter() - self.t0)
 
 # --------------------------- Pomocné funkcie -------------------------------
 
@@ -495,15 +502,22 @@ def fetch_gml_pages(register: str, ku: str, parcels_csv: str, wfs_srs: Optional[
 
     return FetchResult(True, f"Počet stránok: {len(pages)}", pages, first_url)
 
-
-def fetch_geojson_pages(register: str, resolved_ku: str, parcels_csv: str, wfs_srs: Optional[str] = None) -> FetchResult:
-    reg = register.upper().strip()
+@st.cache_data(ttl=120, show_spinner=False)
+def fetch_geojson_pages(
+    register: str,
+    resolved_ku: str,
+    parcels_csv: str,
+    wfs_srs: Optional[str] = None,
+    *,
+    page_size: int = PREVIEW_PAGE_SIZE,   # <<— nové
+) -> "FetchResult":
+    """Rýchlejšie stránkovanie pre náhľad (limit `page_size`)."""
+    reg = (register or "").upper().strip()
     resolved_ku = (resolved_ku or "").strip()
     parcels = [p.strip() for p in re.split(r"[,;\s]+", parcels_csv or "") if p.strip()]
     base = CP_UO_WFS_BASE if reg == "E" else CP_WFS_BASE
     typename = TYPE_E if reg == "E" else TYPE_C
 
-    from urllib.parse import urlencode
     filt_xml = build_fes_filter(resolved_ku, parcels)
     if not filt_xml:
         return FetchResult(False, "Neplatný filter (chýba KU aj parcely)", [], "")
@@ -512,53 +526,64 @@ def fetch_geojson_pages(register: str, resolved_ku: str, parcels_csv: str, wfs_s
     start = 0
     first_url = ""
 
-    while True:
-        params = {
-            "service": "WFS",
-            "version": "2.0.0",
-            "request": "GetFeature",
-            "typeNames": typename,
-            "count": str(PAGE_SIZE),
-            "startIndex": str(start),
-            "filter": filt_xml,
-            "outputFormat": "application/json",
-        }
-        if wfs_srs:
-            params["srsName"] = wfs_srs
-
-        url = f"{base}?{urlencode(params)}"
-        if not first_url:
-            first_url = url
-
-        try:
-            jb = http_get_bytes(url)
-        except requests.HTTPError as e:
-            if pages and getattr(e.response, "status_code", None) == 400:
+    with timed("wfs_geojson"):
+        while True:
+            params = {
+                "service": "WFS",
+                "version": "2.0.0",
+                "request": "GetFeature",
+                "typeNames": typename,
+                "count": str(page_size),          # <<— menšie stránky
+                "startIndex": str(start),
+                "filter": filt_xml,
+                "outputFormat": "application/json",
+            }
+            if wfs_srs:
+                params["srsName"] = wfs_srs
+            url = f"{base}?{urlencode(params)}"
+            if not first_url:
+                first_url = url
+            try:
+                jb = http_get_bytes(url)
+            except requests.HTTPError as e:
+                if pages and getattr(e.response, "status_code", None) == 400:
+                    break
+                return FetchResult(False, f"HTTP chyba: {e}", [], first_url or url)
+            except Exception as e:
+                return FetchResult(False, f"Chyba: {e}", [], first_url or url)
+            try:
+                obj = json.loads(jb.decode("utf-8", "ignore"))
+                feats = obj.get("features", [])
+            except Exception:
+                feats = []
+            if not feats:
                 break
-            return FetchResult(False, f"HTTP chyba: {e}", [], first_url or url)
-        except Exception as e:
-            return FetchResult(False, f"Chyba: {e}", [], first_url or url)
-
-        try:
-            obj = json.loads(jb.decode("utf-8", "ignore"))
-            feats = obj.get("features", [])
-        except Exception:
-            feats = []
-
-        if not feats:
-            break
-
-        pages.append(jb)
-
-        if len(feats) < PAGE_SIZE:
-            break
-        start += PAGE_SIZE
-        if start > 500_000:
-            break
-
+            pages.append(jb)
+            # pre náhľad stačí prvá stránka (alebo málo stránok),
+            # aby sme vedeli bbox a pár geometrií
+            if len(pages) >= 2:
+                break
+            if len(feats) < page_size:
+                break
+            start += page_size
     if not pages:
         return FetchResult(False, "Server vrátil 0 prvkov pre daný filter.", [], first_url)
-    return FetchResult(True, f"Počet stránok: {len(pages)}", pages, first_url)
+    return FetchResult(True, f"Počet stránok (náhľad): {len(pages)}", pages, first_url)
+
+@st.cache_data(ttl=60, show_spinner=False)
+def preview_geojson_autofallback(
+    reg: str,
+    ku: str,
+    parcels: str,
+    *,
+    page_size: int = PREVIEW_PAGE_SIZE,
+) -> "FetchResult":
+    """Skús GeoJSON s rôznymi srsName; rýchlejšie, limitované stránky."""
+    for srs in ("EPSG:4326", None, "EPSG:5514"):
+        res = fetch_geojson_pages(reg, ku, parcels, wfs_srs=srs, page_size=page_size)
+        if res.ok and res.pages:
+            return res
+    return FetchResult(False, "Prázdny výstup pre všetky srsName (4326/auto/5514).", [], "")
 
 # --------- GeoJSON helpers pre mapový náhľad / bbox ---------
 
@@ -950,25 +975,42 @@ if ku_suggestions:
 if ku_name and resolved_ku:
     st.caption(f"Vybrané KU: {ku_name} → kód **{resolved_ku}**")
 
-# --- AUTO PREVIEW ---
-__ku_for_preview = resolved_ku or (soft_pick['code'] if soft_pick else "")
-if (__ku_for_preview or parcels.strip()):
+# ─────────────────────────────────────────────────────────────
+# NÁHĽAD MAPY (UI HOOK – PREVIEW)  ⟵ vlož NAD tlačidlo "Stiahnuť parcely"
+# ─────────────────────────────────────────────────────────────
+do_preview_ku = resolved_ku or (soft_pick['code'] if isinstance(soft_pick, dict) and soft_pick.get('code') else "")
+if do_preview_ku or (parcels or '').strip():
+    col1, = st.columns(1)
     with col1:
-        with st.spinner("Pripravujem mapový náhľad…"):
-            gj = _preview_geojson(reg, __ku_for_preview, parcels)
-        if gj.ok and gj.pages:
-            fc, total, used = merge_geojson_pages(gj.pages, max_features=4000)
-            bbox = bbox_from_geojson(fc)
-            if bbox:
-                show_map_preview(reg, fc, bbox, ku=__ku_for_preview, parcels=parcels)
-                if not resolved_ku and soft_pick:
-                    st.caption(f"Náhľad podľa najbližšej zhody: {soft_pick['name']} ({soft_pick['code']}).")
-                if used < total:
-                    st.caption(f"Náhľad skrátený: {used} z {total} prvkov.")
-            else:
-                st.info("Mapový náhľad: nenašli sa geometrie pre zadaný filter.")
+        bbox = None
+        fc = {}
+
+        # 1) Bez zadaných parciel → rýchly náhľad len KU (WMS + hranica KU), bez WFS
+        if not (parcels or '').strip():
+            with timed('zone_bbox'):
+                bbox = fetch_zone_bbox(reg, do_preview_ku)
+            if not bbox:
+                bbox = (17.0, 48.0, 17.01, 48.01)
+            show_map_preview(reg, {}, bbox, ku=do_preview_ku, parcels="")
+
+        # 2) Parcely sú zadané → malá WFS vzorka, zvýrazníme len tie
         else:
-            st.info("Mapový náhľad: server nevrátil dáta pre zadaný filter.")
+            with st.spinner("Pripravujem výber parciel…"):
+                with timed('wfs_preview'):
+                    gj = preview_geojson_autofallback(reg, do_preview_ku, parcels, page_size=PREVIEW_PAGE_SIZE)
+            if gj.ok and gj.pages:
+                fc, total, used = merge_geojson_pages(gj.pages, max_features=PREVIEW_MAX_FEATURES)
+                bbox = bbox_from_geojson(fc)
+            if not bbox:
+                with timed('zone_bbox_fallback'):
+                    bbox = fetch_zone_bbox(reg, do_preview_ku) or (17.0, 48.0, 17.01, 48.01)
+            show_map_preview(reg, fc, bbox, ku=do_preview_ku, parcels=parcels)
+
+    # Voliteľné: ukáž profilovanie krokov
+    if DEBUG_PROFILE and _step_times:
+        with st.expander("Profilovanie náhľadu"):
+            for k, v in _step_times.items():
+                st.write(f"{k}: {v*1000:.0f} ms")
 
     if not (resolved_ku or parcels.strip()):
         st.error("Zadaj KU (kód alebo názov) alebo aspoň jedno parcelné číslo.")
@@ -1049,3 +1091,4 @@ if DEBUG_UI and "result" in locals():
             f"GDAL_DATA={os.environ.get('GDAL_DATA') or GDAL_DATA_DIR or '-'}",
         ]
         st.code("\n".join(dbg_lines), language="text")
+
