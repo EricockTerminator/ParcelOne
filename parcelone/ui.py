@@ -4,7 +4,7 @@ import streamlit as st
 import folium
 from streamlit_folium import st_folium
 from typing import Optional, Tuple
-
+from parcelone import wfs as _wfs  # why: debug utils (get_last_http, wfs_capabilities)
 from .wfs import (
     fetch_gml_pages, fetch_geojson_pages, merge_geojson_pages,
     bbox_from_geojson, WMS_URL_C, WMS_URL_E, LAYER_C, LAYER_E, ZONE_C, ZONE_E,
@@ -12,6 +12,10 @@ from .wfs import (
 )
 from .convert import convert_pages_with_gdal
 from .ku import load_ku_table, lookup_ku_code
+
+crs_label = st.selectbox("CRS (WFS srsName)", list(WFS_CRS_CHOICES.keys()), index=0)
+wfs_srs = WFS_CRS_CHOICES[crs_label]
+debug = st.sidebar.checkbox("🧪 Debug panel", value=False)
 
 WFS_CRS_CHOICES = {
     "auto (server default)": None,
@@ -180,3 +184,11 @@ def main():
                     st.caption(f"Konverzia: {conv_src}")
             except Exception as e:
                 st.error(f"Konverzia zlyhala: {e}")
+if debug:
+    with st.expander("🧪 WFS diagnostika", expanded=True):
+        ok_c, url_c   = _wfs.wfs_capabilities(_wfs.CP_WFS_BASE)
+        ok_e, url_e   = _wfs.wfs_capabilities(_wfs.CP_UO_WFS_BASE)
+        st.write("CP GetCapabilities:", "✅" if ok_c else "❌", url_c)
+        st.write("CP_UO GetCapabilities:", "✅" if ok_e else "❌", url_e)
+        st.caption("Posledné URL volania:")
+        st.code("\n".join(_wfs.get_last_http()) or "(žiadne)", language="text")
