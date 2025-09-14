@@ -11,6 +11,7 @@ Jednoduchá appka len s WFS + GML.
 Spustenie:  streamlit run app_streamlit_simple.py
 """
 from __future__ import annotations
+import time  # <-- pre profiler timed()
 import glob
 import io
 import json
@@ -1091,4 +1092,5 @@ if DEBUG_UI and "result" in locals():
             f"GDAL_DATA={os.environ.get('GDAL_DATA') or GDAL_DATA_DIR or '-'}",
         ]
         st.code("\n".join(dbg_lines), language="text")
+
 
