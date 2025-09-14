@@ -1,352 +1,160 @@
-# file: parcelone/parcelone/ui.py
-"""Streamlit UI (no forms). KU lookup + robust CRS select + WMS preview + exports.
-
-This version adds a *compatibility wrapper* around `fetch_zone_bbox` so the UI
-works with both the old signature `(register, ku, *, retries=...)` and the new
-one `(register, ku, *, wfs_srs=..., retries=...)`.
-"""
-import os
-import re
-import json
-from io import BytesIO
-from zipfile import ZipFile
-from tempfile import NamedTemporaryFile, TemporaryDirectory
-from typing import Dict, Iterable, List, Tuple, Optional
-
+from __future__ import annotations
+import io, zipfile
 import streamlit as st
-
-from .ku_index import code_for
+import folium
+from streamlit_folium import st_folium
 from .wfs import (
-    fetch_zone_bbox,
-    preview_geojson_autofallback,
-    merge_geojson_pages,
-    fetch_geojson_pages,
-    fetch_gml_pages,
-    ZONE_C,
-    ZONE_E,
+    fetch_gml_pages, fetch_geojson_pages, merge_geojson_pages,
+    bbox_from_geojson, WMS_URL_C, WMS_URL_E, LAYER_C, LAYER_E, ZONE_C, ZONE_E,
 )
-from .config import WFS_CRS_CHOICES, CP_WFS_BASE, CP_UO_WFS_BASE
+from .convert import convert_pages_with_gdal, geojson_pages_to_dxf
+from .ku import load_ku_table, lookup_ku_code
 
-RETRIES = 3  # used only in bbox helper
+WFS_CRS_CHOICES = {
+    "auto (server default)": None,
+    "EPSG:5514 (S-JTSK / Krovák EN)": "EPSG:5514",
+    "EPSG:4258 (ETRS89)": "EPSG:4258",
+    "EPSG:4326 (WGS84)": "EPSG:4326",
+}
 
-# --------------------------- helpers ----------------------------------------
+def _build_cql_for_preview(ku: str, parcels_csv: str) -> str:
+    parts = []
+    ku = (ku or "").strip()
+    if ku: parts.append(f"nationalCadastralReference LIKE '{ku}%'")
+    pcs = [p.strip() for p in (parcels_csv or '').replace(';', ',').split(',') if p.strip()]
+    if pcs and ku:
+        ors = " OR ".join(["label='" + p.replace("'", "''") + "'" for p in pcs])
+        parts.append(f"({ors})")
+    return " AND ".join(parts)
 
-def _normalize_crs_choices(choices) -> Tuple[List[str], Dict[str, str]]:
-    options: List[str] = []
-    label_map: Dict[str, str] = {}
-    if isinstance(choices, dict):
-        for k, v in choices.items():
-            k = str(k); options.append(k); label_map[k] = str(v)
-        return options, label_map
-    for item in choices:
-        if isinstance(item, (list, tuple)) and len(item) >= 2:
-            key = str(item[0]); label = str(item[1])
-        else:
-            key = str(item); label = key
-        options.append(key); label_map[key] = label
-    return options, label_map
+def _cql_for_zone(ku: str) -> str:
+    ku = (ku or "").strip()
+    return f"nationalCadastralReference='{ku}'" if ku else ""
 
-
-def _resolve_ku(ku_input: str) -> str | None:
-    ku_input = (ku_input or "").strip()
-    if not ku_input:
-        return None
-    code, cands = code_for(ku_input)
-    if cands:
-        options = {f"{c.name} ({c.code})": c.code for c in cands}
-        choice = st.selectbox("Našli sme viac KU – vyber jedno:", list(options), key="ku_choice")
-        code = options.get(choice)
-    return code
-
-
-def _download_geojson(pages: list[bytes], ku_code: str) -> None:
-    gj, total, used = merge_geojson_pages(pages)
-    payload = json.dumps(gj, ensure_ascii=False).encode("utf-8")
-    st.success(f"GeoJSON pripravený – vybrané: {used} / spolu: {total}")
-    st.download_button(
-        "Stiahnuť GeoJSON",
-        payload,
-        file_name=f"parcely_{ku_code}.geojson",
-        mime="application/geo+json",
-    )
-
-
-def _download_gml_zip(pages: list[bytes], ku_code: str) -> None:
-    buf = BytesIO()
-    with ZipFile(buf, "w") as zf:
-        for i, page in enumerate(pages, start=1):
-            zf.writestr(f"parcely_{i}.gml", page)
-    buf.seek(0)
-    st.success(f"GML ZIP pripravený – stránok: {len(pages)}")
-    st.download_button(
-        "Stiahnuť GML (.zip)",
-        buf.read(),
-        file_name=f"parcely_{ku_code}.zip",
-        mime="application/zip",
-    )
-
-
-def _download_dxf_from_geojson(pages: list[bytes], ku_code: str) -> None:
-    try:
-        import ezdxf  # type: ignore
-    except Exception:
-        st.error("DXF export vyžaduje balík `ezdxf`. Pridaj `ezdxf>=1.1` do requirements.txt.")
-        return
-
-    gj, total, used = merge_geojson_pages(pages)
-    feats = gj.get("features", []) if isinstance(gj, dict) else []
-    doc = ezdxf.new(); msp = doc.modelspace()
-
-    def as_xy(seq: Iterable) -> List[Tuple[float, float]]:
-        out = []
-        for p in seq:
-            try:
-                out.append((float(p[0]), float(p[1])))
-            except Exception:
-                continue
-        return out
-
-    for f in feats:
-        g = (f or {}).get("geometry") or {}
-        t = g.get("type"); c = g.get("coordinates")
-        if t == "Polygon" and c:
-            msp.add_lwpolyline(as_xy(c[0]), format="xy", close=True, dxfattribs={"layer": "PARCEL_POLY"})
-        elif t == "MultiPolygon" and c:
-            for poly in c:
-                if poly:
-                    msp.add_lwpolyline(as_xy(poly[0]), format="xy", close=True, dxfattribs={"layer": "PARCEL_POLY"})
-
-    buf = BytesIO(); doc.write(buf); buf.seek(0)
-    st.success(f"DXF pripravený – prvkov: {used}")
-    st.download_button("Stiahnuť DXF", buf.getvalue(), file_name=f"parcely_{ku_code}.dxf", mime="image/vnd.dxf")
-
-
-def _download_shp_zip_from_geojson(pages: list[bytes], ku_code: str) -> None:
-    try:
-        import shapefile  # pyshp
-    except Exception:
-        st.error("SHP export vyžaduje balík `pyshp` (package `shapefile`). Pridaj `pyshp>=2.3` do requirements.txt.")
-        return
-
-    gj, total, used = merge_geojson_pages(pages)
-    feats = gj.get("features", []) if isinstance(gj, dict) else []
-
-    def exterior_coords(geom) -> List[List[Tuple[float, float]]]:
-        out: List[List[Tuple[float, float]]] = []
-        t = (geom or {}).get("type"); c = (geom or {}).get("coordinates")
-        def as_xy(seq: Iterable) -> List[Tuple[float, float]]:
-            pts = []
-            for p in seq:
-                try:
-                    pts.append((float(p[0]), float(p[1])))
-                except Exception:
-                    continue
-            return pts
-        if t == "Polygon" and c:
-            out.append(as_xy(c[0]))  # exterior only
-        elif t == "MultiPolygon" and c:
-            for poly in c:
-                if poly:
-                    out.append(as_xy(poly[0]))
-        return out
-
-    with TemporaryDirectory() as td:
-        shp_path = os.path.join(td, "parcely")
-        w = shapefile.Writer(shp_path, shapeType=shapefile.POLYGON)
-        w.autoBalance = 1
-        w.field("fid", "N")
-        cnt = 0
-        for i, f in enumerate(feats):
-            parts = exterior_coords((f or {}).get("geometry"))
-            if not parts:
-                continue
-            w.poly(parts=parts)
-            w.record(int(i))
-            cnt += 1
-        w.close()
-        with open(shp_path + ".cpg", "w", encoding="ascii") as cpg:
-            cpg.write("UTF-8")
-        buf = BytesIO()
-        from zipfile import ZipFile
-        with ZipFile(buf, "w") as zf:
-            for ext in (".shp", ".shx", ".dbf", ".cpg"):
-                p = shp_path + ext
-                if os.path.exists(p):
-                    zf.write(p, arcname=os.path.basename(p))
-        buf.seek(0)
-    st.success(f"SHP ZIP pripravený – prvkov: {cnt}")
-    st.download_button("Stiahnuť SHP (.zip)", buf.getvalue(), file_name=f"parcely_{ku_code}.zip", mime="application/zip")
-
-
-def _download_gpkg_from_geojson(pages: list[bytes], ku_code: str) -> None:
-    try:
-        import fiona
-    except Exception:
-        st.error("GPKG export vyžaduje `fiona` (GDAL) alebo `geopandas`.")
-        return
-
-    gj, total, used = merge_geojson_pages(pages)
-    feats = gj.get("features", []) if isinstance(gj, dict) else []
-
-    with NamedTemporaryFile(suffix=".gpkg", delete=False) as tmp:
-        tmp_path = tmp.name
-    try:
-        schema = {"geometry": "Polygon", "properties": {"fid": "int"}}
-        with fiona.open(tmp_path, mode="w", driver="GPKG", schema=schema, layer="parcely") as dst:
-            for i, f in enumerate(feats):
-                geom = (f or {}).get("geometry")
-                if not isinstance(geom, dict):
-                    continue
-                if geom.get("type") not in ("Polygon", "MultiPolygon"):
-                    continue
-                dst.write({"geometry": geom, "properties": {"fid": int(i)}})
-        data = open(tmp_path, "rb").read()
-    finally:
-        try: os.remove(tmp_path)
-        except Exception: pass
-
-    st.success(f"GPKG pripravený – prvkov: {used}")
-    st.download_button("Stiahnuť GPKG", data, file_name=f"parcely_{ku_code}.gpkg", mime="application/geopackage+sqlite3")
-
-# ---- WMS preview ------------------------------------------------------------
-
-def _derive_wms_base(wfs_base: str) -> str:
-    return re.sub(r"/wfs(\b|$)", "/wms", wfs_base, flags=re.IGNORECASE)
-
-
-def _safe_fetch_zone_bbox(register: str, ku_code: str) -> Tuple[Optional[Tuple[float, float, float, float]], str]:
-    """Try multiple `fetch_zone_bbox` signatures + srs strategies.
-    Returns (bbox, crs) where crs is "EPSG:4326" if bbox is in 4326, otherwise "EPSG:5514".
-    """
-    # 1) Prefer bbox in EPSG:4326 (better for WMS 1.3.0)
-    try:
-        bbox = fetch_zone_bbox(register, ku_code, wfs_srs="EPSG:4326", retries=RETRIES)  # type: ignore[arg-type]
-        if bbox:
-            return bbox, "EPSG:4326"
-    except TypeError:
-        # Older signature without wfs_srs param
-        try:
-            bbox = fetch_zone_bbox(register, ku_code, retries=RETRIES)  # type: ignore[misc]
-            if bbox:
-                return bbox, "EPSG:5514"  # assume server default
-        except TypeError:
-            bbox = fetch_zone_bbox(register, ku_code)  # last resort
-            if bbox:
-                return bbox, "EPSG:5514"
-    # 2) Fallback: call without args even if above failed
-    try:
-        bbox = fetch_zone_bbox(register, ku_code)
-        if bbox:
-            return bbox, "EPSG:5514"
-    except Exception:
-        pass
-    return None, ""
-
-
-def _show_wms_preview(register: str, ku_code: str) -> None:
-    bbox, crs = _safe_fetch_zone_bbox(register, ku_code)
-    if not bbox:
-        st.warning("Náhľad WMS: BBOX sa nepodarilo získať.")
-        return
+def show_map_preview(reg: str, fc_geojson: dict, bbox: tuple[float,float,float,float], *, ku: str = "", parcels: str = ""):
     minx, miny, maxx, maxy = bbox
+    cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
+    m = folium.Map(location=[cy, cx], zoom_start=14, tiles=None, control_scale=True)
+    folium.TileLayer("OpenStreetMap", control=False).add_to(m)
+    is_E = (reg or '').upper() == 'E'
+    url   = WMS_URL_E if is_E else WMS_URL_C
+    layer = LAYER_E    if is_E else LAYER_C
+    zone  = ZONE_E     if is_E else ZONE_C
+    cql_parc = _build_cql_for_preview(ku, "")
+    p = dict(layers=layer, fmt="image/png", transparent=True, overlay=True, control=False, version="1.3.0",
+             attr="© GKÚ SR / INSPIRE")
+    if cql_parc: p["CQL_FILTER"] = cql_parc
+    folium.raster_layers.WmsTileLayer(url=url, name="Parcely (WMS)", **p).add_to(m)
+    cql_zone = _cql_for_zone(ku)
+    zp = dict(layers=zone, fmt="image/png", transparent=True, overlay=True, control=False, version="1.3.0",
+              attr="© GKÚ SR / INSPIRE", opacity=0.8)
+    if cql_zone: zp["CQL_FILTER"] = cql_zone
+    folium.raster_layers.WmsTileLayer(url=url, name="Hranica KU", **zp).add_to(m)
+    if (parcels or '').strip():
+        folium.GeoJson(fc_geojson, name="Vybrané parcely (WFS)", style_function=lambda _: {"weight": 3, "fill": False}).add_to(m)
+    st_folium(m, height=540, returned_objects=[])
 
-    base = CP_UO_WFS_BASE if (register or "").upper() == "E" else CP_WFS_BASE
-    wms = _derive_wms_base(base)
-    layer = ZONE_E if (register or "").upper() == "E" else ZONE_C
 
-    if crs == "EPSG:4326":
-        # WMS 1.3.0 + EPSG:4326 expects lat,lon order
-        bbox_param = f"{miny},{minx},{maxy},{maxx}"
-        crs_param = "EPSG:4326"
-    else:
-        # Assume projected native (S-JTSK). Axis order standard x,y
-        bbox_param = f"{minx},{miny},{maxx},{maxy}"
-        crs_param = "EPSG:5514"
-
-    params = {
-        "service": "WMS",
-        "version": "1.3.0",
-        "request": "GetMap",
-        "layers": layer,
-        "styles": "",
-        "crs": crs_param,
-        "bbox": bbox_param,
-        "width": "900",
-        "height": "650",
-        "format": "image/png",
-        "transparent": "false",
-        "bgcolor": "0xFFFFFF",
-    }
-    from urllib.parse import urlencode
-    url = f"{wms}?{urlencode(params)}"
-    st.image(url, caption="WMS náhľad KU (zóna)", use_column_width=True)
-
-# ----------------------------- main -----------------------------------------
-
-def main() -> None:
-    st.set_page_config(page_title="ParcelOne", layout="wide")
+def main():
+    st.set_page_config(page_title="ParcelOne – WFS GML", layout="wide")
     st.title("ParcelOne – Sťahuj geometrie KN vo vybranom formáte")
 
-    col1, col2 = st.columns([1, 1])
+    with st.sidebar:
+        reg = st.selectbox("Register", ["E", "C"], index=0)
+        col_ku1, col_ku2 = st.columns(2)
+        with col_ku1:
+            ku_code = st.text_input("Katastrálne územie – kód", placeholder="napr. 808156")
+        with col_ku2:
+            ku_name = st.text_input("...alebo názov", placeholder="napr. Bratislava-Staré Mesto")
+        parcels = st.text_area("Parcelné čísla (voliteľné)", placeholder="napr. 1234/1, 1234/2")
+        fmt = st.selectbox("Výstupový formát", ["gml-zip", "geojson", "shp", "dxf", "gpkg"], index=0)
+        crs_label = st.selectbox("CRS (WFS srsName)", list(WFS_CRS_CHOICES.keys()), index=1)
+        wfs_srs = WFS_CRS_CHOICES[crs_label]
+        st.caption("**Kontakt**  •  📞 +421 948 955 128  •  ✉️ svitokerik02@gmail.com")
+
+    col1, col2 = st.columns([2, 1])
+    ku_table = load_ku_table()
+    resolved_ku = (ku_code or "").strip()
+    ku_suggestions: list[dict] = []
+    if not resolved_ku:
+        resolved_ku, ku_suggestions = lookup_ku_code(ku_table, ku_name or "")
+    soft_pick = None
+    if not resolved_ku and ku_suggestions:
+        soft_pick = ku_suggestions[0]
+    if ku_name and not resolved_ku:
+        st.info("Nenašiel som presnú zhodu.")
+    if ku_suggestions:
+        cols = st.columns(min(5, len(ku_suggestions)))
+        for i, it in enumerate(ku_suggestions[:5]):
+            label = f"{it['name']} ({it['code']})"
+            if cols[i].button(label, key=f"pick_ku_{it['code']}"):
+                resolved_ku = it['code']; ku_name = it['name']; soft_pick = it
+    if ku_name and resolved_ku:
+        st.caption(f"Vybrané KU: {ku_name} → kód **{resolved_ku}**")
+
+    # --- Auto preview ---
+    __ku_for_preview = resolved_ku or (soft_pick['code'] if soft_pick else "")
+    if (__ku_for_preview or (parcels or '').strip()):
+        with col1:
+            with st.spinner("Pripravujem mapový náhľad…"):
+                gj = fetch_geojson_pages(reg, __ku_for_preview, parcels, wfs_srs="EPSG:4326")
+            if gj.ok and gj.pages:
+                fc, total, used = merge_geojson_pages(gj.pages, max_features=4000)
+                bbox = bbox_from_geojson(fc)
+                if bbox:
+                    show_map_preview(reg, fc, bbox, ku=__ku_for_preview, parcels=parcels)
+                    if not resolved_ku and soft_pick:
+                        st.caption(f"Náhľad podľa najbližšej zhody: {soft_pick['name']} ({soft_pick['code']}).")
+                    if used < total:
+                        st.caption(f"Náhľad skrátený: {used} z {total} prvkov.")
+                else:
+                    st.info("Mapový náhľad: nenašli sa geometrie pre zadaný filter.")
+            else:
+                st.info("Mapový náhľad: server nevrátil dáta pre zadaný filter.")
+
+    # --- Download ---
+    if not (resolved_ku or (parcels or '').strip()):
+        st.error("Zadaj KU (kód alebo názov) alebo aspoň jedno parcelné číslo.")
+        st.stop()
+
+    with st.spinner("Naťahujem GML stránky z WFS…"):
+        result = fetch_gml_pages(reg, resolved_ku or "", parcels, wfs_srs=wfs_srs)
     with col1:
-        register = st.selectbox("Register", ["E", "C"], index=0)
-        ku_raw = st.text_input("Katastrálne územie – kód alebo názov",
-                               placeholder="napr. 801062 alebo Banská Bystrica")
-        parcels_csv = st.text_area("Parcelné čísla (voliteľné)", placeholder="napr. 1234/1, 456/2")
-    with col2:
-        options, label_map = _normalize_crs_choices(WFS_CRS_CHOICES)
-        wfs_crs = st.selectbox("CRS (WFS srsName)", options=options, format_func=lambda k: label_map.get(k, k))
-        do_preview_ku = st.checkbox("Zobraziť náhľad KU (WMS)", value=False)
-        output_format = st.selectbox("Výstupový formát", ["gml-zip", "geojson", "shp-zip", "gpkg", "dxf"], index=0)
-
-    ku_code = _resolve_ku(ku_raw)
-
-    if do_preview_ku and ku_code:
-        _show_wms_preview(register, ku_code)
-
-    clicked = st.button("Stiahnuť parcely", type="primary")
-    if not clicked:
-        return
-
-    if not ku_code:
-        st.error("Zadaj kód KU alebo platný názov a prípadne vyber zo zoznamu.")
-        return
-
-    if output_format == "geojson":
-        res = fetch_geojson_pages(register, ku_code, parcels_csv, wfs_srs=wfs_crs)
-        if not res.ok:
-            st.error(res.note)
-            prev = preview_geojson_autofallback(register, ku_code, parcels_csv, wfs_srs=wfs_crs)
-            if prev.ok:
-                st.info("Náhľad úspešný s fallbackom – server pre GeoJSON môže byť náladový.")
-                _download_geojson(prev.pages, ku_code)
-            return
-        _download_geojson(res.pages, ku_code)
-
-    elif output_format == "gml-zip":
-        res = fetch_gml_pages(register, ku_code, parcels_csv, wfs_srs=wfs_crs)
-        if not res.ok:
-            st.error(res.note); return
-        _download_gml_zip(res.pages, ku_code)
-
-    elif output_format == "shp-zip":
-        res = fetch_geojson_pages(register, ku_code, parcels_csv, wfs_srs=wfs_crs)
-        if not res.ok:
-            st.error(res.note); return
-        _download_shp_zip_from_geojson(res.pages, ku_code)
-
-    elif output_format == "gpkg":
-        res = fetch_geojson_pages(register, ku_code, parcels_csv, wfs_srs=wfs_crs)
-        if not res.ok:
-            st.error(res.note); return
-        _download_gpkg_from_geojson(res.pages, ku_code)
-
-    else:  # dxf
-        res = fetch_geojson_pages(register, ku_code, parcels_csv, wfs_srs=wfs_crs)
-        if not res.ok:
-            st.error(res.note); return
-        _download_dxf_from_geojson(res.pages, ku_code)
-
-
-if __name__ == "__main__":
-    main()
+        st.success("Parcely pripravené.")
+        mem_zip = io.BytesIO()
+        with zipfile.ZipFile(mem_zip, mode="w") as zf:
+            for i, b in enumerate(result.pages, 1):
+                zf.writestr(f"parcely_{i:03d}.gml", b)
+        gml_zip = mem_zip.getvalue()
+        if fmt == "gml-zip":
+            st.download_button(
+                "Stiahnuť GML (ZIP)", data=gml_zip,
+                file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.zip", mime="application/zip",
+            )
+        else:
+            try:
+                if fmt == "geojson":
+                    data, mime, conv_src = convert_pages_with_gdal(result.pages, "GeoJSON", ".geojson")
+                    st.download_button("Stiahnuť GeoJSON", data=data,
+                                       file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.geojson", mime=mime)
+                    st.caption(f"Konverzia: {conv_src}")
+                elif fmt == "shp":
+                    data, mime, conv_src = convert_pages_with_gdal(result.pages, "ESRI Shapefile", ".shp")
+                    st.download_button("Stiahnuť SHP (ZIP)", data=data,
+                                       file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.zip", mime=mime)
+                    st.caption(f"Konverzia: {conv_src}")
+                elif fmt == "dxf":
+                    gj_res = fetch_geojson_pages(reg, resolved_ku or "", parcels, wfs_srs=wfs_srs)
+                    if not gj_res.ok:
+                        st.error(f"Chyba DXF konverzie: {gj_res.note}\nURL: {gj_res.first_url or '-'}"); st.stop()
+                    dxf_bytes, mime = geojson_pages_to_dxf(gj_res.pages)
+                    st.download_button("Stiahnuť DXF", data=dxf_bytes,
+                                       file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.dxf", mime=mime)
+                    st.caption("Konverzia: čistý Python (bez GDAL/ezdxf)")
+                elif fmt == "gpkg":
+                    data, mime, conv_src = convert_pages_with_gdal(result.pages, "GPKG", ".gpkg")
+                    st.download_button("Stiahnuť GPKG", data=data,
+                                       file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.gpkg", mime=mime)
+                    st.caption(f"Konverzia: {conv_src}")
+            except Exception as e:
+                st.error(str(e))
