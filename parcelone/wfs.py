@@ -450,8 +450,8 @@ def fetch_zone_bbox(
     ku: str,
     *,
     retries: int = 3,
-    timeout: _Optional[aiohttp.ClientTimeout] = None,
-) -> _Optional[Tuple[float, float, float, float]]:
+    timeout: Optional[aiohttp.ClientTimeout] = None,
+) -> Optional[Tuple[float, float, float, float]]:
     effective_timeout = timeout or DEFAULT_TIMEOUT
     return asyncio.run(
         _fetch_zone_bbox_async(register, ku, retries=retries, timeout=effective_timeout)
