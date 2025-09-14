@@ -1,6 +1,4 @@
 
-
-```python
 # file: parcelone/parcelone/ui.py
 """Streamlit UI (no forms). KU lookup + robust CRS select + DXF/SHP/GPKG exports."""
 import json
@@ -283,7 +281,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-```
 # file: parcelone/parcelone/ui.py
 """Streamlit UI (no forms). Simpler flow, working submit + KU lookup + DXF export."""
 import json
