@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from .ku_index import code_for
 import io
 import os
 import re
@@ -59,6 +59,20 @@ def _resource_path(rel: str) -> str:
     return p if os.path.exists(p) else rel
 
 # ---------- KodKU.txt loader (format: "<name>" <code>) ----------
+
+ku_code, candidates = code_for(ku_input)
+
+
+if candidates: # ambiguous -> let user choose
+    label = "Našli sme viac KU s rovnakým názvom — vyber jedno"
+    options = {f"{c.name} ({c.code})": c.code for c in candidates}
+    choice = st.selectbox(label, list(options))
+    ku_code = options[choice]
+
+if not ku_code:
+    st.error("Zadaj 6‑miestny kód KU alebo platný názov.")
+    st.stop()
+    
 # keep exactly one copy of these helpers in your file
 
 def _parse_ku_line(line: str):
