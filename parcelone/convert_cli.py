@@ -1,6 +1,6 @@
 import argparse
 from pathlib import Path
-from converters import convert_pages_with_gdal
+from .converters import convert_pages_with_gdal
 
 
 def main() -> None:
