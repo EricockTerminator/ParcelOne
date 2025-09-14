@@ -5,8 +5,10 @@ from dataclasses import dataclass
 from typing import List, Optional
 from urllib.parse import urlencode
 
-CP_WFS_BASE = "https://inspirews.skgeodesy.sk/geoserver/cp/ows"
-CP_UO_WFS_BASE = "https://inspirews.skgeodesy.sk/geoserver/cp_uo/ows"
+try:  # Allow running as a standalone script or as part of the package
+    from .config import CP_WFS_BASE, CP_UO_WFS_BASE, PAGE_SIZE
+except ImportError:  # pragma: no cover
+    from config import CP_WFS_BASE, CP_UO_WFS_BASE, PAGE_SIZE  # type: ignore
 TYPE_C = "cp:CP.CadastralParcel"
 TYPE_E = "cp_uo:CP.CadastralParcelUO"
 HEADERS_XML = {
