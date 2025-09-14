@@ -217,7 +217,6 @@ async def _fetch(session: aiohttp.ClientSession, url: str, *, retries: int = 3,
     import-time failure. Using `None` here and resolving inside avoids that.
 
     Raises the final exception if all retries fail.
-    """
     if retries < 1:
         raise ValueError("retries must be >= 1")
 
