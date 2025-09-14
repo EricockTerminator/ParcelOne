@@ -1,22 +1,24 @@
+# path: parcelone/ui.py
 from __future__ import annotations
+from typing import Optional, Tuple
 import io, zipfile
+
 import streamlit as st
 import folium
 from streamlit_folium import st_folium
-from typing import Optional, Tuple
-from parcelone import wfs as _wfs  # why: debug utils (get_last_http, wfs_capabilities)
+
+# Debug utils (bezpečné – používame len ak existujú)
+from parcelone import wfs as _wfs  # get_last_http(), wfs_capabilities()
+
 from .wfs import (
     fetch_gml_pages, fetch_geojson_pages, merge_geojson_pages,
     bbox_from_geojson, WMS_URL_C, WMS_URL_E, LAYER_C, LAYER_E, ZONE_C, ZONE_E,
-    fetch_zone_bbox,  # nový bbox helper pre zoom
+    fetch_zone_bbox,
 )
 from .convert import convert_pages_with_gdal
 from .ku import load_ku_table, lookup_ku_code
 
-crs_label = st.selectbox("CRS (WFS srsName)", list(WFS_CRS_CHOICES.keys()), index=0)
-wfs_srs = WFS_CRS_CHOICES[crs_label]
-debug = st.sidebar.checkbox("🧪 Debug panel", value=False)
-
+# --- Konštanty / voľby ---
 WFS_CRS_CHOICES = {
     "auto (server default)": None,
     "EPSG:5514 (S-JTSK / Krovák EN)": "EPSG:5514",
@@ -24,6 +26,7 @@ WFS_CRS_CHOICES = {
     "EPSG:4326 (WGS84)": "EPSG:4326",
 }
 
+# --- Helpery pre náhľad ---
 def _build_cql_for_preview(ku: str, parcels_csv: str) -> str:
     parts = []
     ku = (ku or "").strip()
@@ -40,7 +43,6 @@ def _cql_for_zone(ku: str) -> str:
     return f"nationalCadastralReference='{ku}'" if ku else ""
 
 def show_map_preview(reg: str, fc_geojson: Optional[dict], bbox: Optional[Tuple[float,float,float,float]], *, ku: str = "", parcels: str = ""):
-    # Prečo: keď nie je bbox, aspoň SR centrum
     default_center = (48.7, 19.7); default_zoom = 8
     if bbox:
         minx, miny, maxx, maxy = bbox
@@ -76,12 +78,12 @@ def show_map_preview(reg: str, fc_geojson: Optional[dict], bbox: Optional[Tuple[
 
     st_folium(m, height=540, returned_objects=[])
 
+# --- Hlavný vstup ---
 def main():
-    # MUSÍ byť prvé volanie Streamlitu
     st.set_page_config(page_title="ParcelOne – WFS GML", layout="wide")
     st.title("ParcelOne – Sťahuj geometrie KN vo vybranom formáte")
 
-    # Sidebar vo vnútri main()
+    # Sidebar
     with st.sidebar:
         reg = st.selectbox("Register", ["E", "C"], index=0)
         col_ku1, col_ku2 = st.columns(2)
@@ -91,8 +93,9 @@ def main():
             ku_name = st.text_input("...alebo názov", placeholder="napr. Bratislava-Staré Mesto")
         parcels = st.text_area("Parcelné čísla (voliteľné)", placeholder="napr. 1234/1, 1234/2")
         fmt = st.selectbox("Výstupový formát", ["gml-zip", "geojson", "shp", "dxf", "gpkg"], index=0)
-        crs_label = st.selectbox("CRS (WFS srsName)", list(WFS_CRS_CHOICES.keys()), index=0)
+        crs_label = st.selectbox("CRS (WFS srsName)", list(WFS_CRS_CHOICES.keys()), index=0)  # default: auto
         wfs_srs = WFS_CRS_CHOICES[crs_label]
+        debug = st.checkbox("🧪 Debug panel", value=False)
         st.caption("**Kontakt**  •  📞 +421 948 955 128  •  ✉️ svitokerik02@gmail.com")
 
     col1, col2 = st.columns([2, 1])
@@ -116,7 +119,7 @@ def main():
     if ku_name and resolved_ku:
         st.caption(f"Vybrané KU: {ku_name} → kód **{resolved_ku}**")
 
-    # Náhľad (Zoning bbox → rýchly zoom)
+    # Náhľad
     __ku_for_preview = resolved_ku or (soft_pick['code'] if soft_pick else "")
     with col1:
         with st.spinner("Pripravujem mapový náhľad…"):
@@ -135,7 +138,21 @@ def main():
             else:
                 show_map_preview(reg, None, zone_bbox, ku=__ku_for_preview, parcels="")
 
-    # Download (ťažká časť až tu)
+    # Debug panel (bezpečný – len ak sú utils dostupné)
+    if debug:
+        with st.expander("🧪 WFS diagnostika", expanded=True):
+            cap_fn = getattr(_wfs, "wfs_capabilities", None)
+            last_fn = getattr(_wfs, "get_last_http", None)
+            if callable(cap_fn):
+                ok_c, url_c = cap_fn(_wfs.CP_WFS_BASE)
+                ok_e, url_e = cap_fn(_wfs.CP_UO_WFS_BASE)
+                st.write("CP GetCapabilities:", "✅" if ok_c else "❌", url_c)
+                st.write("CP_UO GetCapabilities:", "✅" if ok_e else "❌", url_e)
+            if callable(last_fn):
+                st.caption("Posledné URL volania:")
+                st.code("\n".join(last_fn()) or "(žiadne)", language="text")
+
+    # Download
     if not (resolved_ku or (parcels or '').strip()):
         st.error("Zadaj KU (kód alebo názov) alebo aspoň jedno parcelné číslo.")
         return
@@ -156,10 +173,8 @@ def main():
         gml_zip = mem_zip.getvalue()
 
         if fmt == "gml-zip":
-            st.download_button(
-                "Stiahnuť GML (ZIP)", data=gml_zip,
-                file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.zip", mime="application/zip",
-            )
+            st.download_button("Stiahnuť GML (ZIP)", data=gml_zip,
+                               file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.zip", mime="application/zip")
         else:
             try:
                 if fmt == "geojson":
@@ -184,11 +199,3 @@ def main():
                     st.caption(f"Konverzia: {conv_src}")
             except Exception as e:
                 st.error(f"Konverzia zlyhala: {e}")
-if debug:
-    with st.expander("🧪 WFS diagnostika", expanded=True):
-        ok_c, url_c   = _wfs.wfs_capabilities(_wfs.CP_WFS_BASE)
-        ok_e, url_e   = _wfs.wfs_capabilities(_wfs.CP_UO_WFS_BASE)
-        st.write("CP GetCapabilities:", "✅" if ok_c else "❌", url_c)
-        st.write("CP_UO GetCapabilities:", "✅" if ok_e else "❌", url_e)
-        st.caption("Posledné URL volania:")
-        st.code("\n".join(_wfs.get_last_http()) or "(žiadne)", language="text")
