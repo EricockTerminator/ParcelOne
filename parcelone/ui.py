@@ -87,7 +87,7 @@ def main():
             ku_name = st.text_input("...alebo názov", placeholder="napr. Bratislava-Staré Mesto")
         parcels = st.text_area("Parcelné čísla (voliteľné)", placeholder="napr. 1234/1, 1234/2")
         fmt = st.selectbox("Výstupový formát", ["gml-zip", "geojson", "shp", "dxf", "gpkg"], index=0)
-        crs_label = st.selectbox("CRS (WFS srsName)", list(WFS_CRS_CHOICES.keys()), index=1)
+        crs_label = st.selectbox("CRS (WFS srsName)", list(WFS_CRS_CHOICES.keys()), index=0)
         wfs_srs = WFS_CRS_CHOICES[crs_label]
         st.caption("**Kontakt**  •  📞 +421 948 955 128  •  ✉️ svitokerik02@gmail.com")
 
