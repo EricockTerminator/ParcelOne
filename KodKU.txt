@@ -1,0 +1,3559 @@
+"Abovce" 800040
+"Abrahám" 800058
+"Abrahámovce" 800066
+"Abrahámovce" 800074
+"Abramová" 800091
+"Abranovce" 800112
+"Adamovské Kochanovce" 800121
+"Adidovce" 800155
+"Alekšince" 800163
+"Amadeho Kračany" 826740
+"Andač" 800180
+"Andovce" 800198
+"Andrejová" 800201
+"Ardanovce" 800236
+"Ardovo" 800252
+"Arnutovce" 800261
+"Babie" 800309
+"Babin Potok" 800325
+"Babindol" 800341
+"Babinec" 800350
+"Babiná" 800333
+"Babkov" 800376
+"Babky" 845728
+"Babín" 800317
+"Bacúch" 800384
+"Bacúrov" 800392
+"Badín" 800473
+"Bajany" 800490
+"Bajerov" 800554
+"Bajerovce" 800562
+"Bajka" 800571
+"Bajtava" 800589
+"Bajč" 800503
+"Baka" 800597
+"Bakta" 800601
+"Baldovce" 800627
+"Balog nad Ipľom" 800635
+"Baloň" 800643
+"Baláže" 800619
+"Banka" 800678
+"Banky" 800694
+"Banky" 800708
+"Banská Belá" 801038
+"Banská Bystrica" 801062
+"Banská Hodruša" 801461
+"Banská Štiavnica" 801470
+"Banské" 801640
+"Banský Studenec" 801658
+"Barca" 801691
+"Barca" 827380
+"Bardejov" 801712
+"Bardejovská Nová Ves" 802077
+"Bardoňovo" 802093
+"Bartošova Lehôtka" 802107
+"Bartošovce" 802115
+"Batizovce" 802174
+"Bačka" 800414
+"Bačkov" 800422
+"Bačkovík" 800431
+"Baďan" 800465
+"Baňa" 800651
+"Baška" 802123
+"Baškovce" 802140
+"Baškovce" 802158
+"Bašovce" 802166
+"Baštín" 803901
+"Bažantnica" 991970
+"Becherov" 802298
+"Beckov" 802255
+"Beckovská Vieska" 825085
+"Beharovce" 802263
+"Behynce" 802271
+"Behynce" 802280
+"Beketfa" 816639
+"Beladice" 802409
+"Belejovce" 802425
+"Belek" 847241
+"Belina" 802450
+"Belince" 802468
+"Bellova Ves" 802476
+"Beloveža" 802484
+"Beluj" 802492
+"Beluša" 802506
+"Belá" 802301
+"Belá" 802328
+"Belá" 802336
+"Belá nad Cirochou" 802395
+"Belín" 802433
+"Belža" 802565
+"Beniakovce" 802611
+"Benice" 802638
+"Benice" 802654
+"Benkova Potôň" 817490
+"Benkovce" 802662
+"Bernolákovo" 802735
+"Bertotovce" 802743
+"Betlanovce" 802824
+"Betliar" 802841
+"Bečov" 854468
+"Beňadikovce" 802581
+"Beňadiková" 802573
+"Beňadovo" 802590
+"Beňatina" 802603
+"Beňova Lehota" 802671
+"Beňuš" 802689
+"Beňušovce" 802727
+"Beša" 802760
+"Beša" 802794
+"Bešeňov" 802808
+"Bešeňová" 802816
+"Bežovce" 802867
+"Bidovce" 802875
+"Biel" 802905
+"Bielovce" 802913
+"Biely Kostol" 802921
+"Bijacovce" 802930
+"Biskupice" 802981
+"Biskupice" 802999
+"Biskupová" 803006
+"Bitarová" 803014
+"Bizovo" 815225
+"Blahová" 803022
+"Blatnica" 803103
+"Blatná lúka" 844276
+"Blatná na Ostrove" 803031
+"Blatná Polianka" 803057
+"Blatné" 803065
+"Blatné Remety" 803073
+"Blatné Revištia" 803090
+"Blažice" 803111
+"Blažov" 829960
+"Blažov" 950157
+"Blažovce" 803146
+"Blesovce" 803162
+"Blhovce" 803171
+"Bobot" 803197
+"Bobotská Lehota" 803201
+"Bobrov" 803219
+"Bobrovec" 803235
+"Bobrovník" 803243
+"Bobrovček" 803227
+"Bodice" 803286
+"Bodiná" 803294
+"Bodorová" 803308
+"Bodovce" 803324
+"Bodružal" 803341
+"Bodza" 803359
+"Bodzianske Lúky" 803367
+"Bodíky" 818330
+"Bogliarka" 803375
+"Bohatá" 803383
+"Bohdanovce" 803413
+"Bohdanovce nad Trnavou" 803421
+"Boheľov" 803430
+"Bohunice" 803448
+"Bohunice" 803456
+"Bohunice" 822400
+"Bohúňovo" 803464
+"Bojnice" 803511
+"Bojničky" 803553
+"Bojná" 803481
+"Bokša" 859249
+"Boldog" 803570
+"Boleráz" 803588
+"Bolešov" 803600
+"Boliarov" 803626
+"Borcová" 803669
+"Borinka" 803693
+"Borov" 803723
+"Borovce" 803758
+"Borová" 803740
+"Borský Mikuláš" 803804
+"Borský Peter" 803821
+"Borský Svätý Jur" 803766
+"Bory" 803855
+"Borčany" 803677
+"Borčice" 803685
+"Borša" 803847
+"Bottovo" 803961
+"Bočiar" 820547
+"Boľ" 803561
+"Boľkovce" 803642
+"Bošianska Neporadza" 839663
+"Bošáca" 803863
+"Boťany" 803944
+"Božčice" 803987
+"Bracovce" 804002
+"Brakoň" 814636
+"Branovo" 804045
+"Branč" 804029
+"Braväcovo" 806145
+"Brdárka" 806161
+"Brehov" 806170
+"Brehy" 806188
+"Brekov" 806196
+"Brestov" 806218
+"Brestov" 806226
+"Brestov nad Laborcom" 806234
+"Brestovec" 806269
+"Brestovec" 806277
+"Bretejovce" 806382
+"Bretka" 806391
+"Breza" 806404
+"Brezany" 806412
+"Brezany" 839469
+"Brezina" 806421
+"Breziny" 806447
+"Breznica" 806463
+"Breznička" 806480
+"Breznička" 806510
+"Brezno" 806528
+"Brezolupy" 806722
+"Brezov" 806731
+"Brezovec" 806820
+"Brezovica" 806838
+"Brezovica" 806846
+"Brezovička" 806862
+"Brezovka" 806871
+"Brezová pod Bradlom" 806749
+"Brežany" 806889
+"Briestenné" 806927
+"Brieštie" 806935
+"Brodno" 806951
+"Brodské" 806960
+"Brody" 877891
+"Brodzany" 806978
+"Brunovce" 806986
+"Brusnica" 807001
+"Brusno" 819671
+"Brusno" 820989
+"Brusník" 807010
+"Brusník" 854166
+"Brutovce" 807028
+"Bruty" 807036
+"Brvnište" 807044
+"Brzotín" 807052
+"Brádno" 804011
+"Buclovany" 807061
+"Budatín" 874825
+"Budatínska Lehota" 807117
+"Budikovany" 807141
+"Budimír" 807150
+"Budince" 853585
+"Budiná" 807176
+"Budička" 865311
+"Budiš" 807222
+"Budkovce" 807231
+"Budmerice" 807265
+"Budulov" 807281
+"Budča" 807125
+"Buglovce" 807290
+"Bukovce" 807320
+"Bukovec" 807354
+"Bukovec" 807389
+"Bukovina" 807401
+"Bukovina" 807419
+"Buková" 807303
+"Bulhary" 807427
+"Bunetice" 807435
+"Bunkovce" 807443
+"Burkov vrch" 843644
+"Buzica" 807486
+"Buzitka" 807508
+"Bučany" 807109
+"Bučuháza" 837709
+"Bušince" 807451
+"Bušovce" 807478
+"Byster" 854328
+"Bystrany" 807575
+"Bystrická hora" 871818
+"Bystričany" 807613
+"Bystrička" 807656
+"Bystrička" 807664
+"Bystrá" 807567
+"Bystrá" 839159
+"Bystré" 807591
+"Bytčica" 807753
+"Byšta" 807681
+"Bzenica" 807761
+"Bzenov" 807788
+"Bzince" 807796
+"Bziny" 807885
+"Bzovská Lehôtka" 807915
+"Bzovík" 807893
+"Bádice" 847267
+"Báhoň" 800481
+"Bánov" 800724
+"Bánovce nad Bebravou" 800805
+"Bánovce nad Ondavou" 801011
+"Bánová" 800759
+"Bátka" 802191
+"Bátorove Kosihy" 870081
+"Bátorová" 802212
+"Bátovce" 802221
+"Báč" 800406
+"Báčovce" 800457
+"Bílkove Humence" 802948
+"Bíňa" 802956
+"Bíňovce" 802972
+"Bôrka" 803715
+"Búč" 807079
+"Búštelek" 822051
+"Bžany" 807923
+"Cabaj" 807931
+"Cabov" 807974
+"Cakov" 807982
+"Cejkov" 807991
+"Cernina" 808008
+"Cerovo" 808032
+"Cerová-Lieskové" 808024
+"Cestice" 808113
+"Chabžany" 831298
+"Chalmová" 807630
+"Chanava" 820644
+"Chlebnice" 820679
+"Chlmec" 820687
+"Chmeľnica" 820695
+"Chmeľov" 820709
+"Chmeľovec" 820733
+"Chmeľová" 820725
+"Chminianska Nová Ves" 820776
+"Chminianske Jakubovany" 820784
+"Chmiňany" 820750
+"Chocholná-Velčice" 820831
+"Chorvatice" 865630
+"Chorvátsky Grob" 820865
+"Chorváty" 841463
+"Chotín" 820881
+"Chotča" 820873
+"Choča" 820792
+"Choňkovce" 820849
+"Chrabrany" 820903
+"Chrastince" 820946
+"Chrastné" 820954
+"Chrasť nad Hornádom" 820938
+"Chrenovec" 820997
+"Chrenová" 840378
+"Chropov" 821004
+"Chrámec" 820911
+"Chrťany" 821012
+"Chtelnica" 821039
+"Chudá Lehota" 821047
+"Chvalová" 821055
+"Chvojnica" 821063
+"Chvojnica" 821071
+"Chym" 845914
+"Chynorany" 821098
+"Chyžné" 821110
+"Chľaba" 820661
+"Cigeľ" 808156
+"Cigeľka" 808172
+"Cigla" 808199
+"Cimenná" 808202
+"Cinobaňa" 808211
+"Cífer" 808130
+"Daletice" 810045
+"Danišovce" 810053
+"Dara" 810088
+"Dargov" 810096
+"Davidov" 810100
+"Debraď" 810118
+"Dechtice" 810223
+"Dedačov" 810134
+"Dedina Mládeže" 810142
+"Dedinka" 810169
+"Dedinka pri Dunaji" 841731
+"Dedinky" 810185
+"Dekýš" 810231
+"Demandice" 810240
+"Demjata" 810347
+"Demänovská Dolina" 810304
+"Demänová" 810282
+"Detrík" 810355
+"Detva" 810363
+"Detvianska Huta" 810550
+"Devičie" 810622
+"Devín" 805301
+"Devínska Nová Ves" 810649
+"Dežerice" 810673
+"Diakovce" 810703
+"Diaková" 810690
+"Dimitrij" 823805
+"Diva" 810711
+"Diviacka Nová Ves" 810720
+"Diviaky" 810746
+"Diviaky nad Nitricou" 810762
+"Divina" 810835
+"Divinka" 810851
+"Divín" 810789
+"Dlhoňa" 811157
+"Dlhá" 810878
+"Dlhá Lúka" 810886
+"Dlhá Lúka" 830097
+"Dlhá nad Kysucou" 810908
+"Dlhá nad Oravou" 810991
+"Dlhá nad Váhom" 811009
+"Dlhá Ves" 811017
+"Dlhé Klčovo" 811025
+"Dlhé nad Cirochou" 811033
+"Dlhé Pole" 811041
+"Dlhé Stráže" 811149
+"Dlžín" 811165
+"Dobrohošť" 811343
+"Dobroslava" 811351
+"Dobroč" 811254
+"Dobročná" 832081
+"Dobrá" 811173
+"Dobrá" 811181
+"Dobrá Niva" 811190
+"Dobrá Voda" 811220
+"Dobšiná" 811378
+"Dohňany" 811432
+"Dojč" 811475
+"Dolinka" 811513
+"Dolná Breznica" 811521
+"Dolná Krupá" 811548
+"Dolná Lehota" 811572
+"Dolná Lehota" 811599
+"Dolná Mariková" 811611
+"Dolná Mičiná" 811718
+"Dolná Poruba" 811726
+"Dolná Potôň" 844250
+"Dolná Seč" 811769
+"Dolná Streda" 811777
+"Dolná Strehová" 811785
+"Dolná Súča" 811840
+"Dolná Tižina" 811904
+"Dolná Trnávka" 811921
+"Dolná Ves" 811939
+"Dolná Štubňa" 811874
+"Dolná Ždaňa" 811947
+"Dolné Brhlovce" 806897
+"Dolné Bzince" 807818
+"Dolné Chlebany" 829609
+"Dolné Devičany" 810606
+"Dolné Držkovce" 811955
+"Dolné Dubovany" 813320
+"Dolné Dubové" 811963
+"Dolné Holiare" 816612
+"Dolné Hámre" 811971
+"Dolné Jabloňovce" 821730
+"Dolné Janíky" 822060
+"Dolné Kočkovce" 812013
+"Dolné Krškany" 812021
+"Dolné Lefantovce" 812048
+"Dolné Lovčice" 833185
+"Dolné Mladonice" 812056
+"Dolné Motešice" 838608
+"Dolné Naštice" 812072
+"Dolné Obdokovce" 812081
+"Dolné Orešany" 812099
+"Dolné Otrokovce" 812102
+"Dolné Plachtince" 812111
+"Dolné Príbelce" 849634
+"Dolné Rykynčice" 854191
+"Dolné Saliby" 812129
+"Dolné Semerovce" 812137
+"Dolné Srnie" 812145
+"Dolné Strháre" 812153
+"Dolné Sľažany" 856266
+"Dolné Terany" 862789
+"Dolné Topoľníky" 863921
+"Dolné Trhovište" 812170
+"Dolné Turovce" 868701
+"Dolné Vestenice" 812188
+"Dolné Zahorany" 812196
+"Dolné Zbrojníky" 872911
+"Dolné Zelenice" 812200
+"Dolné Šipice" 860875
+"Dolné Štitáre" 812161
+"Dolné Šútovce" 862312
+"Dolné Žemberovce" 874311
+"Dolný Badín" 812226
+"Dolný Bar" 812234
+"Dolný Chotár" 812293
+"Dolný Dačov Lom" 810037
+"Dolný Harmanec" 812251
+"Dolný Hričov" 812277
+"Dolný Kalník" 812307
+"Dolný Kubín" 812315
+"Dolný Lieskov" 812471
+"Dolný Lopašov" 812480
+"Dolný Moštenec" 812501
+"Dolný Ohaj" 812510
+"Dolný Pial" 812544
+"Dolný Tekovský Hrádok" 862681
+"Dolný Tisovník" 812552
+"Dolný Turček" 865826
+"Dolný Vadičov" 812561
+"Dolný Vinodol" 869511
+"Dolný Čepeň" 855235
+"Dolný Ďur" 868931
+"Dolný Štefanov" 861090
+"Dolný Štál" 819557
+"Domadice" 812579
+"Domaniža" 812595
+"Domaníky" 812587
+"Domaňovce" 812625
+"Domaša" 819719
+"Donovaly" 812641
+"Dovalovo" 812714
+"Doľany" 811483
+"Doľany" 811491
+"Drahovce" 812773
+"Drahňov" 812757
+"Dravce" 812803
+"Dražice" 812811
+"Dražkovce" 812820
+"Dražovce" 812854
+"Drienica" 812901
+"Drienov" 812927
+"Drienovec" 812935
+"Drienovo" 812943
+"Drienovská Nová Ves" 812960
+"Drienčany" 812889
+"Drietoma" 813001
+"Driečna" 869775
+"Drnava" 813061
+"Drábsko" 812722
+"Drážovce" 812871
+"Drňa" 813052
+"Drženice" 813109
+"Držkovce" 813117
+"Dubinné" 813133
+"Dubková" 830917
+"Dubnica" 803537
+"Dubnica nad Váhom" 813141
+"Dubnička" 813222
+"Dubno" 813281
+"Dubník" 813249
+"Dubodiel" 813290
+"Dubovec" 813389
+"Dubovica" 813397
+"Dubová" 813303
+"Dubová" 813311
+"Dubové" 813362
+"Dubové" 813371
+"Ducové" 813516
+"Dudince" 813532
+"Dukovce" 813567
+"Dulice" 813575
+"Dulov" 813583
+"Dulova Ves" 813591
+"Dulovce" 813605
+"Dulovo" 802204
+"Dunajov" 813630
+"Dunajská Streda" 813664
+"Dunajský Klátov" 821802
+"Duplín" 813842
+"Dvorany nad Nitrou" 813958
+"Dvorce" 950165
+"Dvorec" 813966
+"Dvorec nad Turcom" 813982
+"Dvorianky" 813991
+"Dvorníky" 814024
+"Dvorníky" 814083
+"Dvorníky" 871699
+"Dvorníky nad Nitricou" 840742
+"Dvory nad Žitavou" 814148
+"Dyčka" 814156
+"Dúbrava" 813401
+"Dúbrava" 813427
+"Dúbrava" 813435
+"Dúbravica" 813443
+"Dúbravka" 806099
+"Dúbravka" 813451
+"Dúbravy" 813478
+"Dúžava" 813940
+"Egreš" 814172
+"Eliášovce" 842958
+"Ereč" 822680
+"Etreho Kračany" 828262
+"Falkušovce" 814199
+"Farná" 814202
+"Farná" 821438
+"Fačkov" 814181
+"Fekišovce" 814211
+"Feld" 846821
+"Figa" 814229
+"Fijaš" 814237
+"Filice" 814652
+"Filier" 851825
+"Fintice" 814351
+"Fiľakovo" 814296
+"Fiľakovské Kováče" 814334
+"Folkušová" 814369
+"Forbasy" 814377
+"Frička" 814385
+"Fričkovce" 814393
+"Fričovce" 814415
+"Fulianka" 814423
+"Furča" 827339
+"Gaboltov" 814474
+"Gabčíkovo" 814440
+"Gajary" 814482
+"Galanta" 814504
+"Galovany" 814628
+"Gbelce" 814687
+"Gbely" 814717
+"Gbeľany" 814679
+"Gelnica" 814741
+"Gemer" 814865
+"Gemerská Hôrka" 814903
+"Gemerská Panica" 814911
+"Gemerská Poloma" 814938
+"Gemerská Ves" 814954
+"Gemerské Dechtáre" 814971
+"Gemerské Michalovce" 814989
+"Gemerský Jablonec" 815021
+"Gemerský Milhosť" 814997
+"Gemerček" 814881
+"Geraltov" 815055
+"Gerlachov" 815071
+"Gerlachov" 815098
+"Geča" 814733
+"Giglovce" 815101
+"Giraltovce" 815136
+"Girovce" 815144
+"Glabušovce" 815152
+"Golianovo" 815195
+"Gondovo" 815209
+"Gortva" 815217
+"Gočaltovo" 815179
+"Gočovo" 815187
+"Granč-Petrovce" 815268
+"Gregorova Vieska" 815276
+"Gregorovce" 815284
+"Gregorovce" 871460
+"Gribov" 815292
+"Grinava" 839019
+"Grunt" 881228
+"Gruzovce" 856568
+"Gyňov" 815306
+"Gánovce" 814661
+"Gáň" 814644
+"Gôtovany" 815250
+"Habovka" 815322
+"Habura" 815331
+"Hajná Nová Ves" 815390
+"Hajnáčka" 815411
+"Hajtovka" 815462
+"Haligovce" 815578
+"Halič" 815501
+"Haluzice" 803871
+"Haláčovce" 815471
+"Hamuliakovo" 815594
+"Handlová" 815608
+"Hanigovce" 815675
+"Haniska" 815691
+"Haniska" 815705
+"Hankovce" 815721
+"Hankovce" 815730
+"Hanková" 815713
+"Hanušovce nad Topľou" 815748
+"Hanzlíková" 873527
+"Harakovce" 815764
+"Harhaj" 815772
+"Harichovce" 815781
+"Harmanec" 815799
+"Harvelka" 815802
+"Hatalov" 815918
+"Hatné" 815926
+"Havaj" 815942
+"Havka" 815951
+"Havranec" 815969
+"Hačava" 815349
+"Hačava" 815365
+"Hažlín" 815985
+"Hažín" 815977
+"Hažín nad Cirochou" 823317
+"Helcmanovce" 816001
+"Henckovce" 816027
+"Henclová" 816035
+"Hencovce" 816043
+"Hendrichovce" 816051
+"Hermanovce" 816086
+"Hermanovce nad Topľou" 816094
+"Hertník" 816108
+"Hervartov" 816116
+"Herľany" 816060
+"Heď" 809772
+"Heďbeneéte" 829986
+"Heľpa" 816019
+"Hiadeľ" 816124
+"Hincovce" 816132
+"Hladovka" 816159
+"Hlboké" 816175
+"Hlboké nad Váhom" 816183
+"Hlinné" 816221
+"Hliník nad Hronom" 816191
+"Hliník nad Váhom" 807711
+"Hlivištia" 816230
+"Hlohovec" 816248
+"Hloža-Podhorie" 816400
+"Hniezdne" 816418
+"Hniezdno" 950149
+"Hnilec" 816477
+"Hnilčík" 816434
+"Hnojné" 816507
+"Hnúšťa" 816515
+"Hodejov" 816558
+"Hodejovec" 816566
+"Hodkovce" 816574
+"Hody" 814539
+"Hokovce" 816582
+"Holiša" 816850
+"Holumnica" 816884
+"Holíč" 816728
+"Holčíkovce" 816591
+"Honce" 816892
+"Hontianska Vrbica" 816906
+"Hontianske Nemce" 816931
+"Hontianske Tesáre" 816973
+"Hontianske Trsťany" 862673
+"Horelica" 808512
+"Horenice" 817007
+"Horná Breznica" 817163
+"Horná Krupá" 817180
+"Horná Kráľová" 817171
+"Horná Lehota" 817201
+"Horná Lehota" 817210
+"Horná Mariková" 817287
+"Horná Mičiná" 817457
+"Horná Poruba" 817465
+"Horná Potôň" 817511
+"Horná Seč" 817571
+"Horná Streda" 817589
+"Horná Strehová" 817597
+"Horná Súča" 817627
+"Horná Tižina" 817783
+"Horná Trnávka" 817791
+"Horná Ves" 817805
+"Horná Ves" 817830
+"Horná Štubňa" 817708
+"Horná Ždaňa" 817848
+"Horné Brhlovce" 806901
+"Horné Bzince" 807826
+"Horné Chlebany" 817970
+"Horné Devičany" 810614
+"Horné Držkovce" 817864
+"Horné Dubovany" 813338
+"Horné Dubové" 817872
+"Horné Holiare" 816621
+"Horné Hámre" 817881
+"Horné Jabloňovce" 821748
+"Horné Janíky" 822078
+"Horné Kočkovce" 850501
+"Horné Krškany" 840076
+"Horné Lefantovce" 817996
+"Horné Lovčice" 833193
+"Horné Mladonice" 818011
+"Horné Motešice" 838616
+"Horné Mýto" 864714
+"Horné Naštice" 818046
+"Horné Obdokovce" 818089
+"Horné Opatovce" 874515
+"Horné Orešany" 818097
+"Horné Otrokovce" 818127
+"Horné Ozorovce" 818135
+"Horné Plachtince" 818143
+"Horné Príbelce" 849642
+"Horné Pršany" 818160
+"Horné Rykynčice" 854204
+"Horné Saliby" 818178
+"Horné Semerovce" 818194
+"Horné Srnie" 818216
+"Horné Strháre" 818232
+"Horné Sľažany" 856274
+"Horné Terany" 862797
+"Horné Topoľníky" 863939
+"Horné Trhovište" 818259
+"Horné Turovce" 818275
+"Horné Vestenice" 818283
+"Horné Zahorany" 818291
+"Horné Zbrojníky" 872920
+"Horné Zelenice" 818313
+"Horné Šipice" 860867
+"Horné Štitáre" 818241
+"Horné Šútovce" 862304
+"Horné Žemberovce" 874329
+"Horný Badín" 818321
+"Horný Bar" 818356
+"Horný chotár" 875163
+"Horný Dačov Lom" 810002
+"Horný Hričov" 818381
+"Horný Jatov" 865397
+"Horný Kalník" 818399
+"Horný Lieskov" 818402
+"Horný Moštenec" 818411
+"Horný Ohaj" 818429
+"Horný Pial" 818437
+"Horný Tekovský Hrádok" 862690
+"Horný Tisovník" 818453
+"Horný Turček" 865834
+"Horný Vadičov" 818526
+"Horný Vinodol" 869520
+"Horný Čepeň" 855375
+"Horný Ďur" 868949
+"Horný Štefanov" 861103
+"Horný Štál" 819565
+"Horovce" 818551
+"Horovce" 818577
+"Horňa" 817147
+"Horňany" 817856
+"Horša" 818585
+"Hoste" 818607
+"Hostice" 818615
+"Hostie" 818631
+"Hostišovce" 818658
+"Hostovice" 818704
+"Hosťovce" 818682
+"Hosťovce" 841455
+"Hosťová" 818674
+"Hozelec" 818721
+"Hoňovce" 874965
+"Hoštiná" 818712
+"Hrabičov" 818763
+"Hrabkov" 818801
+"Hrabovec" 818844
+"Hrabovec nad Laborcom" 818852
+"Hrabovka" 818861
+"Hrabovo" 823058
+"Hrabová Roztoka" 818810
+"Hrabové" 818836
+"Hrabovčík" 818828
+"Hrabské" 818887
+"Hrabušice" 818909
+"Hrachovište" 819042
+"Hrachovo" 819051
+"Hradec" 850195
+"Hradisko" 818941
+"Hradisko" 818950
+"Hradište" 818968
+"Hradište" 818984
+"Hradište pod Vrátnom" 819000
+"Hradištská Moľva" 835455
+"Hraničné" 819123
+"Hranovnica" 819131
+"Hraň" 819069
+"Hrašné" 819158
+"Hrašovík" 819212
+"Hrboltová" 819221
+"Hrhov" 819255
+"Hriadky" 819263
+"Hričovské Podhradie" 819271
+"Hriňová" 819298
+"Hrišovce" 819441
+"Hrkovce" 819450
+"Hrlica" 819468
+"Hrnčiarovce" 819476
+"Hrnčiarske Zalužany" 819549
+"Hrochoť" 819603
+"Hromoš" 819620
+"Hronec" 819662
+"Hronsek" 819743
+"Hronská Breznica" 819760
+"Hronská Dúbrava" 819786
+"Hronské Kosihy" 819808
+"Hronské Kľačany" 819794
+"Hronský Beňadik" 819816
+"Hrubov" 819859
+"Hrubá Borša" 819824
+"Hrubá Strana" 807834
+"Hrubé lúky" 871800
+"Hrubý Šúr" 819867
+"Hrušov" 819883
+"Hrušov" 819972
+"Hrušovany" 819981
+"Hrušovo" 819999
+"Hrušové" 807842
+"Hruštín" 820024
+"Hrádok" 819018
+"Hrčeľ" 819247
+"Hubice" 820032
+"Hubina" 820041
+"Hubovo" 820083
+"Hubová" 820075
+"Hubošovce" 820059
+"Hucín" 820091
+"Hudcovce" 820105
+"Hul" 820113
+"Hulvinky" 862614
+"Humenné" 820121
+"Humenský Rokytov" 820369
+"Huncovce" 820385
+"Hunkovce" 820393
+"Hurbanova Ves" 820407
+"Hurbanovo" 820423
+"Husiná" 820491
+"Husák" 820482
+"Hutka" 820539
+"Huty" 820563
+"Huštáky" 827029
+"Hviezdoslavov" 820571
+"Hvozdnica" 820598
+"Hybe" 820610
+"Hágy" 815373
+"Háj" 815381
+"Háj" 866008
+"Hájniky" 856291
+"Hájske" 815446
+"Hámre" 815586
+"Hôrka" 817023
+"Hôrka" 817040
+"Hôrka nad Váhom" 817104
+"Hôrky" 817139
+"Hýľov" 820636
+"Igram" 821128
+"Ihrište" 821161
+"Ihráč" 821152
+"Ilava" 821187
+"Iliašovce" 821209
+"Ilija" 821225
+"Imeľ" 821241
+"Inovce" 821284
+"Ipeľské Predmostie" 821292
+"Ipeľské Úľany" 821306
+"Ipeľský Potok" 821357
+"Ipeľský Sokolec" 821373
+"Istebné" 821390
+"Istebník" 872601
+"Ivachnová" 821403
+"Ivanice" 821420
+"Ivanka pri Dunaji" 821446
+"Ivanka pri Nitre" 821454
+"Ivanovce" 821471
+"Ivančiná" 821411
+"Iľanovo" 821179
+"Iňa" 821250
+"Iňačovce" 821276
+"Iža" 821501
+"Ižipovce" 821519
+"Ižkovce" 821527
+"Ižop" 821535
+"Jablonec" 821560
+"Jablonica" 821586
+"Jablonka" 821632
+"Jablonov" 821713
+"Jablonov nad Turňou" 821721
+"Jablonové" 821756
+"Jablonové" 821772
+"Jabloň" 821551
+"Jacovce" 821781
+"Jahodná" 821811
+"Jaklovce" 821845
+"Jakovany" 821853
+"Jakubany" 821870
+"Jakubov" 821888
+"Jakubova Voľa" 821896
+"Jakubovany" 821900
+"Jakubovany" 821926
+"Jakušovce" 821934
+"Jalakšová" 802239
+"Jalná" 821942
+"Jalovec" 821969
+"Jalovec" 821977
+"Jalová" 821951
+"Jalšové" 821985
+"Jalšovík" 822001
+"Jamník" 822019
+"Jamník" 822027
+"Janice" 822035
+"Jankovce" 822086
+"Janov" 822108
+"Janova Lehota" 822124
+"Janova Ves" 822132
+"Janovce" 822167
+"Janovík" 822205
+"Janík" 822043
+"Jarabina" 822221
+"Jarabá" 822213
+"Jarná" 822230
+"Jarok" 822248
+"Jarovce" 822256
+"Jarovnice" 822272
+"Jasenica" 822281
+"Jasenie" 822302
+"Jasenov" 822329
+"Jasenov" 822337
+"Jasenovce" 822353
+"Jasenovo" 822396
+"Jasenová" 822345
+"Jasenové" 822388
+"Jaslovce" 822418
+"Jasov" 822434
+"Jasová" 822451
+"Jastrabie Kračany" 828271
+"Jastrabie nad Topľou" 822493
+"Jastrabie pri Michalovciach" 822507
+"Jastrabá" 822485
+"Jatov" 822515
+"Jazernica" 822566
+"Jazero" 877999
+"Jedlinka" 822574
+"Jedľové Kostoľany" 822621
+"Jelenec" 822655
+"Jelka" 822663
+"Jelšava" 822698
+"Jelšavská Teplica" 815004
+"Jelšovce" 822728
+"Jelšovec" 822736
+"Jenkovce" 822744
+"Jesenské" 802778
+"Jesenské" 822795
+"Jestice" 822817
+"Jezersko" 822833
+"Ješkova Ves" 822825
+"Ješkova Ves" 869023
+"Jovice" 822841
+"Jovsa" 822850
+"Jur nad Hronom" 822868
+"Jurkova Voľa" 822906
+"Jurová" 822914
+"Jurské" 822922
+"Juskova Voľa" 822931
+"Južné Mesto" 827118
+"Jánovce" 822141
+"Jánovce" 822183
+"Jánošíková" 822094
+"Kajal" 822965
+"Kalameny" 822981
+"Kalinkovo" 823023
+"Kalinov" 823031
+"Kalinovo" 823066
+"Kalinčiakovo" 823015
+"Kalnica" 823121
+"Kalnište" 823163
+"Kalná" 823112
+"Kalná Roztoka" 823147
+"Kalonda" 823171
+"Kaloša" 823180
+"Kaluža" 823228
+"Kalša" 823210
+"Kamanová" 823236
+"Kamenec pod Vtáčnikom" 823261
+"Kamenica" 823287
+"Kamenica nad Cirochou" 823325
+"Kamenica nad Hronom" 823333
+"Kameničany" 823350
+"Kameničná" 823384
+"Kamenná Poruba" 823449
+"Kamenná Poruba" 823457
+"Kamenné" 827444
+"Kamenné Kosihy" 823473
+"Kamenný Most" 823490
+"Kamenín" 823422
+"Kameňany" 823252
+"Kamienka" 823503
+"Kamienka" 823511
+"Kanianka" 823520
+"Kapince" 823538
+"Kapišová" 823546
+"Kaplna" 823554
+"Kapoňa" 831263
+"Kapušany" 823571
+"Kapušianske Kľačany" 823589
+"Kapušianske Vojkovce" 836435
+"Kardošova Vieska" 823597
+"Karlova Ves" 805211
+"Karlová" 823601
+"Karná" 823627
+"Katúň" 823660
+"Kavečany" 823678
+"Kačanov" 822957
+"Kaľamenová" 822973
+"Kaľava" 822990
+"Kašov" 823635
+"Kašova Lehôtka" 865338
+"Kecerovské Kostoľany" 823708
+"Kecerovské Pekľany" 823732
+"Kecerovský Lipovec" 823741
+"Kechnec" 819085
+"Kendice" 823775
+"Kesovce" 823791
+"Kevice" 803316
+"Kečkovce" 823759
+"Kečovo" 823767
+"Keť" 830178
+"Kežmarok" 823813
+"Kiarov" 823945
+"Kladzany" 824020
+"Klasov" 824054
+"Klastava" 824062
+"Klenov" 824143
+"Klenovec" 824224
+"Klenová" 824151
+"Kleňany" 824135
+"Klieština" 824348
+"Klin" 824364
+"Klin nad Bodrogom" 858960
+"Klobušice" 824402
+"Klokoč" 824437
+"Klokočov" 824551
+"Klokočov" 824844
+"Klubina" 824852
+"Kluknava" 824895
+"Klátova Nová Ves" 824101
+"Kláštor pod Znievom" 824089
+"Klíž" 869031
+"Klížska Nemá" 824381
+"Klížske Hradište" 869040
+"Klčov" 824127
+"Klčovany" 803596
+"Kmeťovce" 802247
+"Kmeťovo" 824941
+"Kobeliarovo" 824976
+"Kobylnice" 824984
+"Kobyly" 824992
+"Koceľovce" 825018
+"Kochanovce" 825115
+"Kochanovce nad Laborcom" 825123
+"Kociha" 825026
+"Kocurany" 825051
+"Kocurice" 825069
+"Kojatice" 825131
+"Kojšov" 825166
+"Kokava nad Rimavicou" 825298
+"Kokošovce" 825387
+"Kokšov-Bakša" 825409
+"Kolačkov" 825433
+"Kolačno" 825441
+"Kolbasov" 825697
+"Kolbovce" 825701
+"Kolibabovce" 825719
+"Kolinovce" 825760
+"Kolonica" 825778
+"Kolta" 825786
+"Koláre" 825689
+"Kolárovice" 825506
+"Kolárovo" 825581
+"Kolíňany" 825743
+"Komjatice" 826073
+"Komjatná" 826081
+"Komoča" 826103
+"Komárany" 825794
+"Komárno" 825883
+"Komárov" 826031
+"Komárovce" 826049
+"Komárovce" 826057
+"Koniarovce" 826111
+"Konrádovce" 826120
+"Konská" 826138
+"Konská" 826146
+"Konské" 826154
+"Kopanice" 826189
+"Kopec" 826219
+"Kopernica" 826227
+"Koplotovce" 826235
+"Koprivnica" 826251
+"Kopráš" 834696
+"Kopčany" 826197
+"Kordíky" 826260
+"Korejovce" 826278
+"Koromľa" 826537
+"Korunková" 826545
+"Korytné" 847879
+"Korytárky" 829081
+"Korňa" 826294
+"Kosihovce" 826561
+"Kosihy nad Ipľom" 826570
+"Kosorín" 826588
+"Kostiviarska" 801453
+"Kostolec" 826600
+"Kostolište" 826626
+"Kostolná Gala" 816655
+"Kostolná pri Dunaji" 826634
+"Kostolná Ves" 826651
+"Kostolná-Záriečie" 826669
+"Kostolné" 826693
+"Kostolné Kračany" 826758
+"Kostolné Moravce" 816914
+"Kostolný Sek" 826804
+"Kostoľany nad Hornádom" 813079
+"Kostoľany pod Tribečom" 826596
+"Kotešová" 827746
+"Kotmanová" 811301
+"Kotrčiná Lúčka" 827762
+"Kovarce" 827843
+"Koválov" 827827
+"Koválovec" 827835
+"Kováčovce" 827801
+"Kováčová" 827771
+"Kováčová" 827797
+"Kozelník" 827878
+"Kozárovce" 827860
+"Kozí Vrbovok" 827886
+"Kočovce" 825093
+"Kočín" 825077
+"Koňuš" 826162
+"Koš" 826812
+"Košariská" 826821
+"Košarovce" 826871
+"Košeca" 826880
+"Košecké Rovné" 826910
+"Košická Belá" 827606
+"Košická Nová Ves" 827347
+"Košická Polianka" 827622
+"Košické Hámre" 875309
+"Košický Klečenov" 827673
+"Koškovce" 827681
+"Košolná" 827690
+"Košúty" 827720
+"Košťany nad Turcom" 827711
+"Kožany" 827894
+"Kožuchov" 827908
+"Kožuchovce" 827916
+"Krahule" 827932
+"Krajná Bystrá" 827941
+"Krajná Porúbka" 827967
+"Krajná Poľana" 827959
+"Krajné" 827975
+"Krajné Čierno" 828041
+"Krakovany" 828050
+"Kraskovo" 828378
+"Krasňany" 828459
+"Kravany" 828807
+"Kravany" 828815
+"Kravany nad Dunajom" 828823
+"Kračúnovce" 827924
+"Kraľovany" 828220
+"Kremnica" 828882
+"Kremnické Bane" 829021
+"Kremnička" 801381
+"Kremná" 828874
+"Kristy" 829030
+"Krivany" 829137
+"Krivoklát" 829153
+"Krivosúd-Bodovka" 829161
+"Krivá" 829072
+"Krivá Oľka" 843661
+"Kriváň" 829099
+"Krivé" 829145
+"Krišovská Liesková" 829056
+"Krišľovce" 829048
+"Križovany nad Dudváhom" 829218
+"Krmeš" 828211
+"Krmeš" 869821
+"Krnišov" 828254
+"Krná" 829226
+"Krnča" 829269
+"Krokava" 829277
+"Krompachy" 829307
+"Krpeľany" 829412
+"Krtovce" 829471
+"Krupina" 829498
+"Kručov" 853755
+"Krušetnica" 829587
+"Krušinec" 829595
+"Krušovce" 829617
+"Kružlov" 829625
+"Kružlová" 829641
+"Kružno" 829676
+"Kružná" 829650
+"Králiky" 828084
+"Krásna" 828416
+"Krásna Hôrka" 828386
+"Krásna Lúka" 828394
+"Krásna Ves" 828432
+"Krásno" 828467
+"Krásno nad Kysucou" 828483
+"Krásnohorská Dlhá Lúka" 828700
+"Krásnohorské Podhradie" 828734
+"Krásnovce" 828751
+"Krásny Brod" 828769
+"Krátke Kesy" 836028
+"Kráľ" 828076
+"Kráľov Brod" 828106
+"Kráľova Lehota" 828173
+"Kráľovce" 828238
+"Kráľovce" 828246
+"Kráľovianky" 837717
+"Kráľovičove Kračany" 828297
+"Kráľovská Ľubeľa" 833266
+"Kráľovský Chlmec" 828360
+"Kráľová" 828157
+"Kráľová nad Váhom" 828190
+"Kráľová pri Senci" 828203
+"Kríže" 829170
+"Krížovany" 829200
+"Krížová Ves" 829196
+"Krčava" 828858
+"Kubrica" 829731
+"Kubrá" 829722
+"Kubáňovo" 829714
+"Kubínska Hoľa" 812455
+"Kucany" 843059
+"Kuchyňa" 829773
+"Kuklov" 829781
+"Kuková" 829790
+"Kukučínov" 829811
+"Kunerad" 829838
+"Kunešov" 829854
+"Kunov" 829862
+"Kunova Teplica" 829897
+"Kuraľany" 829901
+"Kurima" 829919
+"Kurimany" 829927
+"Kurimka" 829935
+"Kurov" 829943
+"Kusín" 829951
+"Kuzmice" 830054
+"Kuzmice" 830089
+"Kučín" 829757
+"Kučín nad Ondavou" 829765
+"Kvakovce" 830127
+"Kvačany" 830101
+"Kvačany" 830119
+"Kvašov" 830151
+"Kvetoslavov" 830208
+"Kyjatice" 830232
+"Kyjov" 830241
+"Kynceľove Kračany" 826766
+"Kynceľová" 801429
+"Kynek" 840203
+"Kysak" 830259
+"Kyselica" 870013
+"Kysta" 830275
+"Kysucké Nové Mesto" 830283
+"Kysucký Lieskovec" 830381
+"Kálnica" 823155
+"Kátlovce" 823643
+"Kátov" 823651
+"Kúty" 830038
+"Kľak" 824038
+"Kľačany" 823970
+"Kľačany" 823996
+"Kľače" 824003
+"Kľačno" 824011
+"Kľučiarove Kračany" 828289
+"Kľušov" 824925
+"Kľúčovec" 824887
+"Kľúčové" 824879
+"Kňažia" 824968
+"Kňažice" 874949
+"Kšinná" 829692
+"Lackov" 830429
+"Lackovce" 830445
+"Lacková" 830437
+"Lada" 830461
+"Ladce" 830488
+"Ladice" 830496
+"Ladmovce" 830500
+"Ladomer" 830518
+"Ladomirov" 830526
+"Ladomirová" 830542
+"Ladzany" 830551
+"Lakšárska Nová Ves" 830577
+"Lamač" 806005
+"Lančár" 830615
+"Lascov" 830640
+"Laskár" 830658
+"Lastomír" 830666
+"Lastovce" 830682
+"Lazany" 830879
+"Lazany" 830887
+"Lazisko" 830895
+"Lazy pod Makytou" 830950
+"Lačnov" 830453
+"Laškovce" 830704
+"Lažany" 831042
+"Lažteky" 831441
+"Lechnica" 831239
+"Lednica" 831051
+"Lednické Rovne" 831077
+"Legnava" 831085
+"Lehota" 831140
+"Lehota pod Vtáčnikom" 831191
+"Lehôtka" 831204
+"Lehôtka pod Brehmi" 831212
+"Lekárovce" 831247
+"Leles" 831271
+"Lemešany" 831301
+"Lenartov" 831328
+"Lenartovce" 831336
+"Lendak" 831344
+"Lenka" 831352
+"Lentvora" 831361
+"Leopoldov" 831379
+"Lesenice" 831395
+"Lesnica" 831425
+"Lesné" 831417
+"Lesné Kračany" 828301
+"Lesíček" 831409
+"Letanovce" 831514
+"Letničie" 831522
+"Letná" 826952
+"Levice" 831646
+"Levkuška" 831841
+"Levoča" 831859
+"Leľa" 831255
+"Leštiny" 831484
+"Lešť" 831433
+"Ležiachov" 831972
+"Libichava" 831981
+"Licince" 831999
+"Lidér Tejed" 830003
+"Liesek" 832022
+"Lieskovany" 832031
+"Lieskovec" 832057
+"Lieskovec" 832065
+"Lietava" 832111
+"Lietavská Lúčka" 832138
+"Lietavská Svinná" 832162
+"Liešno" 832073
+"Liešťany" 832090
+"Likavka" 832171
+"Limbach" 832189
+"Lipany" 832219
+"Lipník" 832235
+"Lipníky" 860468
+"Lipovany" 832286
+"Lipovce" 832294
+"Lipovec" 832341
+"Lipovec" 832359
+"Lipovník" 832367
+"Lipovník" 832383
+"Lipová" 832260
+"Lipové" 832324
+"Liptovská Anna" 832391
+"Liptovská Kokava" 832405
+"Liptovská Lúžna" 832413
+"Liptovská Mara" 832499
+"Liptovská Ondrašová" 832782
+"Liptovská Osada" 832430
+"Liptovská Porúbka" 832448
+"Liptovská Sielnica" 832472
+"Liptovská Teplička" 832537
+"Liptovská Teplá" 832511
+"Liptovská Štiavnica" 832502
+"Liptovské Beharovce" 832545
+"Liptovské Kľačany" 832553
+"Liptovské Matiašovce" 832561
+"Liptovské Revúce" 832596
+"Liptovské Sliače" 856410
+"Liptovský Hrádok" 832618
+"Liptovský Ján" 832677
+"Liptovský Michal" 832693
+"Liptovský Mikuláš" 832707
+"Liptovský Ondrej" 832839
+"Liptovský Peter" 832855
+"Liptovský Trnovec" 832863
+"Lisková" 832871
+"Litava" 832928
+"Litmanová" 832944
+"Livina" 839221
+"Livinské Opatovce" 832952
+"Livov" 832961
+"Livovská Huta" 832979
+"Ličartovce" 832006
+"Lišov" 832880
+"Lodno" 832987
+"Lok" 833002
+"Lokca" 833011
+"Lom nad Rimavicou" 833045
+"Lomnica" 832103
+"Lomnička" 833088
+"Lomná" 833053
+"Lomné" 833061
+"Lontov" 833096
+"Lopašov" 833100
+"Lopušné Pažite" 833126
+"Lopúchov" 833118
+"Lorinčík" 833134
+"Lovce" 833151
+"Lovinobaňa" 833215
+"Lovča" 833169
+"Lovčica" 833177
+"Lozorno" 833231
+"Lošonec" 833142
+"Ložín" 833240
+"Lubeník" 833291
+"Lubina" 833398
+"Ludanice" 834076
+"Ludrová" 834084
+"Luhyňa" 834092
+"Lukavica" 834131
+"Lukavica" 834149
+"Lukačovce" 834122
+"Lukov" 834165
+"Lukovištia" 834203
+"Lukové" 834181
+"Lukáčovce" 834114
+"Lula" 834238
+"Luník" 827142
+"Lupoč" 834254
+"Lutila" 834262
+"Lutiše" 834319
+"Lučatín" 833657
+"Lučenec" 833673
+"Lučivná" 833959
+"Lužany" 834378
+"Lužany pri Topli" 834386
+"Lužianky" 834408
+"Lysica" 834581
+"Lysá nad Dunajcom" 834416
+"Lysá pod Makytou" 834483
+"Láb" 830399
+"Látkovce" 866385
+"Látky" 830747
+"Lúka" 834106
+"Lúky" 834211
+"Lúčina" 833924
+"Lúčka" 833967
+"Lúčka" 833975
+"Lúčka" 833991
+"Lúčka" 834009
+"Lúčky" 834017
+"Lúčky" 834033
+"Lúčky" 834041
+"Machalovce" 822191
+"Machulince" 834718
+"Macov" 834599
+"Mad" 812242
+"Madačka" 834637
+"Madočany" 832529
+"Madunice" 834670
+"Majcichov" 834726
+"Majere" 834734
+"Majerka" 821136
+"Majerovce" 834742
+"Makov" 834858
+"Makovce" 834955
+"Malachov" 801372
+"Malacky" 835196
+"Malatiná" 835391
+"Malatíny" 835412
+"Malcov" 835447
+"Malinovec" 854379
+"Malinovo" 835803
+"Malinová" 835790
+"Malužiná" 835820
+"Malá Bara" 801674
+"Malá Budafa" 816663
+"Malá Bytča" 807729
+"Malá Domaša" 834998
+"Malá Franková" 835005
+"Malá Hradná" 835021
+"Malá Ida" 835030
+"Malá Kesa" 800732
+"Malá Lehota" 835102
+"Malá Lehôtka" 850187
+"Malá Lodina" 835137
+"Malá Lúč" 833631
+"Malá Mača" 835161
+"Malá Maňa" 835994
+"Malá nad Hronom" 835170
+"Malá Paka" 867870
+"Malá Poľana" 835188
+"Malá Tŕňa" 864765
+"Malá Vieska" 813087
+"Malá Čalomija" 834963
+"Malá Čausa" 834971
+"Malá Čierna" 834980
+"Malé Bedzany" 835471
+"Malé Bielice" 835480
+"Malé Blahovo" 813834
+"Malé Borové" 835498
+"Malé Bošany" 803910
+"Malé Brestovany" 806242
+"Malé Chlievany" 835528
+"Malé Chrašťany" 820962
+"Malé Chyndice" 835536
+"Malé Dvorany" 803499
+"Malé Dvorníky" 814113
+"Malé Hoste" 835510
+"Malé Kosihy" 835544
+"Malé Kozmálovce" 835587
+"Malé Košecké Podhradie" 835552
+"Malé Krškany" 829447
+"Malé Kršteňany" 835595
+"Malé Lednice" 835617
+"Malé Leváre" 835625
+"Malé Ludince" 835633
+"Malé Orvište" 835641
+"Malé Ostratice" 844543
+"Malé Ozorovce" 835650
+"Malé Raškovce" 835668
+"Malé Ripňany" 835676
+"Malé Stankovce" 835684
+"Malé Straciny" 835692
+"Malé Teriakovce" 868639
+"Malé Trakany" 835706
+"Malé Tŕnie" 869571
+"Malé Uherce" 835714
+"Malé Vozokany" 835722
+"Malé Zlievce" 835757
+"Malé Zálužie" 835749
+"Malé Šarovce" 860603
+"Malé Šenkvice" 860760
+"Malý Biel" 868850
+"Malý Bysterec" 812340
+"Malý Báb" 800287
+"Malý Cetín" 840599
+"Malý Folkmar" 875317
+"Malý Horeš" 835854
+"Malý Kamenec" 835862
+"Malý Kazimír" 875384
+"Malý Kiar" 835871
+"Malý Kolačín" 825417
+"Malý Krtíš" 835889
+"Malý Kýr" 879711
+"Malý Lapáš" 830623
+"Malý Lipník" 835897
+"Malý Lég" 831107
+"Malý Madaras" 863475
+"Malý Máger" 842966
+"Malý Pesek" 829820
+"Malý Ruskov" 842893
+"Malý Slavkov" 835901
+"Malý Slivník" 835919
+"Malý Sulín" 859541
+"Malý Čepčín" 835846
+"Malý Šariš" 835943
+"Malý Šúr" 826642
+"Malčice" 835463
+"Malženice" 835960
+"Mankovce" 836010
+"Marcelová" 836036
+"Margecany" 836044
+"Marhaň" 836061
+"Marianka" 836079
+"Markovce" 836087
+"Markuška" 836095
+"Markušovce" 836125
+"Martin" 836168
+"Martin nad Žitavou" 836320
+"Martinová" 834050
+"Martinová" 836346
+"Martinček" 836338
+"Martovce" 836354
+"Marušová" 842923
+"Maršová" 836141
+"Maslovce" 873373
+"Masníkovo" 831115
+"Matejovce" 836371
+"Matejovce nad Hornádom" 836389
+"Matiaška" 836397
+"Matiašovce" 836401
+"Matovce" 836427
+"Matysová" 836478
+"Matúškovo" 836451
+"Mačov" 834602
+"Maďarský Svodín" 859940
+"Maškovce" 871494
+"Mašková" 836362
+"Maťovce" 836443
+"Mechenice" 847275
+"Medné" 817015
+"Medovarce" 836486
+"Medvecké" 836494
+"Medvedie" 836516
+"Medvedzie" 866172
+"Medveďov" 836508
+"Medzany" 836524
+"Medzev" 836567
+"Medzianky" 836591
+"Medzibrod" 836605
+"Medzibrodie nad Oravou" 836613
+"Medzihradné" 812463
+"Medzilaborce" 836621
+"Melek" 836672
+"Meliata" 836681
+"Melčice" 836664
+"Mengusovce" 836702
+"Merašice" 836729
+"Merník" 836737
+"Merovce" 813559
+"Mestečko" 836753
+"Mestisko" 836761
+"Michajlov" 836800
+"Michal na Ostrove" 836826
+"Michal nad Žitavou" 836834
+"Michalková" 836877
+"Michalok" 836893
+"Michalovce" 836915
+"Michalová" 836907
+"Michaľany" 836842
+"Mierovo" 836788
+"Miezgovce" 836796
+"Miklušovce" 837504
+"Mikolčany" 815039
+"Mikov dvor" 840564
+"Miková" 837512
+"Mikula" 874248
+"Mikulášov" 830585
+"Mikulášov dvor" 813265
+"Mikulášová" 837521
+"Mikušovce" 833797
+"Mikušovce pri Pruskom" 837539
+"Mikšová" 807737
+"Milhostov" 837563
+"Milhosť" 819107
+"Milochov" 837571
+"Miloslavov" 837628
+"Milpoš" 837636
+"Mirkovce" 837661
+"Miroľa" 837687
+"Mičakovce" 836770
+"Miňovce" 837644
+"Mliečany" 813826
+"Mliečno" 837725
+"Mlynica" 837784
+"Mlynky" 837814
+"Mlynský Sek" 832243
+"Mlynárce" 840254
+"Mlynárovce" 837741
+"Mlynčeky" 837750
+"Mlyňany" 863122
+"Mládzovo" 837695
+"Mníchova Lehota" 837873
+"Mníšany" 834700
+"Mníšek nad Hnilcom" 837890
+"Mníšek nad Popradom" 837920
+"Mochovce" 838152
+"Modra" 838039
+"Modra nad Cirochou" 838063
+"Modranka" 838071
+"Modrany" 838080
+"Modrovka" 838101
+"Modrová" 838098
+"Modrý Kameň" 838128
+"Mojmírovce" 838179
+"Mojtín" 838217
+"Mojzesovo" 838225
+"Mojín" 838161
+"Mojš" 838187
+"Mojšova Lúčka" 838195
+"Mokradská Hoľa" 838250
+"Mokrance" 838268
+"Mokraď" 838241
+"Mokroluh" 838276
+"Mokrá Lúka" 838233
+"Mokrý Háj" 838284
+"Moldava nad Bodvou" 838322
+"Moravany" 838411
+"Moravany nad Váhom" 838420
+"Moravské Kračany" 826774
+"Moravské Lieskové" 838454
+"Moravský Svätý Ján" 838489
+"Morovno" 838501
+"Most pri Bratislave" 838527
+"Mostište" 838535
+"Mostová" 838543
+"Motyčky" 838659
+"Moča" 837954
+"Močarany" 837318
+"Močarmany" 846040
+"Močenok" 855936
+"Močiar" 837989
+"Močidľany" 838004
+"Močidľany" 848522
+"Moškovec" 838560
+"Mošovce" 838578
+"Moštenica" 838586
+"Mošurov" 838594
+"Mrázovce" 838683
+"Mudrovce" 838730
+"Mudroňovo" 838721
+"Muránska Dlhá Lúka" 838799
+"Muránska Huta" 838802
+"Muránska Lehota" 838811
+"Muránska Zdychava" 838829
+"Muráň" 838772
+"Mučín" 838691
+"Muľa" 838756
+"Muľka" 838764
+"Mužla" 838896
+"Myjava" 838926
+"Myslava" 827428
+"Myslina" 839027
+"Málaš" 835382
+"Málinec" 835773
+"Mást" 859320
+"Mástske grefty" 859346
+"Môlča" 838306
+"Môťová" 873845
+"Mútne" 838837
+"Mýtna" 839108
+"Mýtna Nová Ves" 839124
+"Mýtne Ludany" 839141
+"Mýto pod Ďumbierom" 839175
+"Nacina Ves" 839205
+"Nadabula" 853151
+"Nadlice" 839230
+"Naháč" 839256
+"Nandraž" 839370
+"Nebojsa" 814610
+"Nechválova Polianka" 839485
+"Necpaly" 839400
+"Nedanovce" 839418
+"Nedašovce" 839426
+"Neded" 839434
+"Nededza" 839442
+"Nedelište" 839451
+"Nedožery" 839477
+"Nekyje na Ostrove" 870251
+"Nemce" 801437
+"Nemcovce" 839493
+"Nemcovce" 839507
+"Nemecká" 839591
+"Nemecký Svodín" 879720
+"Nemečky" 839612
+"Nemešany" 839621
+"Nemčice" 839558
+"Nemčiňany" 839566
+"Nemšová" 839639
+"Nenince" 839655
+"Neporadza" 839680
+"Nesluša" 839728
+"Nesvady" 839817
+"Neverice" 839833
+"Nevidzany" 839841
+"Nevidzany" 839850
+"Nevoľné" 839868
+"Nezbudská Lúčka" 867438
+"Neštich" 822892
+"Nimnica" 839884
+"Nitra" 839914
+"Nitra nad Ipľom" 840572
+"Nitrianska Blatnica" 840602
+"Nitrianska Streda" 840611
+"Nitrianske Hrnčiarovce" 840653
+"Nitrianske Pravno" 840670
+"Nitrianske Rudno" 840700
+"Nitrianske Sučany" 840726
+"Nitriansky Hrádok" 840734
+"Nivky" 991945
+"Nivy" 804274
+"Nižná" 840769
+"Nižná" 840777
+"Nižná Boca" 840785
+"Nižná Hutka" 840793
+"Nižná Jablonka" 840807
+"Nižná Jedľová" 840815
+"Nižná Kamenica" 840823
+"Nižná Myšľa" 840840
+"Nižná Olšava" 840858
+"Nižná Oľka" 843679
+"Nižná Pisaná" 840866
+"Nižná Pokoradz" 840874
+"Nižná Polianka" 840882
+"Nižná Rybnica" 840891
+"Nižná Sitnica" 840904
+"Nižná Slaná" 840912
+"Nižná Voľa" 840971
+"Nižná Úvrať" 881406
+"Nižná Šebastová" 840955
+"Nižná Šuňava" 840963
+"Nižné Ladičkovce" 840980
+"Nižné Nemecké" 840998
+"Nižné Raslavice" 841021
+"Nižné Repaše" 841030
+"Nižné Ružbachy" 841048
+"Nižné Slovinky" 856665
+"Nižné Valice" 841056
+"Nižný Blh" 868906
+"Nižný Hrabovec" 841072
+"Nižný Hrušov" 841099
+"Nižný Klátov" 841129
+"Nižný Komárnik" 841137
+"Nižný Kručov" 841145
+"Nižný Lánec" 841153
+"Nižný Mirošov" 841161
+"Nižný Olčvár" 827631
+"Nižný Orlík" 841170
+"Nižný Skálnik" 868647
+"Nižný Slavkov" 841188
+"Nižný Tvarožec" 841196
+"Nižný Čaj" 841064
+"Nižný Žipov" 841200
+"Nolčovo" 841218
+"Norovce" 841226
+"Nosice" 841234
+"Novosad" 842851
+"Novoť" 842877
+"Nová Baňa" 841251
+"Nová Bašta" 841447
+"Nová Bošáca" 841501
+"Nová Bystrica" 841633
+"Nová Dubnica" 841757
+"Nová Jelka" 822671
+"Nová Kelča" 841765
+"Nová Lehota" 841781
+"Nová Lehota" 841803
+"Nová Lesná" 841820
+"Nová Lipnica" 841838
+"Nová Polhora" 841854
+"Nová Polianka" 841862
+"Nová Sedlica" 841871
+"Nová Stráž" 841901
+"Nová Ves" 841927
+"Nová Ves nad Váhom" 841935
+"Nová Ves nad Žitavou" 841943
+"Nová Ves pri Dunaji" 841749
+"Nová Vieska" 841960
+"Nová Vieska pri Bodrogu" 857343
+"Nová Ľubovňa" 841846
+"Nováky" 842001
+"Nováčany" 815047
+"Nováčany" 841978
+"Nové" 950017
+"Nové Hony" 842010
+"Nové Košariská" 842036
+"Nové Mesto" 804690
+"Nové Mesto nad Váhom" 842044
+"Nové Osady" 842265
+"Nové Sady" 842311
+"Nové Zámky" 842320
+"Nové Ťahanovce" 881171
+"Nový Horeš" 950025
+"Nový Salaš" 842915
+"Nový Svet" 851922
+"Nový Tekov" 842931
+"Nálepkovo" 839299
+"Námestovo" 839345
+"Námestovské Pilsko" 839361
+"Nána" 861545
+"Návojovce" 839388
+"Nýrovce" 843016
+"Obeckov" 843024
+"Obid" 843032
+"Obišovce" 843041
+"Obora" 991953
+"Oborín" 843067
+"Obručné" 843075
+"Obsolovce" 843083
+"Obyce" 843091
+"Ochodnica" 843229
+"Ochtiná" 843261
+"Odorín" 843164
+"Ohrady" 843172
+"Ohradzany" 843199
+"Okoličná na Ostrove" 843342
+"Okoličné" 843385
+"Okoč" 843300
+"Okružná" 843431
+"Okrúhle" 843415
+"Olcnava" 843466
+"Olejníkov" 843504
+"Olešná" 843610
+"Olováry" 843687
+"Olšovany" 843768
+"Omastiná" 843776
+"Omšenie" 843792
+"Ondavka" 843806
+"Ondavské Matiašovce" 843814
+"Ondrašovce" 843831
+"Ondrašová" 843822
+"Ondrejovce" 843849
+"Ondrochov" 832251
+"Opatovce" 843873
+"Opatovce" 874957
+"Opatovce nad Nitrou" 843881
+"Opatovská Nová Ves" 843903
+"Opatovský Sokolec" 843946
+"Opatová" 833754
+"Opatová" 841706
+"Opatová" 843865
+"Opatové Moravce" 816922
+"Opava" 843962
+"Opiná" 843997
+"Opoj" 844004
+"Oponice" 844012
+"Opátka" 843857
+"Oravce" 844021
+"Oravice" 869694
+"Oravská Jasenica" 844047
+"Oravská Lesná" 844110
+"Oravská Polhora" 844128
+"Oravské Hámre" 866571
+"Oravské Veselé" 844179
+"Oravský Biely Potok" 844195
+"Oravský Podzámok" 844209
+"Ordzovany" 844225
+"Orechová" 844241
+"Orechová Potôň" 844268
+"Orechové" 872598
+"Oreské" 844314
+"Oreské" 844322
+"Orešany" 844331
+"Orkucany" 844349
+"Orlov" 844365
+"Orlové" 844373
+"Orovnica" 844411
+"Ortuťová" 844420
+"Orávka" 844039
+"Osada" 866580
+"Osadné" 844446
+"Osikov" 844454
+"Oslany" 844489
+"Osrblie" 844519
+"Ostrany" 820008
+"Ostrov" 809802
+"Ostrov" 844578
+"Ostrov" 844586
+"Ostrovany" 844608
+"Ostrožnica" 844616
+"Ostrá Lúka" 844527
+"Ostrý Grúň" 844624
+"Osturňa" 844641
+"Osuské" 844659
+"Osádka" 844438
+"Otrhánky" 815489
+"Otročok" 844829
+"Ovčiarsko" 844837
+"Ovčie" 844845
+"Ozdín" 844853
+"Očkov" 843105
+"Očová" 843156
+"Oľdza" 843482
+"Oľšavce" 843695
+"Oľšavica" 843709
+"Oľšavka" 843725
+"Oľšavka" 843733
+"Oľšinkov" 843741
+"Oľšov" 843750
+"Oškerda" 844811
+"Oščadnica" 844748
+"Ožďany" 844918
+"Padarovce" 844969
+"Paderovce" 844977
+"Padáň" 844942
+"Pakostov" 844985
+"Palota" 845256
+"Palárikovo" 845027
+"Palín" 845230
+"Palúdzka" 832766
+"Panické Dravce" 845299
+"Panský diel" 818640
+"Papradno" 845337
+"Papín" 845311
+"Papča" 812897
+"Parchovany" 845361
+"Parihuzovce" 845370
+"Partizánska Ľupča" 845400
+"Partizánske" 845426
+"Parížovce" 832481
+"Pastovce" 845566
+"Pastuchov" 845591
+"Pata" 845655
+"Pataš" 845612
+"Patince" 845663
+"Patov" 835811
+"Pavlice" 845698
+"Pavlova Ves" 845710
+"Pavlovce" 845736
+"Pavlovce" 845744
+"Pavlovce nad Uhom" 845787
+"Pavlovo" 875376
+"Pavlová" 845701
+"Pavčina Lehota" 845671
+"Pavľany" 845680
+"Pača" 844934
+"Paňa" 845272
+"Paňovce" 845302
+"Pašková" 845639
+"Paština Závada" 845647
+"Pažiť" 845809
+"Peder" 845884
+"Peklina" 845892
+"Pereš" 827401
+"Pernek" 845931
+"Perín" 845922
+"Petkovce" 845949
+"Petrikovce" 845965
+"Petrova Lehota" 845990
+"Petrova Ves" 846007
+"Petrovany" 846058
+"Petrovce" 846074
+"Petrovce" 846082
+"Petrovce" 846091
+"Petrovce nad Laborcom" 846112
+"Petrovice" 846121
+"Petrovo" 846155
+"Petrová" 845981
+"Petržalka" 804959
+"Pezinok" 846163
+"Pečenice" 845841
+"Pečeňady" 845825
+"Pečeňany" 845833
+"Pečovská Nová Ves" 845876
+"Peťovka" 845957
+"Pichne" 846546
+"Piešťany" 846309
+"Pilhov" 837938
+"Pinciná" 846660
+"Pinkovce" 846678
+"Pinkove Kračany" 826782
+"Piskorovce" 846686
+"Pitelová" 846724
+"Plavecké Podhradie" 846775
+"Plavecký Mikuláš" 846791
+"Plavecký Peter" 846805
+"Plavecký Štvrtok" 846813
+"Plaveč" 846848
+"Plavnica" 846872
+"Plavé Vozokany" 846767
+"Plechotice" 846881
+"Plevník-Drienové" 846945
+"Pleš" 846899
+"Plešivec" 846929
+"Pliešovce" 846988
+"Ploské" 847020
+"Ploské" 847046
+"Ploštín" 847054
+"Plášťovce" 846759
+"Pobedim" 847062
+"Pochabany" 847852
+"Podbiel" 847101
+"Podbranč" 847178
+"Podbrezová" 847216
+"Podhorany" 847305
+"Podhorany" 847313
+"Podhorie" 847356
+"Podhoroď" 847364
+"Podhradie" 847372
+"Podhradie" 847399
+"Podhradie nad Váhom" 847381
+"Podhradík" 847402
+"Podjavorie" 831450
+"Podkonice" 847411
+"Podkriváň" 847500
+"Podkylava" 847526
+"Podlavice" 801283
+"Podlužany" 847577
+"Podlužany" 847585
+"Podmanín" 847615
+"Podolie" 847640
+"Podolínec" 847674
+"Podrečany" 847682
+"Podskalie" 847712
+"Podtureň" 847721
+"Podunajské Biskupice" 847755
+"Podvažie" 847763
+"Podvysoká" 847771
+"Podzámčok" 847780
+"Pohorelá" 847798
+"Pohranice" 847810
+"Pohronská Polhora" 847828
+"Pohronský Bukovec" 847836
+"Pohronský Ruskov" 847844
+"Pokryváč" 847861
+"Polerieka" 847909
+"Poliakovce" 847917
+"Polianka" 847950
+"Polichno" 847968
+"Polina" 847984
+"Polom" 848026
+"Poloma" 848034
+"Polomka" 848051
+"Poltár" 848077
+"Poluvsie" 848115
+"Poluvsie nad Rajčankou" 848123
+"Pondelok" 819514
+"Pongrácovce" 848131
+"Poniky" 848158
+"Poprad" 848174
+"Poproč" 848484
+"Poproč" 848506
+"Popudiny" 848531
+"Poriadie" 848590
+"Porostov" 848620
+"Poruba" 848638
+"Poruba pod Vihorlatom" 848646
+"Poruba-Geceľ" 844144
+"Poráč" 848557
+"Porúbka" 832146
+"Porúbka" 848654
+"Porúbka" 848662
+"Porúbka" 848671
+"Posádka" 848689
+"Poteho osada" 950114
+"Potok" 848719
+"Potok" 848727
+"Potoky" 848735
+"Potvorice" 848794
+"Potônske Lúky" 817520
+"Potôčky" 848701
+"Považany" 848808
+"Považská Bystrica" 848832
+"Považská Teplá" 849006
+"Považské Podhradie" 849022
+"Považský Chlmec" 849031
+"Povina" 849057
+"Povrazník" 849073
+"Pozba" 849090
+"Pozdišovce" 849103
+"Počarová" 847071
+"Počúvadlo" 847089
+"Poľanovce" 847887
+"Poľany" 847895
+"Poľný Kesov" 848018
+"Poľov" 827495
+"Poša" 848697
+"Praha" 849111
+"Prakovce" 849120
+"Pravenec" 849294
+"Pravica" 849324
+"Pravotice" 849332
+"Praznov" 849367
+"Prašice" 849171
+"Prašník" 849251
+"Predajná" 849413
+"Predmier" 849421
+"Prejta" 849430
+"Prenčov" 849448
+"Preseľany" 849464
+"Preseľany nad Ipľom" 849472
+"Prestavlky" 849499
+"Prečín" 849391
+"Prešov" 849502
+"Pribeník" 849677
+"Pribeta" 849707
+"Pribiš" 849715
+"Pribylina" 849774
+"Priechod" 849782
+"Priekopa" 849839
+"Priekopa" 849847
+"Priepasné" 849901
+"Prietrž" 849987
+"Prietržka" 850012
+"Prievaly" 850021
+"Prievidza" 850063
+"Prihradzany" 850225
+"Primoravské lúky" 950068
+"Prituľany" 850250
+"Prochot" 850276
+"Prosačov" 850284
+"Prosiek" 850292
+"Prosné" 850314
+"Prostredný Vadičov" 875236
+"Proč" 850268
+"Pruské" 850331
+"Prusy" 850357
+"Pružina" 850390
+"Práznovce" 849375
+"Prášková" 991911
+"Príboj" 849723
+"Príboj" 852643
+"Príbovce" 849731
+"Príkra" 850233
+"Prílepy" 873420
+"Príslop" 850241
+"Prša" 850322
+"Psiare" 850403
+"Pstriná" 850411
+"Ptičie" 850438
+"Ptrukša" 850446
+"Pucov" 850454
+"Pukanec" 850675
+"Pusté Pole" 850691
+"Pusté Sady" 850705
+"Pusté Úľany" 850730
+"Pusté Čemerné" 850683
+"Pustý Chotár" 802417
+"Pušovce" 850748
+"Pác" 844926
+"Párnica" 845388
+"Párovské Háje" 840165
+"Píla" 846554
+"Píla" 846619
+"Píla" 846651
+"Pódafa" 830011
+"Póšfa" 816680
+"Pôtor" 848751
+"Púchov" 850462
+"Pčoliné" 845817
+"Pšurnovice" 850420
+"Rabča" 850772
+"Rabčice" 850811
+"Rad" 850845
+"Radatice" 850861
+"Radava" 850870
+"Radimov" 850896
+"Radiša" 874981
+"Radnovce" 850900
+"Radobica" 850942
+"Radoma" 850993
+"Radoľa" 850977
+"Radošina" 851078
+"Radošovce" 851094
+"Radošovce" 851116
+"Radvanovce" 851175
+"Radvaň" 801241
+"Radvaň nad Dunajom" 851132
+"Radvaň nad Laborcom" 851167
+"Radzovce" 851191
+"Radôstka" 851027
+"Rafajovce" 851205
+"Rajec" 851221
+"Rajecká Lesná" 851230
+"Rajecké Teplice" 851256
+"Rajčany" 851213
+"Rakovec" 816957
+"Rakovec nad Ondavou" 851523
+"Rakovice" 851531
+"Rakovnica" 851558
+"Rakovo" 851574
+"Raková" 851388
+"Rakovčík" 851515
+"Rakoľuby" 825107
+"Rakytník" 866628
+"Rakúsy" 851612
+"Rakša" 851582
+"Rankovce" 851639
+"Rapovce" 851655
+"Rastice" 873390
+"Rastislavice" 851680
+"Ratka" 851728
+"Ratkovce" 851779
+"Ratkovo" 851787
+"Ratkovská Lehota" 851795
+"Ratkovská Suchá" 851817
+"Ratkovská Zdychava" 852830
+"Ratkovské Bystré" 851833
+"Ratková" 851752
+"Ratnovce" 851841
+"Ratvaj" 851850
+"Rača" 805866
+"Račice" 840751
+"Rašice" 851698
+"Ražňany" 851914
+"Reca" 851931
+"Regetovka" 851949
+"Rejdová" 851965
+"Remeniny" 851981
+"Remetské Hámre" 851990
+"Renčišov" 852007
+"Repejov" 852015
+"Repište" 852031
+"Repištia" 851761
+"Revišné" 867608
+"Revištské Podzámčie" 852091
+"Revúca" 852104
+"Revúcka Lehota" 852210
+"Revúčka" 852228
+"Reľov" 851973
+"Rešica" 852058
+"Rešov" 852066
+"Riadok" 991996
+"Richnava" 852350
+"Richvald" 852376
+"Riečka" 852236
+"Riečka" 852244
+"Riečnica" 852325
+"Rimavica" 831166
+"Rimavská Baňa" 852384
+"Rimavská Lehota" 831158
+"Rimavská Píla" 852406
+"Rimavská Seč" 852414
+"Rimavská Sobota" 852422
+"Rimavské Brezovo" 852597
+"Rimavské Janovce" 852635
+"Rimavské Zalužany" 852651
+"Rišňovce" 852660
+"Rochovce" 852732
+"Rohov" 852694
+"Rohovce" 852678
+"Rohožnica" 839574
+"Rohožnica" 868965
+"Rohožník" 852716
+"Rohožník" 852724
+"Rokycany" 852741
+"Rokytov" 852759
+"Rokytovce" 828785
+"Rolova Huta" 836052
+"Rosina" 852767
+"Rovensko" 852805
+"Rovinka" 852813
+"Rovné" 852848
+"Rovné" 852856
+"Rovné" 852864
+"Rovňany" 852821
+"Rozbehy" 852881
+"Rozhanovce" 852899
+"Rozložná" 852902
+"Roztoky" 852911
+"Rozvadze" 852929
+"Roškovce" 852775
+"Roštár" 852791
+"Rožkovany" 852937
+"Rožňava" 852945
+"Rožňavské Bystré" 853275
+"Rožňová Neporadza" 839671
+"Rudina" 853291
+"Rudinka" 853305
+"Rudinská" 853356
+"Rudlov" 853381
+"Rudnianska Lehota" 853437
+"Rudno" 853526
+"Rudno nad Hronom" 853534
+"Rudná" 853402
+"Rudník" 853461
+"Rudník" 853518
+"Rudňany" 853411
+"Rumanová" 853542
+"Rumince" 853569
+"Runina" 853577
+"Ruskinovce" 950131
+"Ruskov" 853691
+"Ruskovce" 853704
+"Ruskovce" 853721
+"Ruská" 853593
+"Ruská Bystrá" 853607
+"Ruská Kajňa" 853615
+"Ruská Nová Ves" 853623
+"Ruská Poruba" 853631
+"Ruská Volová" 853666
+"Ruská Voľa" 853640
+"Ruská Voľa nad Popradom" 853658
+"Ruské" 853674
+"Ruské Pekľany" 833622
+"Ruský Hrabovec" 853739
+"Ruský Potok" 853763
+"Rusovce" 853771
+"Ružindol" 853798
+"Ružinov" 805556
+"Ružiná" 853780
+"Ružomberok" 853801
+"Ružín" 875414
+"Rybany" 854140
+"Rybky" 852708
+"Rybník" 854158
+"Rybník nad Turcom" 854182
+"Rybáre" 856304
+"Rákoš" 851272
+"Rákoš" 851281
+"Ráztoka" 851884
+"Ráztoky" 851892
+"Ráztočno" 851868
+"Rúbanice" 950050
+"Rúbaň" 853283
+"Sabinov" 854212
+"Salka" 854352
+"Sampor" 854361
+"Santovka" 854387
+"Sap" 845248
+"Sasinkovo" 854425
+"Sazdice" 854450
+"Sačurov" 854301
+"Sebechleby" 854506
+"Sebedražie" 854492
+"Sebedín" 854476
+"Sedliacka Dubová" 854701
+"Sedlice" 854719
+"Sedliská" 854743
+"Sedličná" 854735
+"Sedlište" 950084
+"Sedmerovec" 854751
+"Sejkov" 854760
+"Sekule" 854778
+"Selce" 854794
+"Selce" 854808
+"Selce" 854816
+"Selce" 854832
+"Selec" 854841
+"Selice" 854875
+"Semerovo" 854913
+"Senec" 854964
+"Seniakovce" 854972
+"Senica" 801411
+"Senica" 855006
+"Senné" 855162
+"Senné" 855171
+"Senohrad" 855201
+"Sereď" 855251
+"Sestrč" 950092
+"Setechov" 846147
+"Severné Mesto" 827312
+"Seč" 854514
+"Sečianky" 854522
+"Sečovce" 854531
+"Sečovská Polianka" 854697
+"Seľany" 854786
+"Seňa" 854921
+"Sielnica" 855391
+"Sihelné" 855405
+"Sihla" 855413
+"Sikenička" 855464
+"Sila" 808270
+"Siladice" 855472
+"Silica" 855499
+"Silická Brezová" 855502
+"Silická Jablonica" 855511
+"Sirk" 855545
+"Sirník" 855570
+"Sitnianska Lehôtka" 855588
+"Skala" 855600
+"Skalica" 855618
+"Skalité" 855774
+"Skalská Nová Ves" 855782
+"Skačany" 855596
+"Skerešovo" 855804
+"Sklabinský Podzámok" 855847
+"Sklabiná" 855839
+"Sklabiňa" 855812
+"Skladná" 881317
+"Sklené" 855863
+"Sklené Teplice" 855871
+"Skrabské" 855898
+"Skároš" 855791
+"Skýcov" 855901
+"Slanec" 856002
+"Slanica" 839353
+"Slanská Huta" 856011
+"Slanské Nové Mesto" 856037
+"Slaná Lehota" 848093
+"Slančík" 855987
+"Slaská" 856045
+"Slatina" 856053
+"Slatina nad Bebravou" 856070
+"Slatinka" 856088
+"Slatinka nad Bebravou" 856096
+"Slatinské Lazy" 856142
+"Slatvina" 856169
+"Slavec" 856177
+"Slavkovce" 856193
+"Slavnica" 856215
+"Slavoška" 856231
+"Slavošovce" 856258
+"Slepčany" 856282
+"Sliepkovce" 856444
+"Slivník" 856452
+"Slizké" 856461
+"Slopná" 856479
+"Slovany" 856487
+"Slovenská Kajňa" 856495
+"Slovenská Nová Ves" 856541
+"Slovenská Ves" 856550
+"Slovenská Volová" 856576
+"Slovenská Ľupča" 856525
+"Slovenské Krivé" 856614
+"Slovenské Kľačany" 856606
+"Slovenské Nové Mesto" 856631
+"Slovenské Pravno" 856649
+"Slovenské Ďarmoty" 856592
+"Slovenský Grob" 856657
+"Sládkovičovo" 855961
+"Smilno" 856703
+"Smižany" 856754
+"Smolenice" 856771
+"Smolenická Nová Ves" 856789
+"Smolinské" 856801
+"Smolnícka Huta" 856819
+"Smolník" 856851
+"Smolník nad Cirochou" 856835
+"Smrdáky" 856878
+"Smrečany" 856886
+"Snakov" 856894
+"Snežnica" 856908
+"Snina" 856941
+"Soblahov" 857106
+"Sobotište" 857165
+"Soboš" 857114
+"Sobrance" 857190
+"Socovce" 857203
+"Sokolce-Lak" 857246
+"Sokolce-Turi" 857238
+"Sokolníky" 847283
+"Sokolovce" 857262
+"Sokolče" 857254
+"Sokoľ" 857220
+"Sokoľany" 820555
+"Solivar" 857301
+"Solka" 840688
+"Sološnica" 857335
+"Solčany" 857289
+"Solčianky" 857297
+"Somotor" 857351
+"Sopkovce" 843202
+"Soľ" 857271
+"Soľnička" 857319
+"Soľník" 857327
+"Spišská Belá" 857378
+"Spišská Nová Ves" 857386
+"Spišská Sobota" 848221
+"Spišská Stará Ves" 857581
+"Spišská Teplica" 857599
+"Spišské Bystré" 857611
+"Spišské Hanušovce" 857629
+"Spišské Podhradie" 857645
+"Spišské Tomášovce" 857670
+"Spišské Vlachy" 857696
+"Spišský Hrhov" 857726
+"Spišský Hrušov" 857734
+"Spišský Štiavnik" 857751
+"Spišský Štvrtok" 857777
+"Srňacie" 857785
+"Stakčín" 857807
+"Stakčínska Roztoka" 857793
+"Stankovany" 857823
+"Stankovce" 857840
+"Stanča" 873179
+"Starina" 858480
+"Starina nad Cirochou" 858471
+"Stará Bašta" 857858
+"Stará Bystrica" 857921
+"Stará Gala" 816698
+"Stará Graba" 859354
+"Stará Halič" 857939
+"Stará Huta" 857971
+"Stará Kremnička" 858048
+"Stará Lehota" 858064
+"Stará Lesná" 858081
+"Stará Myjava" 858196
+"Stará Turá" 858251
+"Stará Voda" 858366
+"Stará Ľubovňa" 858099
+"Staré" 858374
+"Staré Hory" 858447
+"Staré Mesto" 804096
+"Starý Hrádok" 858501
+"Starý Smokovec" 858544
+"Starý Tekov" 858579
+"Starňa" 858498
+"Staškov" 858633
+"Staškovce" 858676
+"Stebnícka Huta" 858684
+"Stebník" 858692
+"Stotince" 821144
+"Stožok" 858757
+"Stratená" 858854
+"Streda nad Bodrogom" 858978
+"Stredná hora" 950033
+"Stredné Mesto" 826928
+"Stredné Plachtince" 859001
+"Stredné Turovce" 868710
+"Stredný Čepeň" 855316
+"Strekov" 859028
+"Strelnice" 859044
+"Strelníky" 859052
+"Stretava" 859061
+"Stretavka" 859079
+"Strečno" 858943
+"Streženice" 859095
+"Striežovce" 820016
+"Strihovce" 859117
+"Stropkov" 859133
+"Stročín" 859125
+"Stráne pod Tatrami" 858803
+"Stránska" 858811
+"Stránske" 858838
+"Stráňany" 837075
+"Stráňany" 858765
+"Stráňavy" 858781
+"Stráža" 858862
+"Stráže" 828068
+"Stráže nad Myjavou" 860671
+"Stráže pod Tatrami" 848298
+"Strážky" 858871
+"Strážne" 858889
+"Strážov" 858897
+"Strážske" 858935
+"Studenec" 859290
+"Studená" 859281
+"Studené" 838519
+"Studienka" 859303
+"Stupava" 859338
+"Stupné" 859362
+"Stuľany" 859311
+"Suchohrad" 859524
+"Suchá" 869791
+"Suchá Dolina" 854727
+"Suchá Hora" 859401
+"Suchá nad Parnou" 859435
+"Sucháň" 859478
+"Suché" 859494
+"Suché Brezovo" 859508
+"Sudince" 859389
+"Sukov" 859532
+"Sučany" 859371
+"Suľany" 819832
+"Sušany" 859613
+"Svederník" 859681
+"Sverepec" 859702
+"Sveržov" 859711
+"Svetlice" 859729
+"Svidnička" 859737
+"Svidník" 859745
+"Svinia" 859851
+"Svinica" 859877
+"Svinice" 859885
+"Svinná" 859907
+"Svit" 859923
+"Svodov" 859966
+"Svrbice" 859974
+"Svrčinovec" 860018
+"Svätoplukovo" 859630
+"Svätuš" 859648
+"Svätuša" 847259
+"Svätuše" 846902
+"Svätá Mária" 803332
+"Svätý Anton" 800210
+"Svätý Jur" 822884
+"Svätý Kríž" 859656
+"Svätý Peter" 812536
+"Svätý Štefan" 882011
+"Sádočné" 854310
+"Sása" 831123
+"Sása" 851809
+"Sása" 854417
+"Sásová" 801101
+"Súdovce" 859397
+"Súlovce" 859591
+"Sútor" 859621
+"Súľov-Hradná" 859583
+"Tachty" 862452
+"Tajná" 862461
+"Tajov" 862487
+"Tarnov" 862517
+"Tatranská Javorina" 874108
+"Tatranská Lomnica" 862568
+"Tašuľa" 862525
+"Tehla" 862584
+"Tekolďany" 862592
+"Tekovská Breznica" 862606
+"Tekovská Nová Ves" 841722
+"Tekovské Lužany" 862622
+"Tekovské Lužianky" 862631
+"Tekovské Nemce" 862665
+"Telgárt" 862436
+"Telince" 862703
+"Temeš" 862711
+"Tepličany" 813095
+"Teplička" 862720
+"Teplička nad Váhom" 862754
+"Tepličky" 862762
+"Teplá" 847330
+"Teplý Vrch" 862771
+"Terasa" 827207
+"Terchová" 863041
+"Teriakovce" 863084
+"Terňa" 863092
+"Tesáre" 863114
+"Tesáre nad Žitavou" 863149
+"Tešedíkovo" 863157
+"Tešmák" 863165
+"Tiba" 803472
+"Tibava" 863173
+"Tichá dolina" 950106
+"Tichý Potok" 863190
+"Timoradza" 863203
+"Tisinec" 863211
+"Tisovec" 863220
+"Tlmače" 863416
+"Tokajík" 863432
+"Tomášikovo" 863459
+"Tomášov" 863491
+"Tomášovce" 863505
+"Tomášovce" 863513
+"Tomášová" 852473
+"Tomčany" 836273
+"Tonkovce" 842974
+"Toporec" 863998
+"Topoľa" 863530
+"Topoľany" 837431
+"Topoľnica" 863912
+"Topoľovka" 863971
+"Topoľčany" 863548
+"Topoľčianky" 863882
+"Tornaľa" 860123
+"Torysa" 864005
+"Torysky" 864021
+"Tovarnianska Polianka" 864048
+"Tovarné" 864030
+"Tovarníky" 864056
+"Točnica" 863424
+"Trakovice" 864064
+"Trebatice" 864102
+"Trebejov" 864137
+"Trebeľovce" 864161
+"Trebichava" 864170
+"Trebišov" 864188
+"Trebostovo" 864315
+"Trebušovce" 864323
+"Trenč" 864358
+"Trenčianska Teplá" 864374
+"Trenčianska Turná" 864391
+"Trenčianska Závada" 872431
+"Trenčianske Biskupice" 864668
+"Trenčianske Bohuslavice" 864404
+"Trenčianske Jastrabie" 864412
+"Trenčianske Mitice" 864421
+"Trenčianske Teplice" 864455
+"Trenčín" 864528
+"Trhovište" 864757
+"Trhová Hradská" 864731
+"Trhyňa" 855448
+"Trnava" 864790
+"Trnava pri Laborci" 865273
+"Trnavá Hora" 865265
+"Trnkov" 865354
+"Trnovec" 865389
+"Trnovec nad Váhom" 865427
+"Trnovo" 865435
+"Trnové" 865371
+"Trnávka" 805343
+"Trnávka" 865290
+"Trnávka" 865303
+"Tročany" 865443
+"Trpín" 865451
+"Trstená" 865478
+"Trstená na Ostrove" 865486
+"Trstené" 865494
+"Trstené pri Hornáde" 865508
+"Trstice" 865524
+"Trstín" 865559
+"Trsťany" 865460
+"Trubín" 865567
+"Trávnica" 864081
+"Trávnik" 864099
+"Tuchyňa" 865605
+"Tuhrina" 865583
+"Tuhár" 865575
+"Tulčík" 865613
+"Tupá" 865648
+"Turany" 865788
+"Turany nad Ondavou" 865796
+"Turcovce" 865818
+"Turecká" 858455
+"Turecký vrch" 992003
+"Tureň" 865958
+"Turie" 865982
+"Turie Pole" 991929
+"Turkov" 866075
+"Turnianska Nová Ves" 841471
+"Turová" 866024
+"Turzovka" 866083
+"Turá" 865656
+"Turá Lúka" 865702
+"Turík" 865991
+"Turíčky" 865974
+"Turčianky" 865842
+"Turčianska Štiavnička" 865851
+"Turčianske Jaseno" 817988
+"Turčianske Kľačany" 865869
+"Turčianske Teplice" 865877
+"Turčiansky Michal" 865923
+"Turčiansky Peter" 865931
+"Turčiansky Ďur" 865907
+"Turčok" 865940
+"Turňa nad Bodvou" 866016
+"Tušice" 866121
+"Tušická Nová Ves" 866130
+"Tužina" 866148
+"Tvarožná" 866156
+"Tvrdomestice" 866164
+"Tvrdošovce" 866211
+"Tvrdošín" 866181
+"Tône" 819581
+"Tôň" 863521
+"Töböréte" 830020
+"Tŕnie" 865346
+"Tŕstie" 865532
+"Ubľa" 866237
+"Udavské" 866253
+"Uderiná" 866261
+"Udiča" 866270
+"Uhliská" 866334
+"Uhorská Ves" 866351
+"Uhorské" 866377
+"Uhrovec" 866393
+"Uhrovské Podhradie" 866407
+"Ulič" 866440
+"Uličské Krivé" 866458
+"Uloža" 866466
+"Unín" 866491
+"Urmince" 866539
+"Utekáč" 825344
+"Uzovce" 866598
+"Uzovská Panica" 866644
+"Uzovské Pekľany" 866661
+"Uzovský Šalgov" 866679
+"Uľanka" 866423
+"Uňatín" 866482
+"Vagrinec" 866695
+"Vajka nad Žitavou" 834068
+"Vajkovce" 866717
+"Vajnory" 805700
+"Valaliky" 866725
+"Valaská" 866792
+"Valaská Belá" 867195
+"Valaská Dubová" 867233
+"Valaškovce-Juh" 992160
+"Valaškovce-Sever" 879703
+"Valaškovce-Stred" 992151
+"Valentovce" 867276
+"Valentová" 867268
+"Valkov" 875333
+"Valkovce" 867284
+"Valtov Šúr" 862266
+"Valča" 867250
+"Vaniškovce" 867349
+"Varadka" 867373
+"Varechovce" 867381
+"Varhaňovce" 867411
+"Varov Šúr" 867462
+"Varín" 867446
+"Vasiľov" 867471
+"Vavrečka" 867489
+"Vavrinec" 867497
+"Vavrišovo" 867501
+"Vačková" 803707
+"Vaďovce" 866687
+"Vaľkovo" 867331
+"Vaľkovňa" 867314
+"Vaňovka" 867357
+"Važec" 867527
+"Vechec" 867578
+"Veličná" 867616
+"Velušovce" 869210
+"Velčice" 867594
+"Venécia" 834173
+"Vernár" 869228
+"Veselá" 860620
+"Veselé" 869244
+"Veterná Poruba" 869252
+"Večelkov" 867551
+"Veľaty" 867586
+"Veľkrop" 868841
+"Veľká" 848417
+"Veľká Bara" 801682
+"Veľká Budafa" 816701
+"Veľká Bytča" 807745
+"Veľká Dolina" 867691
+"Veľká Franková" 867705
+"Veľká Hradná" 867713
+"Veľká Ida" 867748
+"Veľká Lehota" 867772
+"Veľká Lehôtka" 867781
+"Veľká Lesná" 867799
+"Veľká Lodina" 867811
+"Veľká Lomnica" 867837
+"Veľká Lúka" 867845
+"Veľká Lúč" 833649
+"Veľká Mača" 867853
+"Veľká Maňa" 836001
+"Veľká nad Ipľom" 867632
+"Veľká Paka" 867888
+"Veľká Poľana" 867896
+"Veľká Suchá" 819531
+"Veľká tabuľa" 882003
+"Veľká Tŕňa" 864773
+"Veľká Ves" 804037
+"Veľká Ves" 867900
+"Veľká Ves nad Ipľom" 867918
+"Veľká Čalomija" 867641
+"Veľká Čausa" 867659
+"Veľká Čierna" 867667
+"Veľké Bedzany" 867926
+"Veľké Bielice" 867934
+"Veľké Bierovce" 867942
+"Veľké Blahovo" 867951
+"Veľké Borové" 867969
+"Veľké Bošany" 803936
+"Veľké Brestovany" 806251
+"Veľké Chlievany" 868001
+"Veľké Chrašťany" 820971
+"Veľké Chyndice" 868019
+"Veľké Dravce" 867977
+"Veľké Dvorany" 867985
+"Veľké Dvorníky" 814121
+"Veľké Hoste" 867993
+"Veľké Janíkovce" 868035
+"Veľké Kapušany" 868043
+"Veľké Kosihy" 868132
+"Veľké Kostoľany" 868141
+"Veľké Kozmálovce" 868175
+"Veľké Košecké Podhradie" 868167
+"Veľké Krškany" 829455
+"Veľké Kršteňany" 868183
+"Veľké Leváre" 868191
+"Veľké Lovce" 868205
+"Veľké Ludince" 868213
+"Veľké Orvište" 868221
+"Veľké Ostratice" 844560
+"Veľké Ozorovce" 868230
+"Veľké Pole" 868248
+"Veľké Raškovce" 868256
+"Veľké Revištia" 868272
+"Veľké Ripňany" 868299
+"Veľké Rovné" 868540
+"Veľké Slemence" 868582
+"Veľké Stankovce" 868591
+"Veľké Straciny" 868612
+"Veľké Teriakovce" 868663
+"Veľké Trakany" 868698
+"Veľké Tŕnie" 869554
+"Veľké Uherce" 868744
+"Veľké Vozokany" 868761
+"Veľké Zlievce" 868833
+"Veľké Zálužie" 868787
+"Veľké Úľany" 868752
+"Veľké Šarovce" 860611
+"Veľké Šenkvice" 860778
+"Veľké Šúrovce I" 862274
+"Veľké Šúrovce II" 862291
+"Veľký Biel" 868868
+"Veľký Bysterec" 812331
+"Veľký Báb" 800295
+"Veľký Cetín" 868914
+"Veľký Folkmar" 868973
+"Veľký Grob" 868990
+"Veľký Horeš" 869007
+"Veľký Kamenec" 869015
+"Veľký Kazimír" 823686
+"Veľký Kolačín" 825425
+"Veľký Krtíš" 869058
+"Veľký Kýr" 837547
+"Veľký Lapáš" 830631
+"Veľký Lipník" 869139
+"Veľký Lom" 869147
+"Veľký Lég" 831131
+"Veľký Meder" 808709
+"Veľký Pesek" 855456
+"Veľký Ruskov" 842907
+"Veľký Slavkov" 869163
+"Veľký Slivník" 869171
+"Veľký Sulín" 859559
+"Veľký Čepčín" 868922
+"Veľký Šariš" 869198
+"Veľopolie" 869201
+"Vidiná" 869261
+"Vidov Vrch" 831468
+"Vidovany" 813354
+"Vidová" 856185
+"Vieska" 807648
+"Vieska" 844284
+"Vieska" 869279
+"Vieska" 869295
+"Vieska" 877689
+"Vieska nad Blhom" 869309
+"Vieska nad Žitavou" 869317
+"Vieska-Bezdedov" 850560
+"Vikartovce" 869457
+"Vinica" 869465
+"Viničky" 869473
+"Viničné" 869481
+"Vinné" 869503
+"Vinohrady" 804380
+"Vinohrady nad Váhom" 869546
+"Virt" 851141
+"Vislanka" 869589
+"Vislava" 869597
+"Vislavce" 866369
+"Visolaje" 869619
+"Vitanová" 869708
+"Vištuk" 869686
+"Višňov" 869627
+"Višňové" 869635
+"Višňové" 869643
+"Višňové" 869651
+"Vlachovo" 869813
+"Vlachy" 869830
+"Vladiča" 869783
+"Vlača" 869767
+"Vlašky" 869848
+"Vlkanová" 869899
+"Vlkas" 869902
+"Vlkovce" 869937
+"Vlková" 869929
+"Vlky" 869945
+"Vlkyňa" 869953
+"Vlčany" 869872
+"Vlčkovany" 813346
+"Vlčkovce" 869881
+"Vlčkovo" 810681
+"Voderady" 869961
+"Vojany" 869970
+"Vojka" 870005
+"Vojka nad Dunajom" 870021
+"Vojkovce" 870030
+"Vojnatina" 870056
+"Vojtechovce" 842991
+"Vojtovce" 870099
+"Vojčice" 869996
+"Vojňany" 870048
+"Volica" 870137
+"Volkovce" 870153
+"Voznica" 870170
+"Vozokany" 870188
+"Vozokany" 870196
+"Vozokany nad Hronom" 819735
+"Voľa" 870129
+"Vrakuňa" 870293
+"Vrakúň" 870269
+"Vranie" 870307
+"Vranov nad Topľou" 870315
+"Vrbany" 810738
+"Vrbnica" 870439
+"Vrbov" 870447
+"Vrbovce" 870587
+"Vrbovce nad Rimavou" 868671
+"Vrbovec" 837156
+"Vrbovka" 870617
+"Vrbová nad Váhom" 870463
+"Vrbové" 870595
+"Vrchteplá" 870625
+"Vráble" 870218
+"Vrádište" 870226
+"Vrícko" 870633
+"Vrútky" 870650
+"Vršatské Podhradie" 870641
+"Vtáčkovce" 870749
+"Vydrany" 870790
+"Vydraň" 836630
+"Vydrná" 870811
+"Vydrník" 870820
+"Vyhne" 870846
+"Vysoká" 870901
+"Vysoká" 870919
+"Vysoká nad Kysucou" 871061
+"Vysoká nad Uhom" 871117
+"Vysoká pri Morave" 871133
+"Vysočany" 870897
+"Vyšehradné" 840696
+"Vyškovce" 871141
+"Vyškovce nad Ipľom" 871168
+"Vyšná Boca" 871184
+"Vyšná Hutka" 871192
+"Vyšná Jablonka" 871206
+"Vyšná Jedľová" 871214
+"Vyšná Kamenica" 871222
+"Vyšná Myšľa" 871231
+"Vyšná Olšava" 871249
+"Vyšná Pisaná" 871257
+"Vyšná Pokoradz" 871265
+"Vyšná Polianka" 871273
+"Vyšná Rybnica" 871290
+"Vyšná Sitnica" 871303
+"Vyšná Slaná" 871311
+"Vyšná Voľa" 871362
+"Vyšná Šebastová" 871346
+"Vyšná Šuňava" 871354
+"Vyšné Ladičkovce" 871371
+"Vyšné nad Hronom" 871389
+"Vyšné Nemecké" 871401
+"Vyšné Opátske" 827088
+"Vyšné Raslavice" 871419
+"Vyšné Remety" 871427
+"Vyšné Repaše" 871435
+"Vyšné Ružbachy" 871451
+"Vyšné Slovinky" 856681
+"Vyšné Valice" 871478
+"Vyšný Blh" 868892
+"Vyšný Hrabovec" 865800
+"Vyšný Hrušov" 871508
+"Vyšný Kazimír" 853747
+"Vyšný Klátov" 871516
+"Vyšný Komárnik" 871524
+"Vyšný Kručov" 871532
+"Vyšný Kubín" 871541
+"Vyšný Lánec" 871559
+"Vyšný Medzev" 836583
+"Vyšný Mirošov" 871575
+"Vyšný Olčvár" 827649
+"Vyšný Orlík" 871583
+"Vyšný Skálnik" 871591
+"Vyšný Slavkov" 871605
+"Vyšný Tvarožec" 871613
+"Vyšný Čaj" 871486
+"Vyšný Žipov" 871621
+"Váhovce" 866709
+"Vápeník" 867365
+"Vážsky klin" 825671
+"Véč" 857360
+"Vígľaš" 869350
+"Vígľašská Huta-Kalinka" 869431
+"Vítkovce" 869759
+"Víťaz" 869724
+"Víťazovce" 869732
+"Výborná" 870765
+"Východná" 870862
+"Výrava" 870871
+"Výčapky" 819841
+"Výčapy-Opatovce" 870781
+"Včelince" 867543
+"Včeláre" 871702
+"Zacharovce" 871851
+"Zaježová" 871915
+"Zalaba" 872261
+"Zalužice" 868779
+"Zamarovce" 872300
+"Zatín" 872393
+"Zavar" 872580
+"Zbehy" 872831
+"Zbehňov" 872822
+"Zboj" 872849
+"Zbojné" 872857
+"Zbora" 872873
+"Zborov" 872881
+"Zborov nad Bystricou" 872903
+"Zbudská Belá" 872946
+"Zbudské Dlhé" 872954
+"Zbudský Rokytov" 872962
+"Zbudza" 872971
+"Zbyňov" 872989
+"Zdoba" 854344
+"Zeleneč" 872997
+"Zelené" 848107
+"Zemianska Dedina" 873004
+"Zemianska Olča" 873021
+"Zemianska Závada" 873039
+"Zemianska Ľubeľa" 833274
+"Zemianske Kostoľany" 873055
+"Zemianske Lieskové" 873063
+"Zemianske Podhradie" 873080
+"Zemianske Sady" 873098
+"Zemianske Šúrovce" 862282
+"Zemiansky Kvašov" 873101
+"Zemiansky Vrbovok" 873136
+"Zemné" 873152
+"Zemplín" 873161
+"Zemplínska Teplica" 873217
+"Zemplínska Široká" 873209
+"Zemplínske Hradište" 873241
+"Zemplínske Hámre" 873225
+"Zemplínske Jastrabie" 873250
+"Zemplínske Kopčany" 826201
+"Zemplínsky Branč" 873268
+"Zemplínsky Klečenov" 873195
+"Zlatno" 809489
+"Zlatno" 873519
+"Zlatná na Ostrove" 873462
+"Zlatník" 873471
+"Zlatníky" 873501
+"Zlatovce" 873551
+"Zlatá Baňa" 873284
+"Zlatá Idka" 873322
+"Zlaté" 873349
+"Zlaté Moravce" 873438
+"Zliechov" 873578
+"Zobor" 840319
+"Zohor" 873586
+"Zolná" 873594
+"Zombor" 873608
+"Zonc" 865966
+"Zuberec" 873659
+"Zubné" 873675
+"Zubrohlava" 873683
+"Zubák" 873641
+"Zvala" 873691
+"Zvolen" 873705
+"Zvolenská Slatina" 873900
+"Zvončín" 873918
+"Zábiedovo" 871648
+"Záblatie" 871664
+"Záborie" 871672
+"Záborské" 871681
+"Zábrež" 844152
+"Zádiel" 871711
+"Zádor" 871729
+"Zádubnie" 871737
+"Záhajné" 950076
+"Záhor" 871745
+"Záhorce" 871770
+"Záhorie" 871788
+"Záhorská Bystrica" 871796
+"Záhorská Ves" 871826
+"Záhradné" 871834
+"Zákamenné" 871940
+"Zákopčie" 872253
+"Zákostoľany" 868159
+"Zálesie" 854298
+"Zálesie" 872270
+"Zálesie" 872296
+"Záložná" 950041
+"Zámutov" 872326
+"Záriečie" 872342
+"Záskalie" 812404
+"Záskalie" 872369
+"Zástranie" 872377
+"Záturčie" 872407
+"Závada" 870161
+"Závada" 872423
+"Závada" 872440
+"Závada" 872458
+"Závada" 872466
+"Závada pod Čiernym vrchom" 872482
+"Závadka" 872491
+"Závadka" 872504
+"Závadka" 872512
+"Závadka" 872547
+"Závadka nad Hronom" 872563
+"Závažná Poruba" 872644
+"Závod" 872679
+"Závodie" 874876
+"Zázrivá" 872806
+"Zúgov" 809799
+"Ábelová" 800015
+"Úbrež" 866245
+"Údol" 866318
+"Úhorná" 866342
+"Újazd" 866415
+"Úpor" 873187
+"Ústie nad Priehradou" 866563
+"Úľany nad Žitavou" 866431
+"Čab" 808253
+"Čabalovce" 808288
+"Čabiny" 808300
+"Čabradský Vrbovok" 808318
+"Čachtice" 808555
+"Čadca" 808393
+"Čajakovo" 819701
+"Čajkov" 808571
+"Čaka" 808580
+"Čakajovce" 808598
+"Čakanovce" 808601
+"Čakanovce" 808636
+"Čakany" 808644
+"Čaklov" 808661
+"Čakýň" 875210
+"Čalovec" 808679
+"Čamovce" 808733
+"Čankov" 808768
+"Čaradice" 808792
+"Častkov" 808831
+"Častkovce" 808857
+"Častá" 808814
+"Čata" 808873
+"Čataj" 808881
+"Čavoj" 808911
+"Čačín" 808334
+"Čaňa" 808750
+"Čebovce" 808971
+"Čechy" 809021
+"Čechynce" 840581
+"Čekovce" 809047
+"Čelkova Lehota" 809144
+"Čelovce" 809161
+"Čelovce" 809187
+"Čeláre" 809110
+"Čemerné" 809217
+"Čenice" 815233
+"Čenkesfa" 829978
+"Čenkovce" 873365
+"Čentöfa" 816710
+"Čerenčany" 809268
+"Čereňany" 809241
+"Čerhov" 809276
+"Čermany" 809292
+"Čermeľ" 827274
+"Černina" 809322
+"Černochov" 809331
+"Černík" 809314
+"Čertižné" 809349
+"Červenica" 809381
+"Červenica pri Sabinove" 809403
+"Červená Voda" 809357
+"Červeník" 809411
+"Červený Hrádok" 809420
+"Červený Kameň" 809438
+"Červený Kláštor" 809446
+"Červený Kríž" 991988
+"Červeňany" 809365
+"Čerín" 809284
+"České Brezovo" 809462
+"Čečehov" 808997
+"Čečejovce" 809004
+"Čečínska Potôň" 817503
+"Čeľadice" 809098
+"Čeľadince" 809101
+"Čeľovce" 809195
+"Čierna" 809551
+"Čierna Lehota" 809560
+"Čierna Lehota" 809586
+"Čierna nad Tisou" 809594
+"Čierna Voda" 809616
+"Čierne" 809624
+"Čierne Kľačany" 809675
+"Čierne nad Topľou" 809691
+"Čierne Pole" 809705
+"Čierny Balog" 809713
+"Čierny Brod" 809764
+"Čierny Potok" 809811
+"Čifáre" 809845
+"Čilistov" 860379
+"Čiližská Radvaň" 809853
+"Čimhová" 809870
+"Čirč" 809896
+"Čičarovce" 809497
+"Čičava" 809501
+"Čičmany" 809519
+"Čižatice" 809934
+"Čoltovo" 809942
+"Čremošné" 809951
+"Čukalovce" 809969
+"Čuklasovce" 809977
+"Čukárska Paka" 867861
+"Čunovo" 809985
+"Čučma" 853178
+"Čápor" 808776
+"Čáry" 808806
+"Čéfa" 816647
+"Číčov" 809527
+"Číž" 809900
+"Ďanová" 810061
+"Ďapalovce" 810070
+"Ďačov" 809993
+"Ďubákovo" 813125
+"Ďurkov" 813915
+"Ďurkovce" 813931
+"Ďurková" 813923
+"Ďurčiná" 813851
+"Ďurďové" 813907
+"Ďurďoš" 813877
+"Ďurďošík" 813893
+"Ľubica" 833312
+"Ľubické Kúpele" 950122
+"Ľubietová" 833339
+"Ľubiša" 833495
+"Ľubochňa" 833509
+"Ľuboreč" 833541
+"Ľuboriečka" 833568
+"Ľuborča" 833533
+"Ľubotice" 833584
+"Ľubotín" 833606
+"Ľubovec" 833614
+"Ľubá" 833258
+"Ľudovítová" 870773
+"Ľutina" 834289
+"Ľutov" 834360
+"Ňagov" 839248
+"Ňárad" 863955
+"Šaca" 827509
+"Šafárka" 862738
+"Šahy" 860158
+"Šajdíkove Humence" 860174
+"Šalgovce" 860310
+"Šalgovík" 860328
+"Šalgočka" 860301
+"Šalková" 801402
+"Šalov" 860344
+"Šambron" 860361
+"Šamorín" 860387
+"Šamudovce" 860417
+"Šandal" 860433
+"Šapinec" 843423
+"Šarbov" 860441
+"Šarišská Poruba" 860476
+"Šarišská Trstená" 860484
+"Šarišské Bohdanovce" 860492
+"Šarišské Dravce" 860514
+"Šarišské Jastrabie" 860522
+"Šarišské Lužianky" 860549
+"Šarišské Michaľany" 860557
+"Šarišské Sokolovce" 860565
+"Šarišské Čierne" 860506
+"Šarišský Štiavnik" 860573
+"Šarkan" 860581
+"Šaľa" 860182
+"Šašová" 860638
+"Šaštín" 860689
+"Šebastovce" 860701
+"Šebešťanová" 860719
+"Šelpice" 860735
+"Šemetkovce" 860743
+"Šemša" 860751
+"Šiatorská Bukovinka" 860786
+"Šiba" 860816
+"Šimonovce" 860832
+"Šindliar" 860841
+"Šintava" 860859
+"Širkovce" 860921
+"Široké" 860948
+"Širákov" 860913
+"Šivetice" 860981
+"Šišov" 860972
+"Šmigovec" 860999
+"Šoltýska" 861006
+"Šoporňa" 861014
+"Šoriakoš" 838551
+"Špania Dolina" 861057
+"Španie Pole" 861065
+"Špačince" 861049
+"Šranek" 991961
+"Šrobárová" 861073
+"Štefanov" 861081
+"Štefanovce" 861120
+"Štefanovce" 861138
+"Štefanovičová" 861162
+"Štefanová" 861111
+"Štefurov" 861171
+"Šterusy" 861189
+"Štiavnické Bane" 861197
+"Štiavnik" 861324
+"Štiavnička" 861201
+"Štrba" 861375
+"Štrbské Pleso" 861405
+"Štrkovec" 861421
+"Štvrtok" 861782
+"Štvrtok na Ostrove" 861791
+"Štítnik" 861341
+"Štós" 861359
+"Štôla" 836711
+"Štúrovo" 861553
+"Šuja" 861804
+"Šulekovo" 861847
+"Šumiac" 861871
+"Šurany" 861898
+"Šurianky" 862231
+"Šurice" 862258
+"Šuľa" 861812
+"Šuľany" 818364
+"Švedlár" 862401
+"Švošov" 862444
+"Švábovce" 862371
+"Šávoľ" 860697
+"Šášovské Podhradie" 860654
+"Šíd" 860824
+"Šípkov" 860883
+"Šípkové" 860905
+"Šók" 854883
+"Šútovo" 862347
+"Ťahanovce" 827452
+"Ťapešovo" 862509
+"Ťapkové" 869236
+"Žabokreky" 873926
+"Žabokreky nad Nitrou" 873934
+"Žakarovce" 873942
+"Žakovce" 873951
+"Žakýl" 847348
+"Žalobín" 873969
+"Žarnov" 873977
+"Žarnovica" 874001
+"Žarnovická Huta" 874019
+"Žatkovce" 874035
+"Žaškov" 874027
+"Žbince" 874051
+"Ždaňa" 874060
+"Ždiar" 874132
+"Žehra" 874183
+"Žehňa" 874159
+"Železiarne" 878049
+"Železná Breznica" 874205
+"Železné" 860131
+"Železník" 874213
+"Želiezovce" 874272
+"Želmanovce" 874281
+"Želovce" 874302
+"Žemliare" 874337
+"Žiar" 874353
+"Žiar" 874361
+"Žiar nad Hronom" 874370
+"Žibritov" 874558
+"Žihárec" 874574
+"Žihľava" 848786
+"Žikava" 874591
+"Žilina" 874604
+"Žilinská Lehota" 874906
+"Žipov" 874922
+"Žirany" 874931
+"Žitavce" 874973
+"Žitná" 874990
+"Žlkovce" 875007
+"Župkov" 875066
+"Župčany" 875015
+"Žíp" 874914
+"Žírovce" 816078
