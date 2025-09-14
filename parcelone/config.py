@@ -13,6 +13,7 @@ load_dotenv()
 
 # Default constants
 _DEFAULT_CP_WFS_BASE = "https://inspirews.skgeodesy.sk/geoserver/cp/ows"
+_DEFAULT_CP_UO_WFS_BASE = "https://inspirews.skgeodesy.sk/geoserver/cp_uo/ows"
 _DEFAULT_PAGE_SIZE = 1000
 _DEFAULT_WFS_CRS_CHOICES = {
     "auto (server default)": None,
@@ -23,6 +24,7 @@ _DEFAULT_WFS_CRS_CHOICES = {
 
 # Exposed configuration with environment variable overrides
 CP_WFS_BASE: str = os.getenv("CP_WFS_BASE", _DEFAULT_CP_WFS_BASE)
+CP_UO_WFS_BASE: str = os.getenv("CP_UO_WFS_BASE", _DEFAULT_CP_UO_WFS_BASE)
 PAGE_SIZE: int = int(os.getenv("PAGE_SIZE", str(_DEFAULT_PAGE_SIZE)))
 
 _env_crs = os.getenv("WFS_CRS_CHOICES")
@@ -34,4 +36,4 @@ if _env_crs:
 else:
     WFS_CRS_CHOICES = _DEFAULT_WFS_CRS_CHOICES
 
-__all__ = ["CP_WFS_BASE", "PAGE_SIZE", "WFS_CRS_CHOICES"]
+__all__ = ["CP_WFS_BASE", "CP_UO_WFS_BASE", "PAGE_SIZE", "WFS_CRS_CHOICES"]
