@@ -1,39 +1,58 @@
+# file: parcelone/parcelone/wfs.py
+"""Fast, sync WFS helpers using `requests` (no asyncio), with robust fallbacks.
 
-import asyncio
-import aiohttp
-import json
-import re
-import time
+Designed to match the working logic from your simple app:
+- FES filter by KU + optional parcel labels
+- Page size 1000, loop until empty
+- Fallbacks: drop `srsName` on HTTP 400; try CQL; split-by-one for labels
+- Separate GeoJSON path (server-side JSON) and GML path
+- Lightweight bbox fetch for KU via zone layer (GeoJSON)
+"""
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
-from urllib.parse import urlencode
-from .config import WFS_CRS_CHOICES
+import json
+import re
 
+import requests
 
-try:  # Allow running as a standalone script or as part of the package
-    from .config import CP_WFS_BASE, CP_UO_WFS_BASE, PAGE_SIZE
+try:  # Allow running as a standalone script or part of the package
+    from .config import CP_WFS_BASE, CP_UO_WFS_BASE, PAGE_SIZE, WFS_CRS_CHOICES
 except ImportError:  # pragma: no cover
-    from config import CP_WFS_BASE, CP_UO_WFS_BASE, PAGE_SIZE  # type: ignore
-ZONE_C = "cp:CP.CadastralZoning"
-ZONE_E = "cp_uo:CP.CadastralZoningUO"
+    from config import CP_WFS_BASE, CP_UO_WFS_BASE, PAGE_SIZE, WFS_CRS_CHOICES  # type: ignore
+
+# ---- layers / types ---------------------------------------------------------
 TYPE_C = "cp:CP.CadastralParcel"
 TYPE_E = "cp_uo:CP.CadastralParcelUO"
-PREVIEW_PAGE_SIZE = 100
-PREVIEW_MAX_FEATURES = 500
-DEBUG_PROFILE = False
-_step_times: dict[str, float] = {}
-DEFAULT_TIMEOUT: aiohttp.ClientTimeout = aiohttp.ClientTimeout(
-    total=60, # total request budget (s)
-    sock_connect=15,
-    sock_read=30,
-)
+ZONE_C = "cp:CP.CadastralZoning"
+ZONE_E = "cp_uo:CP.CadastralZoningUO"
 
+# ---- HTTP defaults ----------------------------------------------------------
 HEADERS_XML = {
-    # Needed by WFS GetFeature endpoints that prefer XML
-    "Accept": "application/xml, text/xml;q=0.9,*/*;q=0.8",
-    # A UA helps some gateways; keep it benign
-    "User-Agent": "ParcelOne/0.1 (+https://parcelone.streamlit.app)",
+    "User-Agent": "ParcelOne/WFS 1.0",
+    "Accept": "application/xml,*/*;q=0.5",
+    "Connection": "close",
 }
+TIMEOUT = (10, 60)  # (connect, read)
+
+
+# ---- common helpers ---------------------------------------------------------
+
+def http_get_bytes(url: str, tries: int = 3) -> bytes:
+    last: Exception | None = None
+    for i in range(tries):
+        try:
+            r = requests.get(url, headers=HEADERS_XML, timeout=TIMEOUT)
+            r.raise_for_status()
+            return r.content
+        except Exception as e:
+            last = e
+            import time as _t
+            _t.sleep(0.6 * (i + 1))
+    assert last is not None
+    raise last
+
 
 def xml_escape(text: str) -> str:
     return (
@@ -69,13 +88,20 @@ def build_fes_filter(ku: str, parcels: List[str]) -> str:
     return ""
 
 
+def build_cql_filter(ku: str, parcels: List[str]) -> str:
+    parts: List[str] = []
+    if parcels:
+        quoted = ",".join(["'" + p.replace("'", "''") + "'" for p in parcels if p])
+        if quoted:
+            parts.append(f"label IN ({quoted})")
+    if ku:
+        parts.append(f"nationalCadastralReference LIKE '{ku}%' ")
+    return " AND ".join(parts)
+
+
 def has_any_feature(xml_bytes: bytes) -> bool:
     b = xml_bytes
-    return (
-        (b.find(b"featureMember") != -1)
-        or (b.find(b":member") != -1)
-        or (b.find(b"<wfs:member") != -1)
-    )
+    return (b.find(b"featureMember") != -1) or (b.find(b":member") != -1) or (b.find(b"<wfs:member") != -1)
 
 
 @dataclass
@@ -87,221 +113,11 @@ class FetchResult:
     detected_epsg: Optional[str] = None
 
 
+# ---- GML (fast path) --------------------------------------------------------
+
 def gml_number_returned(xmlb: bytes) -> Optional[int]:
     m = re.search(rb'numberReturned="(\d+)"', xmlb)
     return int(m.group(1)) if m else None
-
-
-def gml_number_matched(xmlb: bytes) -> Optional[int]:
-    m = re.search(rb'numberMatched="(\d+)"', xmlb)
-    return int(m.group(1)) if m else None
-
-def has_any_geojson_feature(json_bytes: bytes) -> bool:
-    try:
-        data = json.loads(json_bytes.decode("utf-8", "ignore"))
-    except Exception:
-        return False
-    if isinstance(data, dict):
-        t = data.get("type")
-        if t == "FeatureCollection":
-            return bool(data.get("features"))
-        if t == "Feature":
-            return True
-    return False
-
-
-def json_number_returned(jsonb: bytes) -> Optional[int]:
-    try:
-        data = json.loads(jsonb.decode("utf-8", "ignore"))
-    except Exception:
-        return None
-    if isinstance(data, dict):
-        if "numberReturned" in data:
-            try:
-                return int(data["numberReturned"])
-            except Exception:
-                return None
-        if data.get("type") == "FeatureCollection":
-            feats = data.get("features") or []
-            if isinstance(feats, list):
-                return len(feats)
-        if data.get("type") == "Feature":
-            return 1
-    return None
-
-
-def json_number_matched(jsonb: bytes) -> Optional[int]:
-    try:
-        data = json.loads(jsonb.decode("utf-8", "ignore"))
-    except Exception:
-        return None
-    if isinstance(data, dict) and "numberMatched" in data:
-        try:
-            return int(data["numberMatched"])
-        except Exception:
-            return None
-    return None
-
-
-def _bbox_from_coords(coords: List) -> List[Tuple[float, float]]:
-    points: List[Tuple[float, float]] = []
-    if not isinstance(coords, list):
-        return points
-    if coords and isinstance(coords[0], (int, float)):
-        if len(coords) >= 2:
-            points.append((coords[0], coords[1]))
-        return points
-    for item in coords:
-        points.extend(_bbox_from_coords(item))
-    return points
-
-
-def bbox_from_geojson(gj: dict) -> Optional[Tuple[float, float, float, float]]:
-    if not isinstance(gj, dict):
-        return None
-    if "bbox" in gj and isinstance(gj["bbox"], (list, tuple)) and len(gj["bbox"]) >= 4:
-        b = gj["bbox"]
-        return (float(b[0]), float(b[1]), float(b[2]), float(b[3]))
-    points: List[Tuple[float, float]] = []
-    t = gj.get("type")
-    if t == "FeatureCollection":
-        for feat in gj.get("features", []) or []:
-            geom = feat.get("geometry") if isinstance(feat, dict) else None
-            if geom:
-                points.extend(_bbox_from_coords(geom.get("coordinates")))
-    elif t == "Feature":
-        geom = gj.get("geometry")
-        if geom:
-            points.extend(_bbox_from_coords(geom.get("coordinates")))
-    else:
-        # geometry object
-        points.extend(_bbox_from_coords(gj.get("coordinates")))
-    if not points:
-        return None
-    xs = [p[0] for p in points]
-    ys = [p[1] for p in points]
-    return (min(xs), min(ys), max(xs), max(ys))
-
-
-def merge_geojson_pages(pages: List[bytes], max_features: Optional[int] = None) -> Tuple[dict, int, int]:
-    features = []
-    total = 0
-    for page in pages:
-        try:
-            data = json.loads(page.decode("utf-8", "ignore"))
-        except Exception:
-            continue
-        if not isinstance(data, dict):
-            continue
-        t = data.get("type")
-        if t == "FeatureCollection":
-            feats = data.get("features") or []
-            if isinstance(feats, list):
-                total += len(feats)
-                for f in feats:
-                    if max_features is None or len(features) < max_features:
-                        features.append(f)
-        elif t == "Feature":
-            total += 1
-            if max_features is None or len(features) < max_features:
-                features.append(data)
-    used = len(features)
-    return {"type": "FeatureCollection", "features": features}, total, used
-
-
-async def _fetch(
-    session: aiohttp.ClientSession,
-    url: str,
-    *,
-    retries: int = 3,
-    timeout: Optional[aiohttp.ClientTimeout] = None,
-) -> bytes:
-    
-    if retries < 1:
-        raise ValueError("retries must be >= 1")
-
-    effective_timeout = timeout or DEFAULT_TIMEOUT
-
-    backoff = 0.5
-    for attempt in range(1, retries + 1):
-        try:
-            async with session.get(url, timeout=effective_timeout) as resp:
-                resp.raise_for_status()
-                return await resp.read()
-        except (aiohttp.ClientError, asyncio.TimeoutError):
-            if attempt >= retries:
-                raise
-            await asyncio.sleep(backoff)
-            backoff *= 2
-
-
-async def fetch_gml_pages_async(
-    register: str,
-    ku: str,
-    parcels_csv: str,
-    wfs_srs: Optional[str] = None,
-    *,
-    page_size: int = PAGE_SIZE,
-    retries: int = 3,
-    timeout: aiohttp.ClientTimeout = DEFAULT_TIMEOUT,
-) -> FetchResult:
-    reg = (register or "").upper().strip()
-    ku = (ku or "").strip()
-    if not ku and not (parcels_csv or "").strip():
-        return FetchResult(False, "Zadaj aspoň KU alebo parcelné čísla.", [], "")
-
-    parcels = [p.strip() for p in re.split(r"[,;\s]+", parcels_csv or "") if p.strip()]
-    base = CP_UO_WFS_BASE if reg == "E" else CP_WFS_BASE
-    typename = TYPE_E if reg == "E" else TYPE_C
-
-    fes = build_fes_filter(ku, parcels)
-    if not fes:
-        return FetchResult(False, "Neplatný filter (chýba KU aj parcely).", [], "")
-
-    params = {
-        "service": "WFS",
-        "version": "2.0.0",
-        "request": "GetFeature",
-        "typeNames": typename,
-        "count": str(page_size),
-        "startIndex": "0",
-        "filter": fes,
-    }
-    if wfs_srs:
-        params["srsName"] = wfs_srs
-    first_url = f"{base}?{urlencode(params)}"
-
-    async with aiohttp.ClientSession(headers=HEADERS_XML) as session:
-        try:
-            first_page = await _fetch(session, first_url, retries=retries, timeout=timeout)
-        except Exception as e:
-            return FetchResult(False, f"HTTP chyba: {e}", [], first_url)
-
-        if not has_any_feature(first_page):
-            return FetchResult(False, "Server vrátil 0 prvkov pre daný filter.", [], first_url)
-
-        pages = [first_page]
-        total = gml_number_matched(first_page) or gml_number_returned(first_page) or 0
-        if total <= page_size or total == 0:
-            return FetchResult(True, "Počet stránok: 1", pages, first_url)
-
-        start_indices = list(range(page_size, total, page_size))
-        urls = []
-        for start in start_indices:
-            p = params.copy()
-            p["startIndex"] = str(start)
-            urls.append(f"{base}?{urlencode(p)}")
-
-        tasks = [
-            _fetch(session, url, retries=retries, timeout=timeout)
-            for url in urls
-        ]
-        try:
-            results = await asyncio.gather(*tasks)
-        except Exception as e:
-            return FetchResult(False, f"HTTP chyba: {e}", pages, first_url)
-        pages.extend(results)
-        return FetchResult(True, f"Počet stránok: {len(pages)}", pages, first_url)
 
 
 def fetch_gml_pages(
@@ -309,28 +125,15 @@ def fetch_gml_pages(
     ku: str,
     parcels_csv: str,
     wfs_srs: Optional[str] = None,
-    **kwargs,
-) -> FetchResult:
-    return asyncio.run(
-        fetch_gml_pages_async(register, ku, parcels_csv, wfs_srs=wfs_srs, **kwargs)
-    )
-
-# ---------------------- GeoJSON helpers ---------------------------------
-
-async def fetch_geojson_pages_async(
-    register: str,
-    ku: str,
-    parcels_csv: str,
-    wfs_srs: Optional[str] = None,
     *,
     page_size: int = PAGE_SIZE,
-    retries: int = 3,
-    timeout: aiohttp.ClientTimeout = DEFAULT_TIMEOUT,
 ) -> FetchResult:
     reg = (register or "").upper().strip()
     ku = (ku or "").strip()
     if not ku and not (parcels_csv or "").strip():
         return FetchResult(False, "Zadaj aspoň KU alebo parcelné čísla.", [], "")
+
+    from urllib.parse import urlencode
 
     parcels = [p.strip() for p in re.split(r"[,;\s]+", parcels_csv or "") if p.strip()]
     base = CP_UO_WFS_BASE if reg == "E" else CP_WFS_BASE
@@ -340,111 +143,242 @@ async def fetch_geojson_pages_async(
     if not fes:
         return FetchResult(False, "Neplatný filter (chýba KU aj parcely).", [], "")
 
-    params = {
-        "service": "WFS",
-        "version": "2.0.0",
-        "request": "GetFeature",
-        "typeNames": typename,
-        "count": str(page_size),
-        "startIndex": "0",
-        "filter": fes,
-        "outputFormat": "application/json",
-    }
-    if wfs_srs:
-        params["srsName"] = wfs_srs
-    first_url = f"{base}?{urlencode(params)}"
+    pages: List[bytes] = []
+    start = 0
+    first_url = ""
+    dropped_srs = False
 
-    async with aiohttp.ClientSession(headers=HEADERS_XML) as session:
+    while True:
+        params = {
+            "service": "WFS",
+            "version": "2.0.0",
+            "request": "GetFeature",
+            "typeNames": typename,
+            "count": str(page_size),
+            "startIndex": str(start),
+            "filter": fes,
+        }
+        if wfs_srs and not dropped_srs:
+            params["srsName"] = wfs_srs
+
+        url = f"{base}?{urlencode(params)}"
+        if not first_url:
+            first_url = url
+
         try:
-            first_page = await _fetch(session, first_url, retries=retries, timeout=timeout)
+            xmlb = http_get_bytes(url)
+        except requests.HTTPError as e:
+            sc = getattr(e.response, "status_code", None)
+            # if we already have some pages and server says 400 -> end
+            if pages and sc == 400:
+                break
+            # drop srsName once on 400
+            if (sc == 400 or sc is None) and wfs_srs and not dropped_srs:
+                dropped_srs = True
+                continue
+            # split by one when user listed labels – some servers balk at OR
+            if sc == 400 and parcels:
+                singles: List[bytes] = []
+                for pval in parcels:
+                    sp = {
+                        "service": "WFS", "version": "2.0.0", "request": "GetFeature",
+                        "typeNames": typename, "count": "1000", "startIndex": "0",
+                        "filter": build_fes_filter(ku, [pval]),
+                    }
+                    if not dropped_srs and wfs_srs:
+                        sp["srsName"] = wfs_srs
+                    surl = f"{base}?{urlencode(sp)}"
+                    try:
+                        sb = http_get_bytes(surl)
+                        if has_any_feature(sb):
+                            singles.append(sb)
+                    except Exception:
+                        pass
+                if singles:
+                    return FetchResult(True, f"Počet stránok: {len(singles)} (split-by-one)", singles, first_url)
+            # final fallback: CQL
+            cql = build_cql_filter(ku, parcels)
+            if cql:
+                cql_params = {
+                    "service": "WFS", "version": "2.0.0", "request": "GetFeature",
+                    "typeNames": typename, "count": str(page_size), "startIndex": str(start),
+                    "CQL_FILTER": cql,
+                }
+                if not dropped_srs and wfs_srs:
+                    cql_params["srsName"] = wfs_srs
+                cql_url = f"{base}?{urlencode(cql_params)}"
+                if not first_url:
+                    first_url = cql_url
+                try:
+                    xmlb = http_get_bytes(cql_url)
+                except Exception as ee:
+                    return FetchResult(False, f"HTTP chyba: {e}\nCQL fallback zlyhal: {ee}", [], first_url or url)
+            else:
+                return FetchResult(False, f"HTTP chyba: {e}", [], first_url or url)
         except Exception as e:
-            return FetchResult(False, f"HTTP chyba: {e}", [], first_url)
+            return FetchResult(False, f"Chyba: {e}", [], first_url or url)
 
-        if not has_any_geojson_feature(first_page):
-            return FetchResult(False, "Server vrátil 0 prvkov pre daný filter.", [], first_url)
+        nr = gml_number_returned(xmlb)
+        if (nr is not None and nr == 0) or not has_any_feature(xmlb):
+            break
 
-        pages = [first_page]
-        total = json_number_matched(first_page) or json_number_returned(first_page) or 0
-        if total <= page_size or total == 0:
-            return FetchResult(True, "Počet stránok: 1", pages, first_url)
+        pages.append(xmlb)
 
-        start_indices = list(range(page_size, total, page_size))
-        urls = []
-        for start in start_indices:
-            p = params.copy()
-            p["startIndex"] = str(start)
-            urls.append(f"{base}?{urlencode(p)}")
+        if nr is not None:
+            if nr < page_size:
+                break
+            start += nr
+        else:
+            if len(xmlb) < 10000:
+                break
+            start += page_size
 
-        tasks = [
-            _fetch(session, url, retries=retries, timeout=timeout)
-            for url in urls
-        ]
-        try:
-            results = await asyncio.gather(*tasks)
-        except Exception as e:
-            return FetchResult(False, f"HTTP chyba: {e}", pages, first_url)
-        pages.extend(results)
-        return FetchResult(True, f"Počet stránok: {len(pages)}", pages, first_url)
+        if start > 500_000:
+            break
 
+    if not pages:
+        return FetchResult(False, "Server vrátil 0 prvkov pre daný filter.", [], first_url)
+
+    return FetchResult(True, f"Počet stránok: {len(pages)}", pages, first_url)
+
+
+# ---- GeoJSON ---------------------------------------------------------------
 
 def fetch_geojson_pages(
     register: str,
     ku: str,
     parcels_csv: str,
     wfs_srs: Optional[str] = None,
-    **kwargs,
-) -> FetchResult:
-    return asyncio.run(
-        fetch_geojson_pages_async(register, ku, parcels_csv, wfs_srs=wfs_srs, **kwargs)
-    )
-
-
-def preview_geojson_autofallback(
-    register: str,
-    ku: str,
-    parcels_csv: str,
-    wfs_srs: Optional[str] = None,
-    **kwargs,
-) -> FetchResult:
-    res = fetch_geojson_pages(register, ku, parcels_csv, wfs_srs=wfs_srs, **kwargs)
-    if res.ok or not wfs_srs:
-        return res
-    return fetch_geojson_pages(register, ku, parcels_csv, wfs_srs=None, **kwargs)
-
-
-async def _fetch_zone_bbox_async(
-    register: str,
-    ku: str,
     *,
-    retries: int = 3,
-    timeout: aiohttp.ClientTimeout = DEFAULT_TIMEOUT,
-) -> Optional[Tuple[float, float, float, float]]:
+    page_size: int = PAGE_SIZE,
+) -> FetchResult:
     reg = (register or "").upper().strip()
     ku = (ku or "").strip()
-    if not ku:
-        return None
+    parcels = [p.strip() for p in re.split(r"[,;\s]+", parcels_csv or "") if p.strip()]
     base = CP_UO_WFS_BASE if reg == "E" else CP_WFS_BASE
-    layer = ZONE_E if reg == "E" else ZONE_C
-    params = {
-        "service": "WFS",
-        "version": "2.0.0",
-        "request": "GetFeature",
-        "typeNames": layer,
-        "outputFormat": "application/json",
-        "count": "1",
-        "cql_filter": f"nationalCadastralReference='{ku}'",
-    }
-    url = f"{base}?{urlencode(params)}"
-    async with aiohttp.ClientSession(headers=HEADERS_XML) as session:
+    typename = TYPE_E if reg == "E" else TYPE_C
+
+    from urllib.parse import urlencode
+
+    filt_xml = build_fes_filter(ku, parcels)
+    if not filt_xml:
+        return FetchResult(False, "Neplatný filter (chýba KU aj parcely)", [], "")
+
+    pages: List[bytes] = []
+    start = 0
+    first_url = ""
+
+    while True:
+        params = {
+            "service": "WFS",
+            "version": "2.0.0",
+            "request": "GetFeature",
+            "typeNames": typename,
+            "count": str(page_size),
+            "startIndex": str(start),
+            "filter": filt_xml,
+            "outputFormat": "application/json",
+        }
+        if wfs_srs:
+            params["srsName"] = wfs_srs
+
+        url = f"{base}?{urlencode(params)}"
+        if not first_url:
+            first_url = url
+
         try:
-            data = await _fetch(session, url, retries=retries, timeout=timeout)
+            jb = http_get_bytes(url)
+        except requests.HTTPError as e:
+            if pages and getattr(e.response, "status_code", None) == 400:
+                break
+            return FetchResult(False, f"HTTP chyba: {e}", [], first_url or url)
+        except Exception as e:
+            return FetchResult(False, f"Chyba: {e}", [], first_url or url)
+
+        try:
+            obj = json.loads(jb.decode("utf-8", "ignore"))
+            feats = obj.get("features", [])
         except Exception:
-            return None
-    try:
-        gj = json.loads(data.decode("utf-8", "ignore"))
-    except Exception:
+            feats = []
+
+        if not feats:
+            break
+
+        pages.append(jb)
+
+        if len(feats) < page_size:
+            break
+        start += page_size
+        if start > 500_000:
+            break
+
+    if not pages:
+        return FetchResult(False, "Server vrátil 0 prvkov pre daný filter.", [], first_url)
+
+    return FetchResult(True, f"Počet stránok: {len(pages)}", pages, first_url)
+
+
+# ---- GeoJSON helpers -------------------------------------------------------
+
+def merge_geojson_pages(pages: List[bytes], max_features: int = 8000):
+    features: List[dict] = []
+    total = 0
+    for jb in pages:
+        try:
+            obj = json.loads(jb.decode("utf-8", "ignore"))
+            feats = obj.get("features", [])
+        except Exception:
+            feats = []
+        total += len(feats)
+        if len(features) < max_features:
+            room = max_features - len(features)
+            features.extend(feats[:room])
+        if len(features) >= max_features:
+            break
+    fc = {"type": "FeatureCollection", "features": features}
+    return fc, total, len(features)
+
+
+def _walk_coords(geom: dict, agg: List[float]):
+    if not geom:
+        return
+    coords = geom.get("coordinates")
+
+    def _rec(c):
+        if isinstance(c, (list, tuple)):
+            if c and isinstance(c[0], (int, float)) and isinstance(c[1], (int, float)):
+                x, y = float(c[0]), float(c[1])
+                agg[0] = min(agg[0], x)
+                agg[1] = min(agg[1], y)
+                agg[2] = max(agg[2], x)
+                agg[3] = max(agg[3], y)
+            else:
+                for cc in c:
+                    _rec(cc)
+
+    _rec(coords)
+
+
+def bbox_from_geojson(obj: dict) -> Optional[Tuple[float, float, float, float]]:
+    if not obj:
         return None
-    return bbox_from_geojson(gj)
+    agg = [float("inf"), float("inf"), float("-inf"), float("-inf")]
+    if obj.get("type") == "FeatureCollection":
+        for f in obj.get("features", []):
+            _walk_coords((f or {}).get("geometry") or {}, agg)
+    elif obj.get("type") == "Feature":
+        _walk_coords((obj or {}).get("geometry") or {}, agg)
+    else:
+        _walk_coords(obj, agg)
+    if agg[0] == float("inf"):
+        return None
+    return tuple(agg)  # minx, miny, maxx, maxy
+
+
+# ---- KU bbox ---------------------------------------------------------------
+
+def _zoning_layer(register: str) -> str:
+    return ZONE_E if (register or "").upper() == "E" else ZONE_C
 
 
 def fetch_zone_bbox(
@@ -452,9 +386,60 @@ def fetch_zone_bbox(
     ku: str,
     *,
     retries: int = 3,
-    timeout: Optional[aiohttp.ClientTimeout] = None,
 ) -> Optional[Tuple[float, float, float, float]]:
-    effective_timeout = timeout or DEFAULT_TIMEOUT
-    return asyncio.run(
-        _fetch_zone_bbox_async(register, ku, retries=retries, timeout=effective_timeout)
-    )
+    """GeoJSON request to zoning layer filtered by KU -> bbox."""
+    base = CP_UO_WFS_BASE if (register or "").upper() == "E" else CP_WFS_BASE
+    layer = _zoning_layer(register)
+    from urllib.parse import urlencode
+
+    params = {
+        "service": "WFS",
+        "version": "2.0.0",
+        "request": "GetFeature",
+        "typeNames": layer,
+        "outputFormat": "application/json",
+        "count": "1",
+        "CQL_FILTER": f"nationalCadastralReference='{ku}'",
+    }
+    url = f"{base}?{urlencode(params)}"
+    try:
+        jb = http_get_bytes(url, tries=retries)
+        obj = json.loads(jb.decode("utf-8", "ignore"))
+    except Exception:
+        return None
+    return bbox_from_geojson(obj)
+
+
+# ---- small convenience -----------------------------------------------------
+
+def preview_geojson_autofallback(
+    register: str,
+    ku: str,
+    parcels_csv: str,
+    wfs_srs: Optional[str] = None,
+    *,
+    page_size: int = PAGE_SIZE,
+) -> FetchResult:
+    """Try GeoJSON; if it fails, retry without srsName."""
+    res = fetch_geojson_pages(register, ku, parcels_csv, wfs_srs=wfs_srs, page_size=page_size)
+    if res.ok or not wfs_srs:
+        return res
+    return fetch_geojson_pages(register, ku, parcels_csv, wfs_srs=None, page_size=page_size)
+
+
+__all__ = [
+    "TYPE_C",
+    "TYPE_E",
+    "ZONE_C",
+    "ZONE_E",
+    "HEADERS_XML",
+    "TIMEOUT",
+    "FetchResult",
+    "build_fes_filter",
+    "merge_geojson_pages",
+    "fetch_gml_pages",
+    "fetch_geojson_pages",
+    "preview_geojson_autofallback",
+    "fetch_zone_bbox",
+    "bbox_from_geojson",
+]
