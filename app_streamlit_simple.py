@@ -140,7 +140,7 @@ def fetch_zone_bbox(register: str, ku_code: str):
 
     # 3) POISTKA – parcelový layer, 1 feature (GeoJSON), srsName 4326/auto
     try:
-        res = preview_geojson_autofallback(reg, k, "", page_size=1)
+        res = p_to_dxfk(reg, k, "", page_size=1)
         if res.ok and res.pages:
             obj = json.loads(res.pages[0].decode("utf-8","ignore"))
             return bbox_from_geojson(obj)
@@ -353,13 +353,17 @@ def show_map_preview(
         zp["CQL_FILTER"] = cql_zone
     folium.raster_layers.WmsTileLayer(url=url, name="Hranica KU", **zp).add_to(m)
 
-    # Ak používateľ zadá parcely → zvýrazni len tie (WFS → GeoJSON)
-    if (parcels or '').strip():
-        folium.GeoJson(
-            fc_geojson,
-            name="Vybrané parcely (WFS)",
-            style_function=lambda _: {"color": "#0b5ed7", "weight": 3, "fill": False},
-        ).add_to(m)
+    # Ak používateľ zadá parcely → zvýrazni len tie (WFS → GeoJSON),
+    # ale iba ak máme validný GeoJSON s aspoň jednou geometriou.
+    if (parcels or '').strip() and isinstance(fc_geojson, dict):
+        t = fc_geojson.get("type")
+        has_feats = (t == "FeatureCollection" and bool(fc_geojson.get("features"))) or (t == "Feature")
+        if has_feats:
+            folium.GeoJson(
+                fc_geojson,
+                name="Vybrané parcely (WFS)",
+                style_function=lambda _: {"color": "#0b5ed7", "weight": 3, "fill": False},
+            ).add_to(m)
 
     st_folium(m, height=540, returned_objects=[])
 
@@ -981,6 +985,68 @@ def geojson_pages_to_dxf(json_pages: List[bytes]) -> Tuple[bytes, str]:
         with open(out_path, "rb") as f:
             data = f.read()
     return data, "application/dxf"
+def gml_pages_to_dxf(gml_pages: List[bytes]) -> Tuple[bytes, str]:
+    """
+    Minimalistický fallback: vyparsuje gml:posList/gml:pos z GML a vykreslí
+    uzavreté polyline do DXF. Nevyžaduje GDAL ani nové sieťové volania.
+    """
+    import xml.etree.ElementTree as ET
+    import ezdxf
+
+    ns = {"gml": "http://www.opengis.net/gml"}
+    doc = ezdxf.new(setup=True)
+    msp = doc.modelspace()
+    LAYER = "PARCELY"
+    if LAYER not in doc.layers:
+        doc.layers.new(name=LAYER)
+
+    def parse_poslist(txt: str) -> list[tuple[float, float]]:
+        vals = [float(x) for x in re.split(r"[ ,\s]+", (txt or "").strip()) if x]
+        pts = [(vals[i], vals[i+1]) for i in range(0, len(vals) - 1, 2)]
+        if pts and pts[0] != pts[-1]:
+            pts.append(pts[0])
+        return pts
+
+    def add_ring(pts: list[tuple[float, float]]):
+        if len(pts) >= 4:
+            msp.add_lwpolyline(pts, format="xy", dxfattribs={"layer": LAYER, "closed": True})
+
+    for b in gml_pages:
+        try:
+            root = ET.fromstring(b)
+        except Exception:
+            continue
+
+        # Polygon/MultiSurface s posList (najčastejší prípad)
+        for poslist in root.findall(".//gml:posList", ns):
+            add_ring(parse_poslist(poslist.text or ""))
+
+        # Rezerva: ak by boli len jednotlivé gml:pos (menej časté)
+        rings = []
+        cur = []
+        for pos in root.findall(".//gml:pos", ns):
+            parts = [float(x) for x in (pos.text or "").replace(",", " ").split() if x]
+            if len(parts) >= 2:
+                cur.append((parts[0], parts[1]))
+            # uzavretie prstenca heuristikou
+            if len(cur) >= 4 and cur[0] == cur[-1]:
+                rings.append(cur); cur = []
+        if cur:
+            rings.append(cur)
+        for r in rings:
+            if r and r[0] != r[-1]:
+                r = r + [r[0]]
+            add_ring(r)
+
+    with tempfile.TemporaryDirectory() as td:
+        out_path = os.path.join(td, "parcely.dxf")
+        try:
+            doc.saveas(out_path)
+        except AttributeError:
+            doc.save()
+        with open(out_path, "rb") as f:
+            data = f.read()
+    return data, "application/dxf"
 
 # ----------------------------- Streamlit UI --------------------------------
 
@@ -1063,10 +1129,13 @@ if do_preview_ku or (parcels or '').strip():
             if gj.ok and gj.pages:
                 fc, total, used = merge_geojson_pages(gj.pages, max_features=PREVIEW_MAX_FEATURES)
                 bbox = bbox_from_geojson(fc)
+            # ak nič neprišlo, nezvýrazňuj parcely – len KU
+            parcels_for_map = parcels if (gj.ok and gj.pages and fc and fc.get("features")) else ""
             if not bbox:
                 with timed('zone_bbox_fallback'):
                     bbox = fetch_zone_bbox(reg, do_preview_ku) or (17.0, 48.0, 17.01, 48.01)
-            show_map_preview(reg, fc, bbox, ku=do_preview_ku, parcels=parcels)
+            show_map_preview(reg, fc if parcels_for_map else {}, bbox, ku=do_preview_ku, parcels=parcels_for_map)
+
 
     # Voliteľné: ukáž profilovanie krokov
     if DEBUG_PROFILE and _step_times:
@@ -1115,20 +1184,36 @@ if do_preview_ku or (parcels or '').strip():
 
                 elif fmt == "dxf":
                     try:
+                        # 1) GDAL → DXF (ak je k dispozícii)
                         data, mime, conv_src = convert_pages_with_gdal(result.pages, "DXF", ".dxf")
                         st.download_button("Stiahnuť DXF", data=data,
                                            file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.dxf", mime=mime)
                         st.caption(f"Konverzia: {conv_src}")
                     except Exception:
-                        st.info("DXF cez GDAL zlyhal – používam čistý Python fallback (WFS GeoJSON → DXF).")
-                        gj_res = fetch_geojson_pages(reg, resolved_ku or "", parcels, wfs_srs=wfs_srs)
-                        if not gj_res.ok:
-                            st.error(f"Chyba GeoJSON fallbacku: {gj_res.note}\nURL: {gj_res.first_url or '-'}")
-                            st.stop()
-                        dxf_bytes, mime = geojson_pages_to_dxf(gj_res.pages)
-                        st.download_button("Stiahnuť DXF", data=dxf_bytes,
-                                           file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.dxf", mime=mime)
-                        st.caption("Konverzia: čistý Python (ezdxf)")
+                        # 2) Bez siete: rovno z GML stránok → DXF
+                        try:
+                            st.info("GDAL nie je dostupný – konvertujem priamo z GML (bez ďalších requestov).")
+                            dxf_bytes, mime = gml_pages_to_dxf(result.pages)
+                            st.download_button("Stiahnuť DXF", data=dxf_bytes,
+                                               file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.dxf", mime=mime)
+                            st.caption("Konverzia: čistý Python (GML → DXF)")
+                        except Exception:
+                            # 3) Posledný pokus: GeoJSON fallback (môže trvať dlhšie / timeout)
+                            st.info("Skúšam ešte GeoJSON fallback…")
+                            try:
+                                gj_res = fetch_geojson_pages(reg, resolved_ku or "", parcels, wfs_srs=wfs_srs)
+                                if not gj_res.ok:
+                                    raise RuntimeError(gj_res.note or "GeoJSON nevrátil dáta.")
+                                dxf_bytes, mime = geojson_pages_to_dxf(gj_res.pages)
+                                st.download_button("Stiahnuť DXF", data=dxf_bytes,
+                                                   file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.dxf", mime=mime)
+                                st.caption("Konverzia: čistý Python (GeoJSON → DXF)")
+                            except Exception as e:
+                                st.error(f"DXF sa nepodarilo pripraviť: {e}")
+                                st.download_button("Stiahnuť GML (ZIP)", data=gml_zip,
+                                                   file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.zip",
+                                                   mime="application/zip")
+
 
                 elif fmt == "gpkg":
                     data, mime, conv_src = convert_pages_with_gdal(result.pages, "GPKG", ".gpkg")
@@ -1153,6 +1238,7 @@ if DEBUG_UI and "result" in locals():
             f"GDAL_DATA={os.environ.get('GDAL_DATA') or GDAL_DATA_DIR or '-'}",
         ]
         st.code("\n".join(dbg_lines), language="text")
+
 
 
 
