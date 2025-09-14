@@ -21,10 +21,17 @@ PREVIEW_MAX_FEATURES = 500
 DEBUG_PROFILE = False
 _step_times: dict[str, float] = {}
 DEFAULT_TIMEOUT: aiohttp.ClientTimeout = aiohttp.ClientTimeout(
-total=60, # total request budget (s)
-sock_connect=15,
-sock_read=30,
+    total=60, # total request budget (s)
+    sock_connect=15,
+    sock_read=30,
 )
+
+HEADERS_XML = {
+    # Needed by WFS GetFeature endpoints that prefer XML
+    "Accept": "application/xml, text/xml;q=0.9,*/*;q=0.8",
+    # A UA helps some gateways; keep it benign
+    "User-Agent": "ParcelOne/0.1 (+https://parcelone.streamlit.app)",
+}
 
 def xml_escape(text: str) -> str:
     return (
@@ -201,14 +208,9 @@ def merge_geojson_pages(pages: List[bytes], max_features: Optional[int] = None) 
 
 
 
-async def _fetch(
-    session: aiohttp.ClientSession,
-    url: str,
-    *,
-    retries: int = 3,
-    timeout: Optional[aiohttp.ClientTimeout] = None,
-) -> bytes:
-    """Fetch URL with retries.
+async def _fetch(session: aiohttp.ClientSession, url: str, *, retries: int = 3,
+                timeout: aiohttp.ClientTimeout | None = None) -> bytes:
+    timeout = timeout or DEFAULT_TIMEOUT
 
     Why: default arguments are evaluated at definition time. If a module-level
     constant is declared below, `DEFAULT_TIMEOUT` is not yet defined, causing an
