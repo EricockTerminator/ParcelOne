@@ -1,9 +1,8 @@
 import asyncio
 import aiohttp
 import pytest
-
+from parcelone import wfs
 import wfs
-
 
 @pytest.mark.asyncio
 async def test_fetch_gml_pages_async(monkeypatch):
