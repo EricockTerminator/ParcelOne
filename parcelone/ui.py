@@ -1,13 +1,5 @@
 # file: parcelone/parcelone/ui.py
-"""Streamlit UI for ParcelOne (refactor: no top-level execution).
-
-- All logic runs inside `main()`; nothing executes at import-time.
-- KU input accepts 6-digit code or name (uses `ku_index.code_for`).
-- Disambiguation when name maps to multiple KUs.
-- Supports preview (BBox) and download in `geojson` or `gml-zip`.
-"""
-from __future__ import annotations
-
+"""Streamlit UI (no forms). Simpler flow, working submit + KU lookup."""
 import json
 from io import BytesIO
 from zipfile import ZipFile
@@ -24,43 +16,25 @@ from .wfs import (
 )
 from .config import WFS_CRS_CHOICES
 
-# UI defaults
 RETRIES = 3
 
 
-# --------------------------- helpers ----------------------------------------
-
-def _ku_code_input(label: str = "Katastrálne územie – kód alebo názov") -> str:
-    """Return a resolved 6-digit KU code from user input (code or name).
-    Stops the app with an error message on invalid input.
-    """
-    ku_input = st.text_input(
-        label,
-        value="",
-        placeholder="napr. 801062 alebo Banská Bystrica",
-    ).strip()
-
+def _resolve_ku(ku_input: str) -> str | None:
+    ku_input = (ku_input or "").strip()
     if not ku_input:
-        st.stop()  # wait for user to type
-
-    ku_code, candidates = code_for(ku_input)
-
-    if candidates:
-        options = {f"{c.name} ({c.code})": c.code for c in candidates}
-        choice = st.selectbox("Našli sme viac KU – vyber jedno:", list(options.keys()))
-        ku_code = options[choice]
-
-    if not ku_code:
-        st.error("Neplatný kód alebo názov KU. Skús znova.")
-        st.stop()
-
-    return ku_code
+        return None
+    code, cands = code_for(ku_input)
+    if cands:
+        options = {f"{c.name} ({c.code})": c.code for c in cands}
+        choice = st.selectbox("Našli sme viac KU – vyber jedno:", list(options), key="ku_choice")
+        code = options.get(choice)
+    return code
 
 
 def _download_geojson(pages: list[bytes], ku_code: str) -> None:
     gj, total, used = merge_geojson_pages(pages)
     payload = json.dumps(gj, ensure_ascii=False).encode("utf-8")
-    st.success(f"Pripravený GeoJSON – vybrané prvky: {used} / spolu: {total}")
+    st.success(f"GeoJSON pripravený – vybrané: {used} / spolu: {total}")
     st.download_button(
         "Stiahnuť GeoJSON",
         payload,
@@ -75,7 +49,7 @@ def _download_gml_zip(pages: list[bytes], ku_code: str) -> None:
         for i, page in enumerate(pages, start=1):
             zf.writestr(f"parcely_{i}.gml", page)
     buf.seek(0)
-    st.success(f"Pripravený GML ZIP – počet stránok: {len(pages)}")
+    st.success(f"GML ZIP pripravený – stránok: {len(pages)}")
     st.download_button(
         "Stiahnuť GML (.zip)",
         buf.read(),
@@ -84,16 +58,16 @@ def _download_gml_zip(pages: list[bytes], ku_code: str) -> None:
     )
 
 
-# ----------------------------- main -----------------------------------------
-
 def main() -> None:
     st.set_page_config(page_title="ParcelOne", layout="wide")
     st.title("ParcelOne – Sťahuj geometrie KN vo vybranom formáte")
 
-    with st.form("parcel_form"):
+    col1, col2 = st.columns([1, 1])
+    with col1:
         register = st.selectbox("Register", ["E", "C"], index=0)
-        ku_code = _ku_code_input()
+        ku_raw = st.text_input("Katastrálne územie – kód alebo názov", placeholder="napr. 801062 alebo Banská Bystrica")
         parcels_csv = st.text_area("Parcelné čísla (voliteľné)", placeholder="napr. 1234/1, 456/2")
+    with col2:
         output_format = st.selectbox("Výstupový formát", ["gml-zip", "geojson"], index=0)
         wfs_crs = st.selectbox(
             "CRS (WFS srsName)",
@@ -101,9 +75,10 @@ def main() -> None:
             format_func=lambda k: next((label for key, label in WFS_CRS_CHOICES if key == k), k),
         )
         do_preview_ku = st.checkbox("Zobraziť náhľad KU (bbox)", value=False)
-        submitted = st.form_submit_button("Stiahnuť parcely")
 
-    if do_preview_ku:
+    ku_code = _resolve_ku(ku_raw)
+
+    if do_preview_ku and ku_code:
         bbox = fetch_zone_bbox(register, ku_code, retries=RETRIES)
         if bbox:
             st.caption("BBOX (minx, miny, maxx, maxy)")
@@ -111,22 +86,25 @@ def main() -> None:
         else:
             st.warning("Nepodarilo sa načítať BBOX pre zadané KU.")
 
-    if not submitted:
+    clicked = st.button("Stiahnuť parcely", type="primary")
+    if not clicked:
         return
 
-    # Download flow
+    if not ku_code:
+        st.error("Zadaj kód KU alebo platný názov a prípadne vyber zo zoznamu.")
+        return
+
     if output_format == "geojson":
         res = fetch_geojson_pages(register, ku_code, parcels_csv, wfs_srs=wfs_crs, retries=RETRIES)
         if not res.ok:
             st.error(res.note)
-            # try a fallback preview without srsName to help the user
             prev = preview_geojson_autofallback(register, ku_code, parcels_csv, wfs_srs=wfs_crs, retries=RETRIES)
             if prev.ok:
-                st.info("Náhľad úspešný s fallbackom – sťahovanie nižšie môže zlyhať podľa servera.")
+                st.info("Náhľad úspešný s fallbackom – server pre GeoJSON môže byť náladový.")
                 _download_geojson(prev.pages, ku_code)
             return
         _download_geojson(res.pages, ku_code)
-    else:  # gml-zip
+    else:
         res = fetch_gml_pages(register, ku_code, parcels_csv, wfs_srs=wfs_crs, retries=RETRIES)
         if not res.ok:
             st.error(res.note)
@@ -134,12 +112,5 @@ def main() -> None:
         _download_gml_zip(res.pages, ku_code)
 
 
-if __name__ == "__main__":  # manual run
+if __name__ == "__main__":
     main()
-
-
-# --------------------------- wfs.py note -------------------------------------
-# Ensure your `wfs.py` defines parcel type names used by GetFeature:
-# Add near the top (next to ZONE_C/ZONE_E) if missing:
-# TYPE_C = "cp:CP.CadastralParcel"
-# TYPE_E = "cp_uo:CP.CadastralParcelUO"
