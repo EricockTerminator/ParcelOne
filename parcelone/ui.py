@@ -7,8 +7,9 @@ from .wfs import (
     fetch_gml_pages, fetch_geojson_pages, merge_geojson_pages,
     bbox_from_geojson, WMS_URL_C, WMS_URL_E, LAYER_C, LAYER_E, ZONE_C, ZONE_E,
 )
-from .convert import convert_pages_with_gdal, geojson_pages_to_dxf
+from .convert import convert_pages_with_gdal
 from .ku import load_ku_table, lookup_ku_code
+from typing import Optional, Tuple
 
 WFS_CRS_CHOICES = {
     "auto (server default)": None,
@@ -31,16 +32,23 @@ def _cql_for_zone(ku: str) -> str:
     ku = (ku or "").strip()
     return f"nationalCadastralReference='{ku}'" if ku else ""
 
-def show_map_preview(reg: str, fc_geojson: dict, bbox: tuple[float,float,float,float], *, ku: str = "", parcels: str = ""):
-    minx, miny, maxx, maxy = bbox
-    cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
-    m = folium.Map(location=[cy, cx], zoom_start=14, tiles=None, control_scale=True)
+def show_map_preview(reg: str, fc_geojson: Optional[dict], bbox: Optional[Tuple[float,float,float,float]], *, ku: str = "", parcels: str = ""):
+    # Default SR centrum
+    default_center = (48.7, 19.7); default_zoom = 8
+    if bbox:
+        minx, miny, maxx, maxy = bbox
+        cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
+        center = (cy, cx); zoom = 14
+    else:
+        center = default_center; zoom = default_zoom
+
+    m = folium.Map(location=list(center), zoom_start=zoom, tiles=None, control_scale=True)
     folium.TileLayer("OpenStreetMap", control=False).add_to(m)
     is_E = (reg or '').upper() == 'E'
     url   = WMS_URL_E if is_E else WMS_URL_C
     layer = LAYER_E    if is_E else LAYER_C
     zone  = ZONE_E     if is_E else ZONE_C
-    cql_parc = _build_cql_for_preview(ku, "")
+    cql_parc = _build_cql_for_preview(ku, parcels or "")
     p = dict(layers=layer, fmt="image/png", transparent=True, overlay=True, control=False, version="1.3.0",
              attr="© GKÚ SR / INSPIRE")
     if cql_parc: p["CQL_FILTER"] = cql_parc
@@ -50,7 +58,7 @@ def show_map_preview(reg: str, fc_geojson: dict, bbox: tuple[float,float,float,f
               attr="© GKÚ SR / INSPIRE", opacity=0.8)
     if cql_zone: zp["CQL_FILTER"] = cql_zone
     folium.raster_layers.WmsTileLayer(url=url, name="Hranica KU", **zp).add_to(m)
-    if (parcels or '').strip():
+    if (parcels or '').strip() and fc_geojson:
         folium.GeoJson(fc_geojson, name="Vybrané parcely (WFS)", style_function=lambda _: {"weight": 3, "fill": False}).add_to(m)
     st_folium(m, height=540, returned_objects=[])
 
@@ -94,23 +102,21 @@ def main():
 
     # --- Auto preview ---
     __ku_for_preview = resolved_ku or (soft_pick['code'] if soft_pick else "")
-    if (__ku_for_preview or (parcels or '').strip()):
-        with col1:
-            with st.spinner("Pripravujem mapový náhľad…"):
+    with col1:
+        with st.spinner("Pripravujem mapový náhľad…"):
+            if (parcels or '').strip():
                 gj = fetch_geojson_pages(reg, __ku_for_preview, parcels, wfs_srs="EPSG:4326")
-            if gj.ok and gj.pages:
-                fc, total, used = merge_geojson_pages(gj.pages, max_features=4000)
-                bbox = bbox_from_geojson(fc)
-                if bbox:
+                if gj.ok and gj.pages:
+                    fc, total, used = merge_geojson_pages(gj.pages, max_features=4000)
+                    bbox = bbox_from_geojson(fc)
                     show_map_preview(reg, fc, bbox, ku=__ku_for_preview, parcels=parcels)
-                    if not resolved_ku and soft_pick:
-                        st.caption(f"Náhľad podľa najbližšej zhody: {soft_pick['name']} ({soft_pick['code']}).")
                     if used < total:
                         st.caption(f"Náhľad skrátený: {used} z {total} prvkov.")
                 else:
-                    st.info("Mapový náhľad: nenašli sa geometrie pre zadaný filter.")
+                    show_map_preview(reg, None, None, ku=__ku_for_preview, parcels=parcels)
+                    st.caption("WMS náhľad – WFS pre parcely nevrátil dáta.")
             else:
-                st.info("Mapový náhľad: server nevrátil dáta pre zadaný filter.")
+                show_map_preview(reg, None, None, ku=__ku_for_preview, parcels="")
 
     # --- Download ---
     if not (resolved_ku or (parcels or '').strip()):
@@ -119,13 +125,19 @@ def main():
 
     with st.spinner("Naťahujem GML stránky z WFS…"):
         result = fetch_gml_pages(reg, resolved_ku or "", parcels, wfs_srs=wfs_srs)
+
     with col1:
-        st.success("Parcely pripravené.")
+        if not result.ok or not result.pages:
+            st.error(f"WFS nevrátil dáta: {result.note}\nURL: {result.first_url or '-'}")
+            st.stop()
+        st.success(f"Parcely pripravené. Stránok: {len(result.pages)}")
+
         mem_zip = io.BytesIO()
         with zipfile.ZipFile(mem_zip, mode="w") as zf:
             for i, b in enumerate(result.pages, 1):
                 zf.writestr(f"parcely_{i:03d}.gml", b)
         gml_zip = mem_zip.getvalue()
+
         if fmt == "gml-zip":
             st.download_button(
                 "Stiahnuť GML (ZIP)", data=gml_zip,
@@ -144,17 +156,14 @@ def main():
                                        file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.zip", mime=mime)
                     st.caption(f"Konverzia: {conv_src}")
                 elif fmt == "dxf":
-                    gj_res = fetch_geojson_pages(reg, resolved_ku or "", parcels, wfs_srs=wfs_srs)
-                    if not gj_res.ok:
-                        st.error(f"Chyba DXF konverzie: {gj_res.note}\nURL: {gj_res.first_url or '-'}"); st.stop()
-                    dxf_bytes, mime = geojson_pages_to_dxf(gj_res.pages)
-                    st.download_button("Stiahnuť DXF", data=dxf_bytes,
+                    data, mime, conv_src = convert_pages_with_gdal(result.pages, "DXF", ".dxf")
+                    st.download_button("Stiahnuť DXF", data=data,
                                        file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.dxf", mime=mime)
-                    st.caption("Konverzia: čistý Python (bez GDAL/ezdxf)")
+                    st.caption(f"Konverzia: {conv_src}")
                 elif fmt == "gpkg":
                     data, mime, conv_src = convert_pages_with_gdal(result.pages, "GPKG", ".gpkg")
                     st.download_button("Stiahnuť GPKG", data=data,
                                        file_name=f"parcely_{reg}_{resolved_ku or 'filter'}.gpkg", mime=mime)
                     st.caption(f"Konverzia: {conv_src}")
             except Exception as e:
-                st.error(str(e))
+                st.error(f"Konverzia zlyhala: {e}")
