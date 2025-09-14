@@ -232,4 +232,39 @@ def bbox_from_geojson(obj: dict) -> Optional[Tuple[float, float, float, float]]:
 def view_from_bbox(bbox: Tuple[float, float, float, float]):
     minx, miny, maxx, maxy = bbox
     cx, cy = (minx + maxx)/2, (miny + maxy)/2
-    return dict(center=(cy, cx), zoom=14)
+    return dict(center=(cy, cx), zoom=14) 
+
+def fetch_zone_bbox(register: str, ku_code: str) -> Optional[Tuple[float,float,float,float]]:
+    """Rýchly bbox pre katastrálne územie cez Zoning WFS (ľahké dáta).
+    Skúsi vrstvy podľa registra (E/C) a vráti bbox v EPSG:4326.
+    """
+    reg = (register or "").upper().strip()
+    ku = (ku_code or "").strip()
+    if not ku:
+        return None
+    # kandidáti: prioritne vo vetve daného registra, potom fallback
+    candidates = [
+        ("cp_uo:CP.CadastralZoningUO", CP_UO_WFS_BASE),
+        ("cp:CP.CadastralZoning", CP_WFS_BASE),
+    ] if reg == "E" else [
+        ("cp:CP.CadastralZoning", CP_WFS_BASE),
+        ("cp_uo:CP.CadastralZoningUO", CP_UO_WFS_BASE),
+    ]
+    from urllib.parse import urlencode
+    for type_name, base in candidates:
+        try:
+            params = {
+                "service": "WFS", "version": "2.0.0", "request": "GetFeature",
+                "typeNames": type_name, "outputFormat": "application/json",
+                "srsName": "EPSG:4326", "CQL_FILTER": f"nationalCadastralReference='{ku}'",
+            }
+            url = f"{base}?{urlencode(params)}"
+            jb = http_get_bytes(url)
+            obj = json.loads(jb.decode("utf-8", "ignore"))
+            fc = {"type":"FeatureCollection","features": obj.get("features", [])}
+            bb = bbox_from_geojson(fc)
+            if bb:
+                return bb # minx,miny,maxx,maxy in EPSG:4326
+            except Exception:
+                continue
+        return None
