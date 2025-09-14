@@ -48,7 +48,7 @@ HEADERS_XML = {
     "Accept": "application/xml,*/*;q=0.5",
     "Connection": "close",
 }
-TIMEOUT = (10, 60)  # (connect, read)
+TIMEOUT = (15, 90)  # (connect, read)
 PAGE_SIZE = 1000
 # --- voľby CRS pre WFS srsName (None = default servera)
 WFS_CRS_CHOICES = {
@@ -90,8 +90,11 @@ TAB_SPLIT = re.compile(r"\t+")
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def fetch_zone_bbox(register: str, ku_code: str):
-    """Vráti (minx, miny, maxx, maxy) pre hranicu KU cez WFS Zoning.
-    Najprv skúsi GeoJSON + CQL, potom FES filter, napokon None.
+    """
+    Vráti (minx, miny, maxx, maxy) pre hranicu KU.
+    1) WFS Zoning → GeoJSON + CQL
+    2) WFS Zoning → GeoJSON + FES
+    3) POISTKA: WFS Parcely → vezmi 1 feature (GeoJSON) a sprav bbox
     """
     reg = (register or "").upper().strip()
     k = (ku_code or "").strip()
@@ -101,65 +104,50 @@ def fetch_zone_bbox(register: str, ku_code: str):
     base  = CP_UO_WFS_BASE if reg == "E" else CP_WFS_BASE
     layer = ZONE_E         if reg == "E" else ZONE_C
 
-    # 1) rýchly pokus: GeoJSON + CQL
+    # 1) Zoning – GeoJSON + CQL
     try:
         params = {
-            "service": "WFS",
-            "version": "2.0.0",
-            "request": "GetFeature",
-            "typeNames": layer,
-            "count": "1",
-            "startIndex": "0",
+            "service": "WFS", "version": "2.0.0", "request": "GetFeature",
+            "typeNames": layer, "count": "1", "startIndex": "0",
             "outputFormat": "application/json",
             "CQL_FILTER": f"nationalCadastralReference='{k}'",
         }
         url = f"{base}?{urlencode(params)}"
         jb = http_get_bytes(url)
-        obj = json.loads(jb.decode("utf-8", "ignore"))
-        feats = obj.get("features", [])
+        feats = json.loads(jb.decode("utf-8","ignore")).get("features",[])
         if feats:
-            fc = {"type": "FeatureCollection", "features": feats}
-            bb = bbox_from_geojson(fc)
-            if bb:
-                return bb
+            return bbox_from_geojson({"type":"FeatureCollection","features":feats})
     except Exception:
         pass
 
-    # 2) fallback: GeoJSON + FES filter (niektoré inštalácie to vyžadujú)
+    # 2) Zoning – GeoJSON + FES
     try:
-        fes = (
-            '<Filter xmlns="http://www.opengis.net/fes/2.0">'
-            "<PropertyIsEqualTo>"
-            "<ValueReference>nationalCadastralReference</ValueReference>"
-            f"<Literal>{xml_escape(k)}</Literal>"
-            "</PropertyIsEqualTo>"
-            "</Filter>"
-        )
+        fes = ('<Filter xmlns="http://www.opengis.net/fes/2.0">'
+               '<PropertyIsEqualTo><ValueReference>nationalCadastralReference</ValueReference>'
+               f'<Literal>{xml_escape(k)}</Literal></PropertyIsEqualTo></Filter>')
         params = {
-            "service": "WFS",
-            "version": "2.0.0",
-            "request": "GetFeature",
-            "typeNames": layer,
-            "count": "1",
-            "startIndex": "0",
-            "outputFormat": "application/json",
-            "filter": fes,
+            "service":"WFS","version":"2.0.0","request":"GetFeature",
+            "typeNames":layer,"count":"1","startIndex":"0",
+            "outputFormat":"application/json","filter":fes,
         }
         url = f"{base}?{urlencode(params)}"
         jb = http_get_bytes(url)
-        obj = json.loads(jb.decode("utf-8", "ignore"))
-        feats = obj.get("features", [])
+        feats = json.loads(jb.decode("utf-8","ignore")).get("features",[])
         if feats:
-            fc = {"type": "FeatureCollection", "features": feats}
-            bb = bbox_from_geojson(fc)
-            if bb:
-                return bb
+            return bbox_from_geojson({"type":"FeatureCollection","features":feats})
     except Exception:
         pass
 
-    # nič – nech si UI použije svoj default bbox
-    return None
+    # 3) POISTKA – parcelový layer, 1 feature (GeoJSON), srsName 4326/auto
+    try:
+        res = preview_geojson_autofallback(reg, k, "", page_size=1)
+        if res.ok and res.pages:
+            obj = json.loads(res.pages[0].decode("utf-8","ignore"))
+            return bbox_from_geojson(obj)
+    except Exception:
+        pass
 
+    return None
 
 # ---------- Robust resource resolver (works in EXE too) ----------
 # keep exactly one copy of this helper in your file
@@ -1165,6 +1153,7 @@ if DEBUG_UI and "result" in locals():
             f"GDAL_DATA={os.environ.get('GDAL_DATA') or GDAL_DATA_DIR or '-'}",
         ]
         st.code("\n".join(dbg_lines), language="text")
+
 
 
 
