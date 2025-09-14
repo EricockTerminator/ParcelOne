@@ -88,6 +88,79 @@ def _zoning_candidates(register: str) -> list[str]:
 
 TAB_SPLIT = re.compile(r"\t+")
 
+@st.cache_data(ttl=3600, show_spinner=False)
+def fetch_zone_bbox(register: str, ku_code: str):
+    """Vráti (minx, miny, maxx, maxy) pre hranicu KU cez WFS Zoning.
+    Najprv skúsi GeoJSON + CQL, potom FES filter, napokon None.
+    """
+    reg = (register or "").upper().strip()
+    k = (ku_code or "").strip()
+    if not k:
+        return None
+
+    base  = CP_UO_WFS_BASE if reg == "E" else CP_WFS_BASE
+    layer = ZONE_E         if reg == "E" else ZONE_C
+
+    # 1) rýchly pokus: GeoJSON + CQL
+    try:
+        params = {
+            "service": "WFS",
+            "version": "2.0.0",
+            "request": "GetFeature",
+            "typeNames": layer,
+            "count": "1",
+            "startIndex": "0",
+            "outputFormat": "application/json",
+            "CQL_FILTER": f"nationalCadastralReference='{k}'",
+        }
+        url = f"{base}?{urlencode(params)}"
+        jb = http_get_bytes(url)
+        obj = json.loads(jb.decode("utf-8", "ignore"))
+        feats = obj.get("features", [])
+        if feats:
+            fc = {"type": "FeatureCollection", "features": feats}
+            bb = bbox_from_geojson(fc)
+            if bb:
+                return bb
+    except Exception:
+        pass
+
+    # 2) fallback: GeoJSON + FES filter (niektoré inštalácie to vyžadujú)
+    try:
+        fes = (
+            '<Filter xmlns="http://www.opengis.net/fes/2.0">'
+            "<PropertyIsEqualTo>"
+            "<ValueReference>nationalCadastralReference</ValueReference>"
+            f"<Literal>{xml_escape(k)}</Literal>"
+            "</PropertyIsEqualTo>"
+            "</Filter>"
+        )
+        params = {
+            "service": "WFS",
+            "version": "2.0.0",
+            "request": "GetFeature",
+            "typeNames": layer,
+            "count": "1",
+            "startIndex": "0",
+            "outputFormat": "application/json",
+            "filter": fes,
+        }
+        url = f"{base}?{urlencode(params)}"
+        jb = http_get_bytes(url)
+        obj = json.loads(jb.decode("utf-8", "ignore"))
+        feats = obj.get("features", [])
+        if feats:
+            fc = {"type": "FeatureCollection", "features": feats}
+            bb = bbox_from_geojson(fc)
+            if bb:
+                return bb
+    except Exception:
+        pass
+
+    # nič – nech si UI použije svoj default bbox
+    return None
+
+
 # ---------- Robust resource resolver (works in EXE too) ----------
 # keep exactly one copy of this helper in your file
 
@@ -1092,5 +1165,6 @@ if DEBUG_UI and "result" in locals():
             f"GDAL_DATA={os.environ.get('GDAL_DATA') or GDAL_DATA_DIR or '-'}",
         ]
         st.code("\n".join(dbg_lines), language="text")
+
 
 
