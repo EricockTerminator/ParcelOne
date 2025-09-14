@@ -1,12 +1,15 @@
 # file: parcelone/parcelone/wfs.py
 """Fast, sync WFS helpers using `requests` (no asyncio), with robust fallbacks.
 
+Designed to match the working logic from your simple app:
 - FES filter by KU + optional parcel labels
-- PAGE_SIZE=1000 default, loop until empty
-- Fallbacks: drop `srsName` on HTTP 400; CQL fallback; split-by-one for labels
-- Separate GeoJSON and GML paths
-- Lightweight bbox fetch for KU via zoning layer (GeoJSON), supports `wfs_srs`
+- Page size 1000, loop until empty
+- Fallbacks: drop `srsName` on HTTP 400; try CQL; split-by-one for labels
+- Separate GeoJSON path (server-side JSON) and GML path
+- Lightweight bbox fetch for KU via zone layer (GeoJSON)
 """
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 import json
@@ -31,9 +34,29 @@ HEADERS_XML = {
     "Accept": "application/xml,*/*;q=0.5",
     "Connection": "close",
 }
-TIMEOUT = (10, 60)  # (connect, read)
+TIMEOUT = (25, 60)  # (connect, read)
+
 
 # ---- common helpers ---------------------------------------------------------
+
+_SRS_RE = re.compile(r"(EPSG:\d{4,6})")
+
+def sanitize_srs_name(val: Optional[str]) -> Optional[str]:
+    """Vráť čisté "EPSG:xxxx" alebo None.
+    - ak príde label typu "EPSG:5514 (S-JTSK / Krovák EN)", vyextrahuje len kód
+    - prázdny/None → None (server default)
+    """
+    if not val:
+        return None
+    if isinstance(val, (list, tuple)):
+        for x in val:
+            m = _SRS_RE.search(str(x))
+            if m:
+                return m.group(1)
+        return None
+    m = _SRS_RE.search(str(val))
+    return m.group(1) if m else None
+
 def http_get_bytes(url: str, tries: int = 3) -> bytes:
     last: Exception | None = None
     for i in range(tries):
@@ -72,8 +95,7 @@ def build_fes_filter(ku: str, parcels: List[str]) -> str:
         for p in parcels:
             p_xml = xml_escape(p)
             and_parts = [
-                f"<PropertyIsEqualTo><ValueReference>label</ValueReference>"
-                f"<Literal>{p_xml}</Literal></PropertyIsEqualTo>",
+                f"<PropertyIsEqualTo><ValueReference>label</ValueReference><Literal>{p_xml}</Literal></PropertyIsEqualTo>",
             ]
             if ku_part:
                 and_parts.append(ku_part)
@@ -108,7 +130,9 @@ class FetchResult:
     first_url: str
     detected_epsg: Optional[str] = None
 
+
 # ---- GML (fast path) --------------------------------------------------------
+
 def gml_number_returned(xmlb: bytes) -> Optional[int]:
     m = re.search(rb'numberReturned="(\d+)"', xmlb)
     return int(m.group(1)) if m else None
@@ -141,6 +165,7 @@ def fetch_gml_pages(
     start = 0
     first_url = ""
     dropped_srs = False
+    srs = sanitize_srs_name(wfs_srs)
 
     while True:
         params = {
@@ -152,7 +177,7 @@ def fetch_gml_pages(
             "startIndex": str(start),
             "filter": fes,
         }
-        if wfs_srs and not dropped_srs:
+        if srs and not dropped_srs:
             params["srsName"] = wfs_srs
 
         url = f"{base}?{urlencode(params)}"
@@ -163,13 +188,15 @@ def fetch_gml_pages(
             xmlb = http_get_bytes(url)
         except requests.HTTPError as e:
             sc = getattr(e.response, "status_code", None)
+            # if we already have some pages and server says 400 -> end
             if pages and sc == 400:
                 break
+            # drop srsName once on 400
             if (sc == 400 or sc is None) and wfs_srs and not dropped_srs:
                 dropped_srs = True
                 continue
+            # split by one when user listed labels – some servers balk at OR
             if sc == 400 and parcels:
-                # split-by-one fallback for OR filters
                 singles: List[bytes] = []
                 for pval in parcels:
                     sp = {
@@ -177,7 +204,7 @@ def fetch_gml_pages(
                         "typeNames": typename, "count": "1000", "startIndex": "0",
                         "filter": build_fes_filter(ku, [pval]),
                     }
-                    if not dropped_srs and wfs_srs:
+                    if not dropped_srs and srs:
                         sp["srsName"] = wfs_srs
                     surl = f"{base}?{urlencode(sp)}"
                     try:
@@ -188,7 +215,7 @@ def fetch_gml_pages(
                         pass
                 if singles:
                     return FetchResult(True, f"Počet stránok: {len(singles)} (split-by-one)", singles, first_url)
-            # final CQL fallback
+            # final fallback: CQL
             cql = build_cql_filter(ku, parcels)
             if cql:
                 cql_params = {
@@ -196,7 +223,7 @@ def fetch_gml_pages(
                     "typeNames": typename, "count": str(page_size), "startIndex": str(start),
                     "CQL_FILTER": cql,
                 }
-                if not dropped_srs and wfs_srs:
+                if not dropped_srs and srs:
                     cql_params["srsName"] = wfs_srs
                 cql_url = f"{base}?{urlencode(cql_params)}"
                 if not first_url:
@@ -233,7 +260,9 @@ def fetch_gml_pages(
 
     return FetchResult(True, f"Počet stránok: {len(pages)}", pages, first_url)
 
+
 # ---- GeoJSON ---------------------------------------------------------------
+
 def fetch_geojson_pages(
     register: str,
     ku: str,
@@ -257,6 +286,7 @@ def fetch_geojson_pages(
     pages: List[bytes] = []
     start = 0
     first_url = ""
+    srs = sanitize_srs_name(wfs_srs)
 
     while True:
         params = {
@@ -269,7 +299,7 @@ def fetch_geojson_pages(
             "filter": filt_xml,
             "outputFormat": "application/json",
         }
-        if wfs_srs:
+        if srs:
             params["srsName"] = wfs_srs
 
         url = f"{base}?{urlencode(params)}"
@@ -307,7 +337,9 @@ def fetch_geojson_pages(
 
     return FetchResult(True, f"Počet stránok: {len(pages)}", pages, first_url)
 
+
 # ---- GeoJSON helpers -------------------------------------------------------
+
 def merge_geojson_pages(pages: List[bytes], max_features: int = 8000):
     features: List[dict] = []
     total = 0
@@ -362,7 +394,9 @@ def bbox_from_geojson(obj: dict) -> Optional[Tuple[float, float, float, float]]:
         return None
     return tuple(agg)  # minx, miny, maxx, maxy
 
+
 # ---- KU bbox ---------------------------------------------------------------
+
 def _zoning_layer(register: str) -> str:
     return ZONE_E if (register or "").upper() == "E" else ZONE_C
 
@@ -371,12 +405,9 @@ def fetch_zone_bbox(
     register: str,
     ku: str,
     *,
-    wfs_srs: Optional[str] = "EPSG:4326",
     retries: int = 3,
 ) -> Optional[Tuple[float, float, float, float]]:
-    """GeoJSON request to zoning layer filtered by KU -> bbox.
-    If `wfs_srs` is provided, the WFS call asks the server to reproject.
-    """
+    """GeoJSON request to zoning layer filtered by KU -> bbox."""
     base = CP_UO_WFS_BASE if (register or "").upper() == "E" else CP_WFS_BASE
     layer = _zoning_layer(register)
     from urllib.parse import urlencode
@@ -390,9 +421,6 @@ def fetch_zone_bbox(
         "count": "1",
         "CQL_FILTER": f"nationalCadastralReference='{ku}'",
     }
-    if wfs_srs:
-        params["srsName"] = wfs_srs
-
     url = f"{base}?{urlencode(params)}"
     try:
         jb = http_get_bytes(url, tries=retries)
@@ -401,7 +429,9 @@ def fetch_zone_bbox(
         return None
     return bbox_from_geojson(obj)
 
-# ---- convenience -----------------------------------------------------------
+
+# ---- small convenience -----------------------------------------------------
+
 def preview_geojson_autofallback(
     register: str,
     ku: str,
@@ -410,6 +440,7 @@ def preview_geojson_autofallback(
     *,
     page_size: int = PAGE_SIZE,
 ) -> FetchResult:
+    """Try GeoJSON; if it fails, retry without srsName."""
     res = fetch_geojson_pages(register, ku, parcels_csv, wfs_srs=wfs_srs, page_size=page_size)
     if res.ok or not wfs_srs:
         return res
