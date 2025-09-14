@@ -6,7 +6,7 @@ import time
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 from urllib.parse import urlencode
-
+from __future__ import annotations
 from .config import WFS_CRS_CHOICES
 
 
@@ -207,16 +207,19 @@ def merge_geojson_pages(pages: List[bytes], max_features: Optional[int] = None) 
     return {"type": "FeatureCollection", "features": features}, total, used
 
 
+async def _fetch(
+    session: aiohttp.ClientSession,
+    url: str,
+    *,
+    retries: int = 3,
+    timeout: Optional[aiohttp.ClientTimeout] = None,
+) -> bytes:
+    """HTTP GET with retries and timeout.
 
-async def _fetch(session: aiohttp.ClientSession, url: str, *, retries: int = 3,
-                timeout: aiohttp.ClientTimeout | None = None) -> bytes:
-    timeout = timeout or DEFAULT_TIMEOUT
-
-    Why: default arguments are evaluated at definition time. If a module-level
-    constant is declared below, `DEFAULT_TIMEOUT` is not yet defined, causing an
-    import-time failure. Using `None` here and resolving inside avoids that.
-
-    Raises the final exception if all retries fail.
+    Note: default arguments are evaluated at import time; using `None` here and
+    resolving to `DEFAULT_TIMEOUT` inside avoids NameError if constants below
+    change position.
+    """
     if retries < 1:
         raise ValueError("retries must be >= 1")
 
@@ -233,13 +236,6 @@ async def _fetch(session: aiohttp.ClientSession, url: str, *, retries: int = 3,
                 raise
             await asyncio.sleep(backoff)
             backoff *= 2
-
-
-__all__ = [
-    "DEFAULT_TIMEOUT",
-    "_fetch",
-]
-
 
 
 async def fetch_gml_pages_async(
@@ -460,9 +456,13 @@ def fetch_zone_bbox(
     ku: str,
     *,
     retries: int = 3,
-    timeout: aiohttp.ClientTimeout = DEFAULT_TIMEOUT,
-) -> Optional[Tuple[float, float, float, float]]:
-    """Fetch bounding box for cadastral zone."""
+    timeout: _Optional[aiohttp.ClientTimeout] = None,
+) -> _Optional[Tuple[float, float, float, float]]:
+    """Fetch bounding box for cadastral zone.
+
+    Calls async implementation and returns (minx, miny, maxx, maxy) or None.
+    """
+    effective_timeout = timeout or DEFAULT_TIMEOUT
     return asyncio.run(
-        _fetch_zone_bbox_async(register, ku, retries=retries, timeout=timeout)
+        _fetch_zone_bbox_async(register, ku, retries=retries, timeout=effective_timeout)
     )
