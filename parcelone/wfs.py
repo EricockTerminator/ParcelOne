@@ -20,7 +20,11 @@ PREVIEW_PAGE_SIZE = 100
 PREVIEW_MAX_FEATURES = 500
 DEBUG_PROFILE = False
 _step_times: dict[str, float] = {}
-
+DEFAULT_TIMEOUT: aiohttp.ClientTimeout = aiohttp.ClientTimeout(
+total=60, # total request budget (s)
+sock_connect=15,
+sock_read=30,
+)
 
 def xml_escape(text: str) -> str:
     return (
@@ -197,17 +201,44 @@ def merge_geojson_pages(pages: List[bytes], max_features: Optional[int] = None) 
 
 
 
-async def _fetch(session: aiohttp.ClientSession, url: str, *, retries: int = 3, timeout: aiohttp.ClientTimeout = DEFAULT_TIMEOUT) -> bytes:
-    for attempt in range(retries):
+async def _fetch(
+    session: aiohttp.ClientSession,
+    url: str,
+    *,
+    retries: int = 3,
+    timeout: Optional[aiohttp.ClientTimeout] = None,
+) -> bytes:
+    """Fetch URL with retries.
+
+    Why: default arguments are evaluated at definition time. If a module-level
+    constant is declared below, `DEFAULT_TIMEOUT` is not yet defined, causing an
+    import-time failure. Using `None` here and resolving inside avoids that.
+
+    Raises the final exception if all retries fail.
+    """
+    if retries < 1:
+        raise ValueError("retries must be >= 1")
+
+    effective_timeout = timeout or DEFAULT_TIMEOUT
+
+    backoff = 0.5
+    for attempt in range(1, retries + 1):
         try:
-            async with session.get(url, timeout=timeout) as resp:
+            async with session.get(url, timeout=effective_timeout) as resp:
                 resp.raise_for_status()
                 return await resp.read()
-        except Exception:
-            if attempt + 1 == retries:
+        except (aiohttp.ClientError, asyncio.TimeoutError):
+            if attempt >= retries:
                 raise
-            await asyncio.sleep(0.5)
-    raise RuntimeError("unreachable")
+            await asyncio.sleep(backoff)
+            backoff *= 2
+
+
+__all__ = [
+    "DEFAULT_TIMEOUT",
+    "_fetch",
+]
+
 
 
 async def fetch_gml_pages_async(
