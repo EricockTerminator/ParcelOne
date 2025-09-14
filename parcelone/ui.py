@@ -67,58 +67,67 @@ def main():
     st.set_page_config(page_title="ParcelOne – WFS GML", layout="wide")
     st.title("ParcelOne – Sťahuj geometrie KN vo vybranom formáte")
 
-    with st.sidebar:
-        reg = st.selectbox("Register", ["E", "C"], index=0)
-        col_ku1, col_ku2 = st.columns(2)
-        with col_ku1:
-            ku_code = st.text_input("Katastrálne územie – kód", placeholder="napr. 808156")
-        with col_ku2:
-            ku_name = st.text_input("...alebo názov", placeholder="napr. Bratislava-Staré Mesto")
-        parcels = st.text_area("Parcelné čísla (voliteľné)", placeholder="napr. 1234/1, 1234/2")
-        fmt = st.selectbox("Výstupový formát", ["gml-zip", "geojson", "shp", "dxf", "gpkg"], index=0)
-        crs_label = st.selectbox("CRS (WFS srsName)", list(WFS_CRS_CHOICES.keys()), index=1)
-        wfs_srs = WFS_CRS_CHOICES[crs_label]
-        st.caption("**Kontakt**  •  📞 +421 948 955 128  •  ✉️ svitokerik02@gmail.com")
+with st.sidebar:
+    reg = st.selectbox("Register", ["E", "C"], index=0)
+    col_ku1, col_ku2 = st.columns(2)
+    with col_ku1:
+        ku_code = st.text_input("Katastrálne územie – kód", placeholder="napr. 808156")
+    with col_ku2:
+        ku_name = st.text_input("...alebo názov", placeholder="napr. Bratislava-Staré Mesto")
+    parcels = st.text_area("Parcelné čísla (voliteľné)", placeholder="napr. 1234/1, 1234/2")
+    fmt = st.selectbox("Výstupový formát", ["gml-zip", "geojson", "shp", "dxf", "gpkg"], index=0)
+    crs_label = st.selectbox("CRS (WFS srsName)", list(WFS_CRS_CHOICES.keys()), index=1)
+    wfs_srs = WFS_CRS_CHOICES[crs_label]
+    st.caption("**Kontakt**  •  📞 +421 948 955 128  •  ✉️ svitokerik02@gmail.com")
 
-    col1, col2 = st.columns([2, 1])
-    ku_table = load_ku_table()
-    resolved_ku = (ku_code or "").strip()
-    ku_suggestions: list[dict] = []
-    if not resolved_ku:
-        resolved_ku, ku_suggestions = lookup_ku_code(ku_table, ku_name or "")
-    soft_pick = None
-    if not resolved_ku and ku_suggestions:
-        soft_pick = ku_suggestions[0]
-    if ku_name and not resolved_ku:
-        st.info("Nenašiel som presnú zhodu.")
-    if ku_suggestions:
-        cols = st.columns(min(5, len(ku_suggestions)))
-        for i, it in enumerate(ku_suggestions[:5]):
-            label = f"{it['name']} ({it['code']})"
-            if cols[i].button(label, key=f"pick_ku_{it['code']}"):
-                resolved_ku = it['code']; ku_name = it['name']; soft_pick = it
-    if ku_name and resolved_ku:
-        st.caption(f"Vybrané KU: {ku_name} → kód **{resolved_ku}**")
+col1, col2 = st.columns([2, 1])
+ku_table = load_ku_table()
+resolved_ku = (ku_code or "").strip()
+ku_suggestions: list[dict] = []
+if not resolved_ku:
+    resolved_ku, ku_suggestions = lookup_ku_code(ku_table, ku_name or "")
+soft_pick = None
+if not resolved_ku and ku_suggestions:
+    soft_pick = ku_suggestions[0]
+if ku_name and not resolved_ku:
+    st.info("Nenašiel som presnú zhodu.")
+if ku_suggestions:
+    cols = st.columns(min(5, len(ku_suggestions)))
+    for i, it in enumerate(ku_suggestions[:5]):
+        label = f"{it['name']} ({it['code']})"
+        if cols[i].button(label, key=f"pick_ku_{it['code']}"):
+            resolved_ku = it['code']; ku_name = it['name']; soft_pick = it
+if ku_name and resolved_ku:
+    st.caption(f"Vybrané KU: {ku_name} → kód **{resolved_ku}**")
 
-    # --- Auto preview ---
-    __ku_for_preview = resolved_ku or (soft_pick['code'] if soft_pick else "")
-    with col1:
-        with st.spinner("Pripravujem mapový náhľad…"):
-            if (parcels or '').strip():
-                gj = fetch_geojson_pages(reg, __ku_for_preview, parcels, wfs_srs="EPSG:4326")
-                if gj.ok and gj.pages:
-                    fc, total, used = merge_geojson_pages(gj.pages, max_features=4000)
-                    bbox = bbox_from_geojson(fc)
-                    show_map_preview(reg, fc, bbox, ku=__ku_for_preview, parcels=parcels)
-                    if used < total:
-                        st.caption(f"Náhľad skrátený: {used} z {total} prvkov.")
-                else:
-                    show_map_preview(reg, None, None, ku=__ku_for_preview, parcels=parcels)
-                    st.caption("WMS náhľad – WFS pre parcely nevrátil dáta.")
+# --- Auto preview (rýchly bbox cez Zoning WFS; GeoJSON len pri parcelách) ---
+__ku_for_preview = resolved_ku or (soft_pick['code'] if soft_pick else "")
+with col1:
+    with st.spinner("Pripravujem mapový náhľad…"):
+        zone_bbox = None
+        if __ku_for_preview:
+            try:
+                # nový ľahký bbox pre KU – neťahá parcely
+                from parcelone.wfs import fetch_zone_bbox  # lazy import OK
+                zone_bbox = fetch_zone_bbox(reg, __ku_for_preview)
+            except Exception:
+                zone_bbox = None
+        if (parcels or '').strip():
+            gj = fetch_geojson_pages(reg, __ku_for_preview, parcels, wfs_srs="EPSG:4326")
+            if gj.ok and gj.pages:
+                fc, total, used = merge_geojson_pages(gj.pages, max_features=4000)
+                bb = bbox_from_geojson(fc) or zone_bbox
+                show_map_preview(reg, fc, bb, ku=__ku_for_preview, parcels=parcels)
+                if used < total:
+                    st.caption(f"Náhľad skrátený: {used} z {total} prvkov.")
             else:
-                show_map_preview(reg, None, None, ku=__ku_for_preview, parcels="")
+                show_map_preview(reg, None, zone_bbox, ku=__ku_for_preview, parcels=parcels)
+                st.caption("WMS náhľad – WFS pre parcely nevrátil dáta.")
+        else:
+            # bez parciel: iba WMS + zoom na KU podľa Zoning bbox
+            show_map_preview(reg, None, zone_bbox, ku=__ku_for_preview, parcels="")
 
-    # --- Download ---
+# --- Download ---
     if not (resolved_ku or (parcels or '').strip()):
         st.error("Zadaj KU (kód alebo názov) alebo aspoň jedno parcelné číslo.")
         st.stop()
