@@ -265,6 +265,6 @@ def fetch_zone_bbox(register: str, ku_code: str) -> Optional[Tuple[float,float,f
             bb = bbox_from_geojson(fc)
             if bb:
                 return bb # minx,miny,maxx,maxy in EPSG:4326
-            except Exception:
-                continue
-        return None
+        except Exception:
+            continue
+    return None
