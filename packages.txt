@@ -1,0 +1,5 @@
+# Debian 11 (bullseye) balíky pre ogr2ogr a závislosti
+#gdal-data sa nainštaluje s gdal-bin
+gdal-bin
+libgdal-dev
+proj-bin
