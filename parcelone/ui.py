@@ -1,12 +1,17 @@
 # file: parcelone/parcelone/ui.py
-"""Streamlit UI (no forms). KU lookup + robust CRS select + WMS preview + exports."""
+"""Streamlit UI (no forms). KU lookup + robust CRS select + WMS preview + exports.
+
+This version adds a *compatibility wrapper* around `fetch_zone_bbox` so the UI
+works with both the old signature `(register, ku, *, retries=...)` and the new
+one `(register, ku, *, wfs_srs=..., retries=...)`.
+"""
 import os
 import re
 import json
 from io import BytesIO
 from zipfile import ZipFile
 from tempfile import NamedTemporaryFile, TemporaryDirectory
-from typing import Dict, Iterable, List, Tuple
+from typing import Dict, Iterable, List, Tuple, Optional
 
 import streamlit as st
 
@@ -25,6 +30,7 @@ from .config import WFS_CRS_CHOICES, CP_WFS_BASE, CP_UO_WFS_BASE
 RETRIES = 3  # used only in bbox helper
 
 # --------------------------- helpers ----------------------------------------
+
 def _normalize_crs_choices(choices) -> Tuple[List[str], Dict[str, str]]:
     options: List[str] = []
     label_map: Dict[str, str] = {}
@@ -203,22 +209,59 @@ def _download_gpkg_from_geojson(pages: list[bytes], ku_code: str) -> None:
     st.download_button("Stiahnuť GPKG", data, file_name=f"parcely_{ku_code}.gpkg", mime="application/geopackage+sqlite3")
 
 # ---- WMS preview ------------------------------------------------------------
+
 def _derive_wms_base(wfs_base: str) -> str:
-    return re.sub(r"/wfs(\\b|$)", "/wms", wfs_base, flags=re.IGNORECASE)
+    return re.sub(r"/wfs(\b|$)", "/wms", wfs_base, flags=re.IGNORECASE)
+
+
+def _safe_fetch_zone_bbox(register: str, ku_code: str) -> Tuple[Optional[Tuple[float, float, float, float]], str]:
+    """Try multiple `fetch_zone_bbox` signatures + srs strategies.
+    Returns (bbox, crs) where crs is "EPSG:4326" if bbox is in 4326, otherwise "EPSG:5514".
+    """
+    # 1) Prefer bbox in EPSG:4326 (better for WMS 1.3.0)
+    try:
+        bbox = fetch_zone_bbox(register, ku_code, wfs_srs="EPSG:4326", retries=RETRIES)  # type: ignore[arg-type]
+        if bbox:
+            return bbox, "EPSG:4326"
+    except TypeError:
+        # Older signature without wfs_srs param
+        try:
+            bbox = fetch_zone_bbox(register, ku_code, retries=RETRIES)  # type: ignore[misc]
+            if bbox:
+                return bbox, "EPSG:5514"  # assume server default
+        except TypeError:
+            bbox = fetch_zone_bbox(register, ku_code)  # last resort
+            if bbox:
+                return bbox, "EPSG:5514"
+    # 2) Fallback: call without args even if above failed
+    try:
+        bbox = fetch_zone_bbox(register, ku_code)
+        if bbox:
+            return bbox, "EPSG:5514"
+    except Exception:
+        pass
+    return None, ""
+
 
 def _show_wms_preview(register: str, ku_code: str) -> None:
-    # Get bbox in EPSG:4326 so WMS 1.3.0 axis-order quirks are known
-    bbox = fetch_zone_bbox(register, ku_code, wfs_srs="EPSG:4326", retries=RETRIES)
+    bbox, crs = _safe_fetch_zone_bbox(register, ku_code)
     if not bbox:
         st.warning("Náhľad WMS: BBOX sa nepodarilo získať.")
         return
-    minx, miny, maxx, maxy = bbox  # lon, lat
-    # WMS 1.3.0 + EPSG:4326 expects lat,lon order in BBOX (miny,minx,maxy,maxx)
-    bbox_param = f"{miny},{minx},{maxy},{maxx}"
+    minx, miny, maxx, maxy = bbox
 
     base = CP_UO_WFS_BASE if (register or "").upper() == "E" else CP_WFS_BASE
     wms = _derive_wms_base(base)
     layer = ZONE_E if (register or "").upper() == "E" else ZONE_C
+
+    if crs == "EPSG:4326":
+        # WMS 1.3.0 + EPSG:4326 expects lat,lon order
+        bbox_param = f"{miny},{minx},{maxy},{maxx}"
+        crs_param = "EPSG:4326"
+    else:
+        # Assume projected native (S-JTSK). Axis order standard x,y
+        bbox_param = f"{minx},{miny},{maxx},{maxy}"
+        crs_param = "EPSG:5514"
 
     params = {
         "service": "WMS",
@@ -226,7 +269,7 @@ def _show_wms_preview(register: str, ku_code: str) -> None:
         "request": "GetMap",
         "layers": layer,
         "styles": "",
-        "crs": "EPSG:4326",
+        "crs": crs_param,
         "bbox": bbox_param,
         "width": "900",
         "height": "650",
@@ -239,6 +282,7 @@ def _show_wms_preview(register: str, ku_code: str) -> None:
     st.image(url, caption="WMS náhľad KU (zóna)", use_column_width=True)
 
 # ----------------------------- main -----------------------------------------
+
 def main() -> None:
     st.set_page_config(page_title="ParcelOne", layout="wide")
     st.title("ParcelOne – Sťahuj geometrie KN vo vybranom formáte")
