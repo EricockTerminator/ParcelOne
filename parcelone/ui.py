@@ -60,6 +60,38 @@ def _resource_path(rel: str) -> str:
 
 # ---------- KodKU.txt loader (format: "<name>" <code>) ----------
 
+from .ku_index import code_for  # resolves KU code from name or returns candidates
+
+
+def _ku_code_input(label: str = "Katastrálne územie – kód alebo názov") -> str:
+    """Streamlit input that accepts 6-digit KU code or KU name.
+    Returns a resolved 6-digit code or stops the app with an error.
+    """
+    import streamlit as st  # local import to avoid circular issues at import time
+
+    ku_input = st.text_input(label, value="", placeholder="napr. 801062 alebo Banská Bystrica").strip()
+    if not ku_input:
+        st.info("Zadaj kód KU (6 číslic) alebo názov katastrálneho územia.")
+        st.stop()
+
+    ku_code, candidates = code_for(ku_input)
+
+    if candidates:
+        # ambiguous name -> let user choose
+        options = {f"{c.name} ({c.code})": c.code for c in candidates}
+        choice = st.selectbox("Našli sme viac KU – vyber jedno:", list(options.keys()))
+        ku_code = options[choice]
+
+    if not ku_code:
+        st.error("Neplatný kód alebo názov KU. Skús znova.")
+        st.stop()
+
+    return ku_code
+
+
+ku_code = _ku_code_input()
+bbox = fetch_zone_bbox(register, ku_code, retries=RETRIES)
+
 ku_code, candidates = code_for(ku_input)
 
 
