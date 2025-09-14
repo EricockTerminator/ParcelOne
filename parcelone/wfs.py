@@ -1,4 +1,4 @@
-from __future__ import annotation
+
 import asyncio
 import aiohttp
 import json
