@@ -1,17 +1,26 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
-import json, os, re
+import json, re, time
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 # --- Endpoints & constants ---
-CP_WFS_BASE = "https://inspirews.skgeodesy.sk/geoserver/cp/ows"        # C register
-CP_UO_WFS_BASE = "https://inspirews.skgeodesy.sk/geoserver/cp_uo/ows"   # E register
+CP_WFS_BASE    = "https://inspirews.skgeodesy.sk/geoserver/cp/ows"        # C register
+CP_UO_WFS_BASE = "https://inspirews.skgeodesy.sk/geoserver/cp_uo/ows"     # E register
 TYPE_C = "cp:CP.CadastralParcel"
 TYPE_E = "cp_uo:CP.CadastralParcelUO"
-HEADERS_XML = {"User-Agent": "ParcelOne/WFS-GML 1.0", "Accept": "application/xml,*/*;q=0.5", "Connection": "close"}
-TIMEOUT = (10, 60)
+
+# dôležité: nechaj keep-alive (neuvádzaj 'Connection: close')
+HEADERS_XML = {
+    "User-Agent": "ParcelOne/WFS-GML 1.2",
+    "Accept": "application/xml,*/*;q=0.5",
+}
+# Cloud ↔ GKÚ potrebuje dlhší connect timeout
+TIMEOUT: tuple[int, int] = (25, 120)  # (connect, read)
 PAGE_SIZE = 1000
+
 WMS_URL_C = "https://inspirews.skgeodesy.sk/geoserver/cp/ows"
 WMS_URL_E = "https://inspirews.skgeodesy.sk/geoserver/cp_uo/ows"
 LAYER_C = "cp:CP.CadastralParcel"
@@ -19,17 +28,31 @@ LAYER_E = "cp_uo:CP.CadastralParcelUO"
 ZONE_C  = "cp:CP.CadastralZoning"
 ZONE_E  = "cp_uo:CP.CadastralZoningUO"
 
+# --- Robustná HTTP session s Retry/backoff ---
+_retry = Retry(
+    total=6, connect=6, read=6, status=6,
+    backoff_factor=0.8,
+    status_forcelist=(429, 500, 502, 503, 504),
+    allowed_methods=("GET",),
+    raise_on_status=False,
+)
+_adapter = HTTPAdapter(pool_connections=20, pool_maxsize=20, max_retries=_retry)
+SESSION = requests.Session()
+SESSION.headers.update(HEADERS_XML)
+SESSION.mount("https://", _adapter)
+SESSION.mount("http://",  _adapter)
+
 # --- HTTP helper ---
-def http_get_bytes(url: str, tries: int = 3) -> bytes:
+def http_get_bytes(url: str, tries: int = 2) -> bytes:
     last: Exception | None = None
     for i in range(tries):
         try:
-            r = requests.get(url, headers=HEADERS_XML, timeout=TIMEOUT)
+            r = SESSION.get(url, timeout=TIMEOUT)
             r.raise_for_status()
             return r.content
-        except Exception as e:  # why: WFS býva „krehký“, retry zvyšuje úspešnosť
+        except Exception as e:
             last = e
-            import time; time.sleep(0.6 * (i + 1))
+            time.sleep(0.8 * (i + 1))  # exponenciálny backoff
     assert last is not None
     raise last
 
@@ -58,11 +81,12 @@ def build_fes_filter(ku: str, parcels: List[str]) -> str:
     return f'<Filter xmlns="http://www.opengis.net/fes/2.0">{ku_part}</Filter>' if ku_part else ""
 
 def build_cql_filter(ku: str, parcels: List[str]) -> str:
-    parts = []
+    parts: List[str] = []
     if parcels:
         q = ",".join(["'" + p.replace("'", "''") + "'" for p in parcels if p])
         if q: parts.append(f"label IN ({q})")
-    if ku: parts.append(f"nationalCadastralReference LIKE '{ku}%'")
+    if ku:
+        parts.append(f"nationalCadastralReference LIKE '{ku}%'")
     return " AND ".join(parts)
 
 # --- Result model ---
@@ -81,7 +105,7 @@ def _gml_number_returned(xmlb: bytes) -> Optional[int]:
     m = re.search(rb'numberReturned="(\d+)"', xmlb)
     return int(m.group(1)) if m else None
 
-# --- WFS: GML paging ---
+# --- WFS: GML paging (prefer CQL pri parcelách; lepšie retry) ---
 def fetch_gml_pages(register: str, ku: str, parcels_csv: str, wfs_srs: Optional[str] = None) -> FetchResult:
     reg = (register or "").upper().strip()
     ku = (ku or "").strip()
@@ -91,27 +115,61 @@ def fetch_gml_pages(register: str, ku: str, parcels_csv: str, wfs_srs: Optional[
     base = CP_UO_WFS_BASE if reg == "E" else CP_WFS_BASE
     typename = TYPE_E if reg == "E" else TYPE_C
     from urllib.parse import urlencode
+
+    # 1) Prefer CQL keď sú parcely (GeoServer to spraví rýchlejšie)
+    if parcels:
+        cql = build_cql_filter(ku, parcels)
+        params = {"service":"WFS","version":"2.0.0","request":"GetFeature",
+                  "typeNames":typename,"count":str(PAGE_SIZE),"startIndex":"0","CQL_FILTER": cql}
+        if wfs_srs: params["srsName"] = wfs_srs
+        url = f"{base}?{urlencode(params)}"
+        try:
+            b = http_get_bytes(url, tries=2)
+            if _gml_has_features(b):
+                return FetchResult(True, "CQL (parcely)", [b], url)
+        except requests.exceptions.ConnectTimeout:
+            # skús bez srsName
+            if wfs_srs:
+                params.pop("srsName", None)
+                url = f"{base}?{urlencode(params)}"
+                try:
+                    b = http_get_bytes(url, tries=2)
+                    if _gml_has_features(b):
+                        return FetchResult(True, "CQL bez srsName (parcely)", [b], url)
+                except Exception as e:
+                    return FetchResult(False, f"Connect timeout: {e}", [], url)
+        except Exception as e:
+            # padáme do FES fallbacku nižšie
+            pass
+
+    # 2) FES stránkovanie (pre KU-only alebo fallback)
     fes = build_fes_filter(ku, parcels)
-    if not fes: return FetchResult(False, "Neplatný filter (chýba KU aj parcely).", [], "")
+    if not fes:
+        return FetchResult(False, "Neplatný filter (chýba KU aj parcely).", [], "")
 
     pages: List[bytes] = []
     start = 0
     first_url = ""
     dropped_srs = False
+
     while True:
-        params = {"service": "WFS", "version": "2.0.0", "request": "GetFeature", "typeNames": typename,
-                  "count": str(PAGE_SIZE), "startIndex": str(start), "filter": fes}
-        if wfs_srs and not dropped_srs: params["srsName"] = wfs_srs
-        url = f"{base}?{urlencode(params)}"; first_url = first_url or url
+        params = {"service":"WFS","version":"2.0.0","request":"GetFeature","typeNames":typename,
+                  "count":str(PAGE_SIZE),"startIndex":str(start),"filter":fes}
+        if wfs_srs and not dropped_srs:
+            params["srsName"] = wfs_srs
+        url = f"{base}?{urlencode(params)}"
+        first_url = first_url or url
+
         try:
-            xmlb = http_get_bytes(url)
+            xmlb = http_get_bytes(url, tries=2)
         except requests.HTTPError as e:
             sc = getattr(e.response, "status_code", None)
-            # why: niektoré servery vracajú 400 pri prekročení limitu – stopni stránkovanie
-            if pages and sc == 400: break
+            if pages and sc == 400:
+                break
             if (sc == 400 or sc is None) and wfs_srs and not dropped_srs:
-                dropped_srs = True; continue
-            # fallback: split-by-one alebo CQL
+                dropped_srs = True
+                continue
+            # split-by-one fallback (bezpečný pri malom počte parciel)
             if sc == 400 and parcels:
                 singles: List[bytes] = []
                 for pval in parcels:
@@ -120,11 +178,14 @@ def fetch_gml_pages(register: str, ku: str, parcels_csv: str, wfs_srs: Optional[
                     if not dropped_srs and wfs_srs: sp["srsName"] = wfs_srs
                     surl = f"{base}?{urlencode(sp)}"
                     try:
-                        sb = http_get_bytes(surl)
-                        if _gml_has_features(sb): singles.append(sb)
-                    except Exception: pass
+                        sb = http_get_bytes(surl, tries=2)
+                        if _gml_has_features(sb):
+                            singles.append(sb)
+                    except Exception:
+                        pass
                 if singles:
                     return FetchResult(True, f"Počet stránok: {len(singles)} (split-by-one)", singles, first_url)
+            # CQL fallback aj pri KU-only (ak FES padá)
             cql = build_cql_filter(ku, parcels)
             if cql:
                 cql_params = {"service":"WFS","version":"2.0.0","request":"GetFeature","typeNames":typename,
@@ -132,16 +193,22 @@ def fetch_gml_pages(register: str, ku: str, parcels_csv: str, wfs_srs: Optional[
                 if not dropped_srs and wfs_srs: cql_params["srsName"] = wfs_srs
                 cql_url = f"{base}?{urlencode(cql_params)}"; first_url = first_url or cql_url
                 try:
-                    xmlb = http_get_bytes(cql_url)
+                    xmlb = http_get_bytes(cql_url, tries=2)
                 except Exception as ee:
                     return FetchResult(False, f"HTTP chyba: {e}\nCQL fallback zlyhal: {ee}", [], first_url or url)
             else:
                 return FetchResult(False, f"HTTP chyba: {e}", [], first_url or url)
+        except requests.exceptions.ConnectTimeout:
+            if wfs_srs and not dropped_srs:
+                dropped_srs = True
+                continue
+            return FetchResult(False, f"Connect timeout na {url}", [], first_url or url)
         except Exception as e:
             return FetchResult(False, f"Chyba: {e}", [], first_url or url)
 
         nr = _gml_number_returned(xmlb)
-        if (nr is not None and nr == 0) or not _gml_has_features(xmlb): break
+        if (nr is not None and nr == 0) or not _gml_has_features(xmlb):
+            break
         pages.append(xmlb)
         if nr is not None:
             if nr < PAGE_SIZE: break
@@ -151,7 +218,8 @@ def fetch_gml_pages(register: str, ku: str, parcels_csv: str, wfs_srs: Optional[
             start += PAGE_SIZE
         if start > 500_000: break
 
-    if not pages: return FetchResult(False, "Server vrátil 0 prvkov pre daný filter.", [], first_url)
+    if not pages:
+        return FetchResult(False, "Server vrátil 0 prvkov pre daný filter.", [], first_url)
     return FetchResult(True, f"Počet stránok: {len(pages)}", pages, first_url)
 
 # --- WFS: GeoJSON paging (pre preview/DXF) ---
