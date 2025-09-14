@@ -1,3 +1,4 @@
+from __future__ import annotation
 import asyncio
 import aiohttp
 import json
@@ -6,7 +7,6 @@ import time
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 from urllib.parse import urlencode
-from __future__ import annotations
 from .config import WFS_CRS_CHOICES
 
 
@@ -214,12 +214,7 @@ async def _fetch(
     retries: int = 3,
     timeout: Optional[aiohttp.ClientTimeout] = None,
 ) -> bytes:
-    """HTTP GET with retries and timeout.
-
-    Note: default arguments are evaluated at import time; using `None` here and
-    resolving to `DEFAULT_TIMEOUT` inside avoids NameError if constants below
-    change position.
-    """
+    
     if retries < 1:
         raise ValueError("retries must be >= 1")
 
@@ -314,7 +309,6 @@ def fetch_gml_pages(
     wfs_srs: Optional[str] = None,
     **kwargs,
 ) -> FetchResult:
-    """Synchronous wrapper for Streamlit."""
     return asyncio.run(
         fetch_gml_pages_async(register, ku, parcels_csv, wfs_srs=wfs_srs, **kwargs)
     )
@@ -458,10 +452,6 @@ def fetch_zone_bbox(
     retries: int = 3,
     timeout: _Optional[aiohttp.ClientTimeout] = None,
 ) -> _Optional[Tuple[float, float, float, float]]:
-    """Fetch bounding box for cadastral zone.
-
-    Calls async implementation and returns (minx, miny, maxx, maxy) or None.
-    """
     effective_timeout = timeout or DEFAULT_TIMEOUT
     return asyncio.run(
         _fetch_zone_bbox_async(register, ku, retries=retries, timeout=effective_timeout)
